@@ -59,7 +59,7 @@ flowchart TD
     B --> C
     D --> C
     
-    style " " fill:none,stroke:none
+    style " " fill:got "none",stroke:got "none"
 ```
 
 ```mermaid
