@@ -47,7 +47,7 @@ flowchart TD
 flowchart TD
     A[①開始]
     
-    subgraph " "
+    subgraph S1
         direction LR
         B[②処理A]
         D[④処理B]
@@ -59,14 +59,14 @@ flowchart TD
     B --> C
     D --> C
     
-    style " " fill:none, stroke:#000000
+    style S1 fill:#ffffff,stroke:#ffffff
 ```
 
 ```mermaid
 flowchart TD
     A[①開始]
     
-    subgraph " "
+    subgraph S1
         direction LR
         B[②処理A]
         D[④処理B]
@@ -78,7 +78,7 @@ flowchart TD
     B --> C
     D --> C
     
-    style " " fill:none, stroke:#000000
+    style S1 fill:#ffffff,stroke:#ffffff
 ```
 
 ---
