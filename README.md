@@ -300,9 +300,9 @@ erDiagram
         datetime created_at "作成日時"
     }
     
-    USER ||--o{ POST : "投稿する"
-    POST ||--o{ COMMENT : "コメントされる"
-    USER ||--o{ COMMENT : "コメントする"
+    USER --> POST : "投稿する"
+    POST --> COMMENT : "コメントされる"
+    USER --> COMMENT : "コメントする"
 ```
 
 #### ■ ECサイトの複雑なER図
@@ -349,11 +349,11 @@ erDiagram
         datetime added_at
     }
     
-    USER ||--o{ ORDER : places
-    USER ||--o{ CART : has
-    ORDER ||--o{ ORDER_ITEM : contains
-    PRODUCT ||--o{ ORDER_ITEM : included_in
-    PRODUCT ||--o{ CART : added_to
+    USER --> ORDER : places
+    USER --> CART : has
+    ORDER --> ORDER_ITEM : contains
+    PRODUCT --> ORDER_ITEM : included_in
+    PRODUCT --> CART : added_to
 ```
 
 ```mermaid
@@ -399,11 +399,11 @@ erDiagram
         datetime added_at
     }
     
-    USER ||--o{ ORDER : places
-    USER ||--o{ CART : has
-    ORDER ||--o{ ORDER_ITEM : contains
-    PRODUCT ||--o{ ORDER_ITEM : included_in
-    PRODUCT ||--o{ CART : added_to
+    USER --> ORDER : places
+    USER --> CART : has
+    ORDER --> ORDER_ITEM : contains
+    PRODUCT --> ORDER_ITEM : included_in
+    PRODUCT --> CART : added_to
 ```
 
 ### 2. クラス図（オブジェクト指向設計）- GitHub対応版
@@ -486,9 +486,9 @@ classDiagram
         +delete() void
     }
     
-    User ||--o{ Post : creates
-    Post ||--o{ Comment : has
-    User ||--o{ Comment : writes
+    User --> Post : creates
+    Post --> Comment : has
+    User --> Comment : writes
     
     class UserRepository {
         <<interface>>
