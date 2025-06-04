@@ -59,7 +59,7 @@ flowchart TD
     B --> C
     D --> C
     
-    style S1 fill:#ffffff,stroke:#ffffff
+    style S1 fill:#ffffff,stroke:#ffffff %% 仕方なく、画素値で白黒にfillする
 ```
 
 ```mermaid
