@@ -59,7 +59,7 @@ flowchart TD
     B --> C
     D --> C
     
-    style " " fill:BRNK,stroke:BRNK
+    style " " fill:none,stroke:none
 ```
 
 ```mermaid
@@ -78,7 +78,7 @@ flowchart TD
     B --> C
     D --> C
     
-    style " " fill:BRNK,stroke:BRNK
+    style " " fill:none,stroke:none
 ```
 
 ---
