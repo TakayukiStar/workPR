@@ -267,9 +267,9 @@ erDiagram
         datetime created_at "作成日時"
     }
     
-    USER ||--o{ POST : "投稿する"
-    POST ||--o{ COMMENT : "コメントされる"
-    USER ||--o{ COMMENT : "コメントする"
+    USER --> POST : "投稿する"
+    POST --> COMMENT : "コメントされる"
+    USER --> COMMENT : "コメントする"
 ```
 
 ```mermaid
