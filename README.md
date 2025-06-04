@@ -440,9 +440,9 @@ classDiagram
         +delete() void
     }
     
-    User ||--o{ Post : creates
-    Post ||--o{ Comment : has
-    User ||--o{ Comment : writes
+    User --> Post : creates
+    Post --> Comment : has
+    User --> Comment : writes
     
     class UserRepository {
         <<interface>>
