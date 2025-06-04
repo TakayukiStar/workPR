@@ -47,7 +47,7 @@ flowchart TD
 flowchart TD
     A[①開始]
     
-    subgraph S1
+    subgraph S1 [" "]
         direction LR
         B[②処理A]
         D[④処理B]
@@ -66,7 +66,7 @@ flowchart TD
 flowchart TD
     A[①開始]
     
-    subgraph S1
+    subgraph S1 [" "]
         direction LR
         B[②処理A]
         D[④処理B]
