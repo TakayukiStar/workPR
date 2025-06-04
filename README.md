@@ -1,6 +1,3 @@
-# TakayukiPR
-Applying for development, I introduce as self-PR.
-
 # Mermaid記法 完全マスター教材 🚀
 ## 初級エンジニアから中上級レベルまで最速キャッチアップ
 
@@ -22,7 +19,7 @@ Applying for development, I introduce as self-PR.
 Mermaidは**テキストベースで図表を作成**できる革命的なツールです。コードを書くように図を描けるため、バージョン管理が可能で、ドキュメントと一緒に管理できます。
 
 ### 基本的な書き方
-```mermaid
+```
 graph TD
     A[開始] --> B[処理]
     B --> C[終了]
@@ -44,7 +41,7 @@ graph TD
 ### 1. フローチャート（基本中の基本）
 
 #### ■ シンプルなフロー
-```mermaid
+```
 flowchart TD
     Start([開始]) --> Input[データ入力]
     Input --> Process{処理が必要？}
@@ -67,7 +64,7 @@ flowchart TD
 ```
 
 #### ■ ノードの形状バリエーション
-```mermaid
+```
 flowchart LR
     A[四角形] --> B(丸角四角形)
     B --> C([楕円形])
@@ -86,7 +83,7 @@ flowchart LR
 ```
 
 #### ■ 方向指定
-```mermaid
+```
 flowchart TB
     subgraph "方向の例"
         TD[TB/TD: 上から下]
@@ -109,7 +106,7 @@ flowchart TB
 ### 2. シーケンス図（システム間のやりとり）
 
 #### ■ 基本的なシーケンス
-```mermaid
+```
 sequenceDiagram
     participant U as ユーザー
     participant F as フロントエンド
@@ -140,7 +137,7 @@ sequenceDiagram
 ```
 
 #### ■ 条件分岐とループ
-```mermaid
+```
 sequenceDiagram
     participant A as Client
     participant B as Server
@@ -180,7 +177,7 @@ sequenceDiagram
 
 ### 3. ガントチャート（プロジェクト管理）
 
-```mermaid
+```
 gantt
     title プロジェクト進行表
     dateFormat  YYYY-MM-DD
@@ -223,7 +220,7 @@ gantt
 ### 1. ER図（データベース設計の必須技術）
 
 #### ■ 基本的なER図
-```mermaid
+```
 erDiagram
     USER {
         int user_id PK "ユーザーID"
@@ -290,7 +287,7 @@ erDiagram
 ```
 
 #### ■ 多対多の関係を含む複雑なER図
-```mermaid
+```
 erDiagram
     USER {
         int user_id PK
@@ -384,7 +381,7 @@ erDiagram
 
 ### 2. クラス図（オブジェクト指向設計）
 
-```mermaid
+```
 classDiagram
     class User {
         -int userId
@@ -478,7 +475,7 @@ classDiagram
 
 ### 3. 状態図（状態遷移の可視化）
 
-```mermaid
+```
 stateDiagram-v2
     [*] --> 未ログイン
     
@@ -528,7 +525,7 @@ stateDiagram-v2
 
 ### 1. 複雑なフローチャート（サブグラフとスタイリング）
 
-```mermaid
+```
 flowchart TD
     subgraph "認証システム"
         A[ログイン要求] --> B{認証情報確認}
@@ -598,7 +595,7 @@ flowchart TD
 
 ### 2. アーキテクチャ図（C4モデル風）
 
-```mermaid
+```
 flowchart TB
     subgraph "フロントエンド層"
         ReactApp[React Application]
@@ -724,7 +721,7 @@ flowchart TB
 
 ### 3. 詳細なシーケンス図（エラーハンドリング込み）
 
-```mermaid
+```
 sequenceDiagram
     participant U as User
     participant F as Frontend
@@ -832,7 +829,7 @@ sequenceDiagram
 
 ### 1. リリースプロセスの可視化
 
-```mermaid
+```
 gitgraph:
     options:
         theme: base
@@ -902,7 +899,7 @@ gitgraph:
 
 ### 2. DevOpsパイプライン
 
-```mermaid
+```
 flowchart LR
     subgraph "開発"
         Code[コード作成] --> Commit[Git Commit]
@@ -986,7 +983,7 @@ flowchart LR
 
 ### 3. ユーザージャーニーマップ
 
-```mermaid
+```
 journey
     title ユーザーのオンラインショッピング体験
     section 発見
@@ -1032,7 +1029,7 @@ journey
 
 ### 4. システム障害対応フロー
 
-```mermaid
+```
 flowchart TD
     Alert[アラート発生] --> Triage{重要度判定}
     
@@ -1123,7 +1120,7 @@ flowchart TD
 
 ### よく使うノード形状
 
-```mermaid
+```
 flowchart LR
     A[四角形] --> B(丸角四角形)
     B --> C([楕円])
@@ -1147,7 +1144,7 @@ flowchart LR
 
 ### 矢印の種類
 
-```mermaid
+```
 flowchart LR
     A --> B
     C --- D
@@ -1169,7 +1166,7 @@ flowchart LR
 
 ### スタイリング例
 
-```mermaid
+```
 flowchart TD
     A[Normal] --> B[Styled]
     
