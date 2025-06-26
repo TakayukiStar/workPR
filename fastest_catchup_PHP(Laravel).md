@@ -1,6 +1,6 @@
 # 🚀 PHP Laravel 超入門: 非エンジニア向け最速学習ガイド
 
-このガイドは、全くの非エンジニアでも PHP と Laravel を『最速』で使い始められるように作成した学習教材です！✨ 実際に手を動かしながら、楽しく Webアプリケーション開発を学んでいきましょう！ 🎉
+このガイドは、全くの非エンジニアでも PHP と Laravel を『最速』で使い始められるように作成した学習教材です！✨ 実際に手を動かしながら、楽しく Web アプリケーション開発を学んでいきましょう！ 🎉
 
 ## 📚 目次
 
@@ -20,7 +20,7 @@
 14. [📋 フォームとバリデーション](#14-フォームとバリデーション)
 15. [🔐 認証機能](#15-認証機能)
 16. [🛡️ ミドルウェア](#16-ミドルウェア)
-17. [🔌 API開発](#17-api開発)
+17. [🔌 API 開発](#17-api開発)
 18. [🎯 実践的なアプリケーション作成](#18-実践的なアプリケーション作成)
 19. [❓ よくある質問と回答](#19-よくある質問と回答)
 20. [🎓 次のステップとまとめ](#20-次のステップとまとめ)
@@ -35,11 +35,11 @@ PHP は Web サイトを動的にする魔法の言語です！✨
 
 #### 🎯 PHP の特徴
 
-- **🌐 Web開発専用**: HTML と組み合わせて動的なページを作成
-- **💻 サーバーサイド**: サーバー上で実行される
-- **💰 完全無料**: オープンソースで使い放題
-- **📚 豊富な機能**: たくさんの便利な機能が標準装備
-- **🗄️ データベース**: MySQL など主要 DB と簡単連携
+- **Web 開発専用**: HTML と組み合わせて動的なページを作成
+- **サーバーサイド**: サーバー上で実行される
+- **完全無料**: オープンソースで使い放題
+- **豊富な機能**: たくさんの便利な機能が標準装備
+- **データベース連携**: MySQL など主要 DB と簡単連携
 
 ### 🎨 Laravel って何？
 
@@ -47,24 +47,24 @@ Laravel は PHP の最強フレームワーク！🔥 「職人のための Web 
 
 #### ✨ Laravel の特徴
 
-- **😍 美しいコード**: 読みやすくて書きやすい
-- **🏗️ MVC構造**: きれいに整理された設計
-- **🎁 豊富な機能**: 認証、ルーティング、セッション管理など全部入り
-- **⚡ Artisan**: 強力なコマンドラインツール
-- **🎯 Eloquent ORM**: 直感的なデータベース操作
-- **🎨 Blade**: 使いやすいテンプレートエンジン
+- **美しいコード**: 読みやすくて書きやすい
+- **MVC 構造**: きれいに整理された設計
+- **豊富な機能**: 認証、ルーティング、セッション管理など全部入り
+- **Artisan**: 強力なコマンドラインツール
+- **Eloquent ORM**: 直感的なデータベース操作
+- **Blade**: 使いやすいテンプレートエンジン
 
 ### 🎉 なぜ PHP Laravel を学ぶべき？
 
-- **💼 就職に有利**: Web開発の現場で大人気
-- **📈 学習しやすい**: 初心者にも優しい
-- **⚡ 開発が速い**: あっという間にアプリが作れる
-- **📖 日本語情報豊富**: 困ったときの情報がたくさん
-- **🌍 実用性抜群**: 小さなサイトから大規模アプリまで対応
-- **🤝 活発なコミュニティ**: みんなで助け合い
+- **就職に有利**: Web 開発の現場で大人気
+- **学習しやすい**: 初心者にも優しい
+- **開発が速い**: あっという間にアプリが作れる
+- **日本語情報豊富**: 困ったときの情報がたくさん
+- **実用性抜群**: 小さなサイトから大規模アプリまで対応
+- **活発なコミュニティ**: みんなで助け合い
 
 > 💡 **初心者向けヒント**：
-> Facebook、Wikipedia、WordPress も PHP で作られてるよ！🎯 Laravel は PHP フレームワークの中でも特に人気が高くて、学習すれば即戦力になれるよ！✨
+> Facebook、Wikipedia、WordPress も PHP で作られています！🎯 Laravel は PHP フレームワークの中でも特に人気が高くて、学習すれば即戦力になれますよ！✨
 
 ---
 
@@ -74,26 +74,26 @@ Laravel を動かすための環境を整えよう！🛠️
 
 ### 🎯 おすすめ環境構築方法
 
-1. **🎪 XAMPP**（Windows/Mac/Linux対応、超簡単！）
-2. **🐳 Laravel Sail**（Docker利用、本格派）
+1. **🎪 XAMPP**（Windows/Mac/Linux 対応、超簡単！）
+2. **🐳 Laravel Sail**（Docker 利用、本格派）
 3. **🔧 ローカル個別インストール**（上級者向け）
 
 ### 🎪 XAMPP で簡単セットアップ
 
-XAMPP は Web サーバー、データベース、PHP を一発でインストールできる便利ツール！🎉
+XAMPP は Web サーバー、データベース、PHP を一発でインストールできる便利ツールです！🎉
 
 #### 📥 XAMPP インストール
 
-1. 🌐 [XAMPP公式サイト](https://www.apachefriends.org/jp/index.html) からダウンロード
-2. 📦 インストーラーを実行（デフォルト設定でOK）
+1. 🌐 [XAMPP 公式サイト](https://www.apachefriends.org/jp/index.html) からダウンロード
+2. 📦 インストーラーを実行（デフォルト設定で OK）
 3. 🖥️ XAMPP Control Panel を起動
 4. ▶️ Apache と MySQL を「Start」ボタンでスタート
 
 #### 🎵 Composer のインストール
 
-Laravel をインストールするために必要なツール！🔧
+Laravel をインストールするために必要なツールです！🔧
 
-1. 🌐 [Composer公式サイト](https://getcomposer.org/download/) からダウンロード
+1. 🌐 [Composer 公式サイト](https://getcomposer.org/download/) からダウンロード
 2. 📦 インストーラーを実行
 3. 💻 コマンドプロンプト/ターミナルで確認
 
@@ -104,38 +104,38 @@ composer --version
 #### 🎨 Laravel プロジェクト作成
 
 ```bash
-# 🎉 Laravel インストーラーをグローバルにインストール
+# Laravel インストーラーをグローバルにインストール
 composer global require laravel/installer
 
-# 🚀 新しいLaravelプロジェクトを作成
+# 新しいLaravelプロジェクトを作成
 laravel new my-awesome-app
 
-# 📁 プロジェクトディレクトリに移動
+# プロジェクトディレクトリに移動
 cd my-awesome-app
 
-# 🎯 開発サーバーを起動
+# 開発サーバーを起動
 php artisan serve
 ```
 
 #### 🎊 動作確認
 
-ブラウザで `http://localhost:8000` にアクセス！Laravel のウェルカムページが表示されれば成功！🎉
+ブラウザで `http://localhost:8000` にアクセス！Laravel のウェルカムページが表示されれば成功です！🎉
 
 ### 🎨 エディタの準備
 
 #### 💻 Visual Studio Code（おすすめ！）
 
-1. 🌐 [VS Code公式サイト](https://code.visualstudio.com/) からダウンロード
+1. 🌐 [VS Code 公式サイト](https://code.visualstudio.com/) からダウンロード
 2. 📦 以下の拡張機能をインストール：
-   - 🐘 PHP Extension Pack
-   - 🎨 Laravel Extension Pack
-   - 🧠 PHP IntelliSense
+   - PHP Extension Pack
+   - Laravel Extension Pack
+   - PHP IntelliSense
 
 #### 🎯 その他のエディタ
 
 - **💎 PhpStorm**（有料だけど最強）
 - **⚡ Sublime Text**（軽量で高速）
-- **⚛️ Atom**（GitHub製、カスタマイズ性抜群）
+- **⚛️ Atom**（GitHub 製、カスタマイズ性抜群）
 
 ### 🗄️ データベースの準備
 
@@ -147,7 +147,7 @@ php artisan serve
 ### ⚙️ Laravel プロジェクトの設定
 
 ```bash
-# 🔧 .envファイルの設定（データベース接続情報）
+# .envファイルの設定（データベース接続情報）
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
@@ -155,15 +155,15 @@ DB_DATABASE=laravel_app
 DB_USERNAME=root
 DB_PASSWORD=
 
-# 🔑 アプリケーションキーの生成
+# アプリケーションキーの生成
 php artisan key:generate
 
-# 🗄️ データベースのマイグレーション実行
+# データベースのマイグレーション実行
 php artisan migrate
 ```
 
 > 💡 **初心者向けヒント**：
-> 環境構築は最初の難関だけど、一度設定すれば後は楽ちん！🎯 エラーが出たら Google 先生に聞こう！ほとんどの問題は先人が解決してるよ！😊
+> 環境構築は最初の難関だけど、一度設定すれば後は楽ちんです！🎯 エラーが出たら Google 先生に聞いてみましょう。ほとんどの問題は先人が解決していますよ！😊
 
 ---
 
@@ -715,7 +715,7 @@ function calculateAverage(...$numbers) {
     if ($count === 0) {
         return 0;
     }
-    
+
     $sum = array_sum($numbers);
     return $sum / $count;
 }
@@ -841,11 +841,11 @@ function testScope() {
     // 🏠 ローカルスコープ
     $localVar = "私はローカル変数です 🏠";
     echo $localVar; // OK
-    
+
     // 🌍 グローバル変数にアクセスするにはglobalキーワードが必要
     global $globalVar;
     echo $globalVar; // OK
-    
+
     // 🌍 $GLOBALS スーパーグローバル配列を使用
     echo $GLOBALS['globalVar']; // OK
 }
@@ -1001,23 +1001,23 @@ class User {
     public $name;
     public $email;
     public $age;
-    
+
     // 🎯 コンストラクタ（オブジェクト作成時に実行）
     public function __construct($name, $email, $age) {
         $this->name = $name;
         $this->email = $email;
         $this->age = $age;
     }
-    
+
     // 🎭 メソッド（振る舞い）
     public function introduce() {
         return "こんにちは、私の名前は{$this->name}です。{$this->age}歳です。👋";
     }
-    
+
     public function getEmail() {
         return $this->email;
     }
-    
+
     public function isAdult() {
         return $this->age >= 18;
     }
@@ -1051,33 +1051,33 @@ class BankAccount {
     // 🔒 private: クラス内部からのみアクセス可能
     private $balance;
     private $accountNumber;
-    
+
     // 🔓 protected: このクラスと継承したクラスからアクセス可能
     protected $ownerName;
-    
+
     // 🌐 public: どこからでもアクセス可能
     public $bankName;
-    
+
     public function __construct($accountNumber, $ownerName, $initialBalance = 0) {
         $this->accountNumber = $accountNumber;
         $this->ownerName = $ownerName;
         $this->balance = $initialBalance;
         $this->bankName = "サンプル銀行 🏦";
     }
-    
+
     // 🎯 getter メソッド（プライベートプロパティへの安全なアクセス）
     public function getBalance() {
         return $this->balance;
     }
-    
+
     public function getAccountNumber() {
         return $this->accountNumber;
     }
-    
+
     public function getOwnerName() {
         return $this->ownerName;
     }
-    
+
     // 🔧 setter メソッド（プライベートプロパティの安全な変更）
     public function deposit($amount) {
         if ($amount > 0) {
@@ -1086,7 +1086,7 @@ class BankAccount {
         }
         return false;
     }
-    
+
     public function withdraw($amount) {
         if ($amount > 0 && $amount <= $this->balance) {
             $this->balance -= $amount;
@@ -1094,7 +1094,7 @@ class BankAccount {
         }
         return false;
     }
-    
+
     // 📊 アカウント情報を表示
     public function getAccountInfo() {
         return [
@@ -1138,24 +1138,24 @@ print_r($account->getAccountInfo());
 class Animal {
     protected $name;
     protected $species;
-    
+
     public function __construct($name, $species) {
         $this->name = $name;
         $this->species = $species;
     }
-    
+
     public function getName() {
         return $this->name;
     }
-    
+
     public function getSpecies() {
         return $this->species;
     }
-    
+
     public function makeSound() {
         return "何かの音を出しています 🔊";
     }
-    
+
     public function introduce() {
         return "私は{$this->species}の{$this->name}です。🐾";
     }
@@ -1164,27 +1164,27 @@ class Animal {
 // 🐕 派生クラス（子クラス）
 class Dog extends Animal {
     private $breed;
-    
+
     public function __construct($name, $breed) {
         // 🧬 親クラスのコンストラクタを呼び出し
         parent::__construct($name, "犬");
         $this->breed = $breed;
     }
-    
+
     // 🔄 メソッドのオーバーライド
     public function makeSound() {
         return "ワンワン！🐕";
     }
-    
+
     // ➕ 独自のメソッド
     public function fetch() {
         return "{$this->name}がボールを取ってきました！🎾";
     }
-    
+
     public function getBreed() {
         return $this->breed;
     }
-    
+
     // 🔄 親クラスのメソッドを拡張
     public function introduce() {
         $parentIntro = parent::introduce();
@@ -1194,20 +1194,20 @@ class Dog extends Animal {
 
 class Cat extends Animal {
     private $isIndoor;
-    
+
     public function __construct($name, $isIndoor = true) {
         parent::__construct($name, "猫");
         $this->isIndoor = $isIndoor;
     }
-    
+
     public function makeSound() {
         return "ニャーニャー！🐱";
     }
-    
+
     public function purr() {
         return "{$this->name}がゴロゴロ鳴いています。😸";
     }
-    
+
     public function getEnvironment() {
         return $this->isIndoor ? "室内飼い 🏠" : "外飼い 🌳";
     }
@@ -1244,19 +1244,19 @@ if ($dog instanceof Dog) {
 // 🎭 抽象クラス（直接インスタンス化できない）
 abstract class Shape {
     protected $color;
-    
+
     public function __construct($color) {
         $this->color = $color;
     }
-    
+
     public function getColor() {
         return $this->color;
     }
-    
+
     // 🎯 抽象メソッド（継承先で必ず実装する必要がある）
     abstract public function calculateArea();
     abstract public function calculatePerimeter();
-    
+
     // 🔧 具象メソッド（継承先でそのまま使用可能）
     public function getInfo() {
         return "色: {$this->color}, 面積: " . $this->calculateArea() . "🎨";
@@ -1267,17 +1267,17 @@ abstract class Shape {
 class Rectangle extends Shape {
     private $width;
     private $height;
-    
+
     public function __construct($color, $width, $height) {
         parent::__construct($color);
         $this->width = $width;
         $this->height = $height;
     }
-    
+
     public function calculateArea() {
         return $this->width * $this->height;
     }
-    
+
     public function calculatePerimeter() {
         return 2 * ($this->width + $this->height);
     }
@@ -1285,16 +1285,16 @@ class Rectangle extends Shape {
 
 class Circle extends Shape {
     private $radius;
-    
+
     public function __construct($color, $radius) {
         parent::__construct($color);
         $this->radius = $radius;
     }
-    
+
     public function calculateArea() {
         return pi() * $this->radius * $this->radius;
     }
-    
+
     public function calculatePerimeter() {
         return 2 * pi() * $this->radius;
     }
@@ -1314,23 +1314,23 @@ class GameCharacter implements Drawable, Movable {
     private $name;
     private $x;
     private $y;
-    
+
     public function __construct($name, $x = 0, $y = 0) {
         $this->name = $name;
         $this->x = $x;
         $this->y = $y;
     }
-    
+
     public function draw() {
         return "{$this->name}を({$this->x}, {$this->y})に描画しました 🎨";
     }
-    
+
     public function move($x, $y) {
         $this->x = $x;
         $this->y = $y;
         return "{$this->name}が({$x}, {$y})に移動しました 🏃";
     }
-    
+
     public function getPosition() {
         return ['x' => $this->x, 'y' => $this->y];
     }
@@ -1358,7 +1358,7 @@ trait Loggable {
     public function log($message) {
         echo "[" . date('Y-m-d H:i:s') . "] " . $message . "📝\n";
     }
-    
+
     public function logError($error) {
         echo "[ERROR] " . $error . "🚨\n";
     }
@@ -1366,15 +1366,15 @@ trait Loggable {
 
 trait Cacheable {
     private $cache = [];
-    
+
     public function setCache($key, $value) {
         $this->cache[$key] = $value;
     }
-    
+
     public function getCache($key) {
         return $this->cache[$key] ?? null;
     }
-    
+
     public function clearCache() {
         $this->cache = [];
     }
@@ -1383,17 +1383,17 @@ trait Cacheable {
 // 🎯 複数のトレイトを使用
 class UserService {
     use Loggable, Cacheable;
-    
+
     public function createUser($name, $email) {
         $this->log("ユーザー作成開始: {$name} 👤");
-        
+
         // 📋 キャッシュをチェック
         $cachedUser = $this->getCache($email);
         if ($cachedUser) {
             $this->log("キャッシュからユーザーを取得: {$name} 💾");
             return $cachedUser;
         }
-        
+
         // 🎯 ユーザー作成処理（模擬）
         $user = [
             'id' => uniqid(),
@@ -1401,14 +1401,14 @@ class UserService {
             'email' => $email,
             'created_at' => date('Y-m-d H:i:s')
         ];
-        
+
         // 💾 キャッシュに保存
         $this->setCache($email, $user);
-        
+
         $this->log("ユーザー作成完了: {$name} ✅");
         return $user;
     }
-    
+
     public function deleteUser($email) {
         $this->log("ユーザー削除: {$email} 🗑️");
         // 削除処理...
@@ -1432,23 +1432,23 @@ class MathUtility {
     // ⚡ 静的プロパティ
     public static $pi = 3.14159;
     private static $calculations = 0;
-    
+
     // ⚡ 静的メソッド
     public static function add($a, $b) {
         self::$calculations++;
         return $a + $b;
     }
-    
+
     public static function multiply($a, $b) {
         self::$calculations++;
         return $a * $b;
     }
-    
+
     public static function circleArea($radius) {
         self::$calculations++;
         return self::$pi * $radius * $radius;
     }
-    
+
     public static function getCalculationCount() {
         return self::$calculations;
     }
@@ -1468,41 +1468,41 @@ echo MathUtility::getCalculationCount() . "📊";        // 3📊
 <?php
 class MagicExample {
     private $data = [];
-    
+
     // 🎉 オブジェクトが作成されるときに呼ばれる
     public function __construct($initialData = []) {
         echo "オブジェクトが作成されました ✨\n";
         $this->data = $initialData;
     }
-    
+
     // 🗑️ オブジェクトが破棄されるときに呼ばれる
     public function __destruct() {
         echo "オブジェクトが破棄されました 🗑️\n";
     }
-    
+
     // 🎯 存在しないプロパティにアクセスしたときに呼ばれる
     public function __get($name) {
         echo "プロパティ '{$name}' を取得しています 🔍\n";
         return $this->data[$name] ?? null;
     }
-    
+
     // 🔧 存在しないプロパティに値を設定したときに呼ばれる
     public function __set($name, $value) {
         echo "プロパティ '{$name}' に値 '{$value}' を設定しています 🔧\n";
         $this->data[$name] = $value;
     }
-    
+
     // 🎯 存在しないメソッドが呼ばれたときに呼ばれる
     public function __call($name, $arguments) {
         echo "メソッド '{$name}' が呼ばれました。引数: " . implode(', ', $arguments) . "🎯\n";
         return "メソッド '{$name}' は存在しません";
     }
-    
+
     // 📝 オブジェクトを文字列として扱うときに呼ばれる
     public function __toString() {
         return json_encode($this->data);
     }
-    
+
     // 🎯 オブジェクトを関数として呼び出すときに呼ばれる
     public function __invoke($message) {
         echo "オブジェクトが関数として呼ばれました: {$message} 🎯\n";
@@ -1538,7 +1538,7 @@ Laravel は MVC（Model-View-Controller）アーキテクチャを採用！こ�
 
 ### 🎯 MVC アーキテクチャとは
 
-MVC は以下の3つの要素で構成される魔法の設計パターン！🪄
+MVC は以下の 3 つの要素で構成される魔法の設計パターン！🪄
 
 - **🎯 Model（モデル）**: データベースとの連携、ビジネスロジック
 - **🖼️ View（ビュー）**: ユーザーインターフェース、画面表示
@@ -1611,10 +1611,10 @@ class HomeController extends Controller
             ['name' => '佐藤花子', 'email' => 'sato@example.com'],
             ['name' => '鈴木次郎', 'email' => 'suzuki@example.com']
         ];
-        
+
         return view('home', compact('message', 'users'));
     }
-    
+
     public function about()
     {
         return view('about', [
@@ -1622,7 +1622,7 @@ class HomeController extends Controller
             'description' => 'このサイトについて'
         ]);
     }
-    
+
     public function contact()
     {
         return view('contact');
@@ -1689,7 +1689,7 @@ class HomeController extends Controller
             <a href="{{ route('about') }}">📋 About</a>
             <a href="{{ route('contact') }}">📧 お問い合わせ</a>
         </nav>
-        
+
         @yield('content')
     </div>
 </body>
@@ -1704,11 +1704,11 @@ class HomeController extends Controller
 
 @section('content')
     <h1>{{ $message }}</h1>
-    
+
     <p>現在の時刻: {{ date('Y年m月d日 H:i:s') }}⏰</p>
-    
+
     <h2>ユーザー一覧 👥</h2>
-    
+
     @if(count($users) > 0)
         @foreach($users as $user)
             <div class="user-card">
@@ -1719,7 +1719,7 @@ class HomeController extends Controller
     @else
         <p>ユーザーが見つかりません。😅</p>
     @endif
-    
+
     <h3>統計情報 📊</h3>
     <ul>
         <li>総ユーザー数: {{ count($users) }}人</li>
@@ -1738,7 +1738,7 @@ class HomeController extends Controller
 @section('content')
     <h1>{{ $title }}</h1>
     <p>{{ $description }}</p>
-    
+
     <h2>Laravel の特徴 ✨</h2>
     <ul>
         <li>🎯 エレガントで表現力豊かな構文</li>
@@ -1746,7 +1746,7 @@ class HomeController extends Controller
         <li>🔐 簡単な認証機能</li>
         <li>📚 豊富なドキュメント</li>
     </ul>
-    
+
     <p>作成日: {{ date('Y年m月d日') }}📅</p>
 @endsection
 ```
@@ -1792,11 +1792,11 @@ Route::prefix('admin')->group(function () {
     Route::get('/', function () {
         return "管理者トップ 👑";
     });
-    
+
     Route::get('/users', function () {
         return "ユーザー管理 👥";
     });
-    
+
     Route::get('/posts', function () {
         return "投稿管理 📝";
     });
@@ -1822,7 +1822,7 @@ class Article extends Model
 {
     // 🏷️ テーブル名（デフォルトは複数形）
     protected $table = 'articles';
-    
+
     // 🔧 一括代入可能な属性
     protected $fillable = [
         'title',
@@ -1830,25 +1830,25 @@ class Article extends Model
         'author',
         'published_at'
     ];
-    
+
     // 📅 日付として扱う属性
     protected $dates = [
         'published_at'
     ];
-    
+
     // 🎯 カスタムメソッド
     public function isPublished()
     {
         return $this->published_at !== null;
     }
-    
+
     public function getExcerpt($length = 100)
     {
-        return strlen($this->content) > $length 
+        return strlen($this->content) > $length
             ? substr($this->content, 0, $length) . '...'
             : $this->content;
     }
-    
+
     public function getStatusEmoji()
     {
         return $this->isPublished() ? '✅' : '⏳';
@@ -1877,20 +1877,20 @@ class UtilityController extends Controller
         Log::info('UtilityController が呼び出されました 📝');
         Log::warning('これは警告メッセージです ⚠️');
         Log::error('これはエラーメッセージです 🚨');
-        
+
         // 💾 キャッシュ機能
         Cache::put('key', 'value', 60); // 60秒間キャッシュ
         $value = Cache::get('key', 'default'); // デフォルト値付きで取得
-        
+
         // 🔍 キャッシュの存在確認と削除
         if (Cache::has('key')) {
             Cache::forget('key');
         }
-        
+
         // 📁 ファイルストレージ
         Storage::put('example.txt', 'ファイルの内容 📄');
         $content = Storage::get('example.txt');
-        
+
         // 🔧 ヘルパー関数の使用
         $data = [
             'app_name' => config('app.name'),
@@ -1901,7 +1901,7 @@ class UtilityController extends Controller
             'storage_url' => storage_path('app/public'),
             'public_path' => public_path('images'),
         ];
-        
+
         return response()->json($data);
     }
 }
@@ -2076,7 +2076,7 @@ Route::get('/home', function () {
     $dashboardUrl = route('dashboard');
     $profileUrl = route('profile');
     $userUrl = route('user.show', ['id' => 123]);
-    
+
     return "
         <div style='font-family: Arial; padding: 20px;'>
             <h1>ナビゲーション 🧭</h1>
@@ -2105,11 +2105,11 @@ Route::prefix('admin')->group(function () {
     Route::get('/', function () {
         return '管理者ダッシュボード 👑'; // /admin/
     });
-    
+
     Route::get('/users', function () {
         return 'ユーザー管理 👥'; // /admin/users
     });
-    
+
     Route::get('/posts', function () {
         return '投稿管理 📝'; // /admin/posts
     });
@@ -2120,7 +2120,7 @@ Route::name('admin.')->group(function () {
     Route::get('/admin/dashboard', function () {
         return 'ダッシュボード 📊';
     })->name('dashboard'); // admin.dashboard
-    
+
     Route::get('/admin/users', function () {
         return 'ユーザー管理 👥';
     })->name('users'); // admin.users
@@ -2134,7 +2134,7 @@ Route::prefix('api/v1')
         Route::get('/users', function () {
             return response()->json(['users' => [], 'status' => 'success']);
         })->name('users');
-        
+
         Route::get('/posts', function () {
             return response()->json(['posts' => [], 'status' => 'success']);
         })->name('posts');
@@ -2145,7 +2145,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
         return 'ダッシュボード（認証済み）🔐';
     });
-    
+
     Route::get('/profile', function () {
         return 'プロフィール（認証済み）👤';
     });
@@ -2382,10 +2382,10 @@ class UserController extends Controller
             ['id' => 2, 'name' => '佐藤花子', 'email' => 'sato@example.com', 'avatar' => '👩'],
             ['id' => 3, 'name' => '鈴木次郎', 'email' => 'suzuki@example.com', 'avatar' => '👨'],
         ];
-        
+
         return view('users.index', compact('users'));
     }
-    
+
     /**
      * 👤 特定のユーザーを表示
      */
@@ -2398,10 +2398,10 @@ class UserController extends Controller
             'avatar' => '👤',
             'created_at' => now()->format('Y-m-d H:i:s')
         ];
-        
+
         return view('users.show', compact('user'));
     }
-    
+
     /**
      * ➕ ユーザー作成フォームを表示
      */
@@ -2409,7 +2409,7 @@ class UserController extends Controller
     {
         return view('users.create');
     }
-    
+
     /**
      * 💾 ユーザーを作成
      */
@@ -2421,14 +2421,14 @@ class UserController extends Controller
             'email' => 'required|email|unique:users',
             'password' => 'required|string|min:8',
         ]);
-        
+
         // 💾 ここでデータベースに保存する処理
         // User::create($validatedData);
-        
+
         return redirect()->route('users.index')
                         ->with('success', 'ユーザーが作成されました！🎉');
     }
-    
+
     /**
      * ✏️ ユーザー編集フォームを表示
      */
@@ -2440,10 +2440,10 @@ class UserController extends Controller
             'email' => "user{$id}@example.com",
             'avatar' => '👤'
         ];
-        
+
         return view('users.edit', compact('user'));
     }
-    
+
     /**
      * 🔄 ユーザーを更新
      */
@@ -2453,14 +2453,14 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $id,
         ]);
-        
+
         // 🔄 ここでデータベースを更新する処理
         // User::find($id)->update($validatedData);
-        
+
         return redirect()->route('users.show', $id)
                         ->with('success', 'ユーザー情報が更新されました！✅');
     }
-    
+
     /**
      * 🗑️ ユーザーを削除
      */
@@ -2468,7 +2468,7 @@ class UserController extends Controller
     {
         // 🗑️ ここでデータベースから削除する処理
         // User::destroy($id);
-        
+
         return redirect()->route('users.index')
                         ->with('success', 'ユーザーが削除されました！🗑️');
     }
@@ -2494,46 +2494,46 @@ class RequestController extends Controller
     {
         // 📋 全てのリクエストデータを取得
         $allData = $request->all();
-        
+
         // 🎯 特定のフィールドのみ取得
         $specificData = $request->only(['name', 'email']);
-        
+
         // 🚫 特定のフィールドを除外して取得
         $exceptData = $request->except(['password', 'password_confirmation']);
-        
+
         // 🎯 個別のフィールドを取得
         $name = $request->input('name');
         $email = $request->input('email', 'default@example.com'); // デフォルト値付き
-        
+
         // 🔍 フィールドの存在チェック
         if ($request->has('name')) {
             // nameフィールドが存在する ✅
         }
-        
+
         if ($request->filled('name')) {
             // nameフィールドが存在し、空でない ✅
         }
-        
+
         // 📋 配列データの取得
         $tags = $request->input('tags', []);
-        
+
         // 🎯 ネストしたデータの取得
         $userName = $request->input('user.name');
-        
+
         // 📁 ファイルアップロード
         if ($request->hasFile('avatar')) {
             $file = $request->file('avatar');
             $path = $file->store('avatars', 'public');
         }
-        
+
         // 🌐 HTTPメソッドの取得
         $method = $request->method();
-        
+
         // 🌐 URLとパス情報
         $url = $request->url();
         $fullUrl = $request->fullUrl();
         $path = $request->path();
-        
+
         return response()->json([
             'message' => 'リクエストデータを処理しました！✅',
             'all_data' => $allData,
@@ -2543,7 +2543,7 @@ class RequestController extends Controller
             'path' => $path . ' 🛣️'
         ]);
     }
-    
+
     /**
      * 📁 ファイルアップロード処理
      */
@@ -2552,22 +2552,22 @@ class RequestController extends Controller
         $request->validate([
             'file' => 'required|file|mimes:jpg,png,pdf|max:2048', // 2MB以下
         ]);
-        
+
         $file = $request->file('file');
-        
+
         // 📋 ファイル情報の取得
         $originalName = $file->getClientOriginalName();
         $extension = $file->getClientOriginalExtension();
         $size = $file->getSize();
         $mimeType = $file->getMimeType();
-        
+
         // 💾 ファイルの保存
         $path = $file->store('uploads', 'public');
-        
+
         // 🎯 カスタムファイル名で保存
         $customName = time() . '_' . $originalName;
         $customPath = $file->storeAs('uploads', $customName, 'public');
-        
+
         return response()->json([
             'message' => 'ファイルがアップロードされました！📁',
             'path' => $path,
@@ -2602,39 +2602,39 @@ class ResponseController extends Controller
     {
         // 📝 文字列レスポンス
         return 'Hello, World! 🌍';
-        
+
         // 📋 配列レスポンス（自動的にJSONに変換）
         return [
-            'message' => 'Hello 👋', 
+            'message' => 'Hello 👋',
             'status' => 'success ✅',
             'timestamp' => now()
         ];
-        
+
         // 🖼️ ビューレスポンス
         return view('welcome');
-        
+
         // 🎯 ビューにデータを渡す
         return view('users.index', [
             'users' => ['田中 👨', '佐藤 👩', '鈴木 👨']
         ]);
-        
+
         // 📊 JSONレスポンス
         return response()->json([
             'data' => ['user' => 'John Doe 👤'],
             'status' => 'success ✅'
         ]);
-        
+
         // 🎯 ステータスコード付きレスポンス
         return response()->json([
             'error' => 'Not Found 🔍'
         ], 404);
-        
+
         // 🎯 カスタムヘッダー付きレスポンス
         return response('Content 📄')
                 ->header('Content-Type', 'text/plain')
                 ->header('X-Custom-Header', 'Laravel-Awesome');
     }
-    
+
     /**
      * 🔄 リダイレクトレスポンス
      */
@@ -2642,57 +2642,57 @@ class ResponseController extends Controller
     {
         // 🌐 URLへのリダイレクト
         return redirect('https://example.com');
-        
+
         // 🛣️ ルートへのリダイレクト
         return redirect()->route('users.index');
-        
+
         // 🎮 アクションへのリダイレクト
         return redirect()->action([UserController::class, 'index']);
-        
+
         // ⬅️ 前のページへのリダイレクト
         return redirect()->back();
-        
+
         // 📝 入力値を保持してリダイレクト
         return redirect()->back()->withInput();
-        
+
         // ✅ セッションデータ付きリダイレクト
         return redirect()->route('users.index')
                         ->with('success', '操作が完了しました！🎉');
-        
+
         // 🚨 エラーメッセージ付きリダイレクト
         return redirect()->back()
                         ->withErrors(['email' => 'メールアドレスが無効です 📧']);
     }
-    
+
     /**
      * 📥 ファイルダウンロード
      */
     public function downloadFile()
     {
         $pathToFile = storage_path('app/documents/sample.pdf');
-        
+
         // 📥 ファイルダウンロード
         return response()->download($pathToFile);
-        
+
         // 🏷️ カスタムファイル名でダウンロード
         return response()->download($pathToFile, 'custom-name.pdf');
-        
+
         // 🗑️ ファイルを削除してからダウンロード
         return response()->download($pathToFile, 'sample.pdf', [
             'Content-Type' => 'application/pdf'
         ])->deleteFileAfterSend();
     }
-    
+
     /**
      * 👁️ ファイル表示
      */
     public function displayFile()
     {
         $pathToFile = storage_path('app/images/sample.jpg');
-        
+
         // 🖼️ ファイルをブラウザで表示
         return response()->file($pathToFile);
-        
+
         // 🎯 カスタムヘッダー付きでファイル表示
         return response()->file($pathToFile, [
             'Content-Type' => 'image/jpeg'
@@ -2702,7 +2702,7 @@ class ResponseController extends Controller
 ?>
 ```
 
-### 🔌 APIコントローラー
+### 🔌 API コントローラー
 
 ```php
 <?php
@@ -2724,7 +2724,7 @@ class UserApiController extends Controller
             ['id' => 1, 'name' => '田中太郎', 'email' => 'tanaka@example.com', 'avatar' => '👨'],
             ['id' => 2, 'name' => '佐藤花子', 'email' => 'sato@example.com', 'avatar' => '👩'],
         ];
-        
+
         return response()->json([
             'success' => true,
             'message' => 'ユーザー一覧を取得しました！✅',
@@ -2736,7 +2736,7 @@ class UserApiController extends Controller
             ]
         ]);
     }
-    
+
     /**
      * 👤 ユーザー詳細API
      */
@@ -2749,14 +2749,14 @@ class UserApiController extends Controller
             'avatar' => '👤',
             'created_at' => now()->toISOString()
         ];
-        
+
         return response()->json([
             'success' => true,
             'message' => 'ユーザー詳細を取得しました！✅',
             'data' => $user
         ]);
     }
-    
+
     /**
      * ➕ ユーザー作成API
      */
@@ -2766,21 +2766,21 @@ class UserApiController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
         ]);
-        
+
         // 💾 ここでデータベースに保存
         $user = array_merge($validatedData, [
             'id' => rand(1000, 9999),
             'avatar' => '👤',
             'created_at' => now()->toISOString()
         ]);
-        
+
         return response()->json([
             'success' => true,
             'message' => 'ユーザーが作成されました！🎉',
             'data' => $user
         ], 201);
     }
-    
+
     /**
      * 🔄 ユーザー更新API
      */
@@ -2790,34 +2790,34 @@ class UserApiController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $id,
         ]);
-        
+
         // 🔄 ここでデータベースを更新
         $user = array_merge($validatedData, [
             'id' => $id,
             'avatar' => '👤',
             'updated_at' => now()->toISOString()
         ]);
-        
+
         return response()->json([
             'success' => true,
             'message' => 'ユーザーが更新されました！✅',
             'data' => $user
         ]);
     }
-    
+
     /**
      * 🗑️ ユーザー削除API
      */
     public function destroy($id): JsonResponse
     {
         // 🗑️ ここでデータベースから削除
-        
+
         return response()->json([
             'success' => true,
             'message' => 'ユーザーが削除されました！🗑️'
         ]);
     }
-    
+
     /**
      * 🚨 エラーハンドリング
      */
@@ -2861,16 +2861,16 @@ class FunController extends Controller
             '🎪 ルーレット',
             '🎭 記憶ゲーム'
         ];
-        
+
         $selectedGame = $games[array_rand($games)];
-        
+
         return response()->json([
             'message' => 'ゲームを選んだよ！',
             'game' => $selectedGame,
             'lucky_number' => rand(1, 100)
         ]);
     }
-    
+
     /**
      * 🎊 今日の運勢
      */
@@ -2883,12 +2883,12 @@ class FunController extends Controller
             ['fortune' => '吉', 'emoji' => '🙂', 'message' => '普通の一日になりそう！'],
             ['fortune' => '末吉', 'emoji' => '😌', 'message' => '後半に良いことがありそう！']
         ];
-        
+
         $todayFortune = $fortunes[array_rand($fortunes)];
-        
+
         return view('fortune', compact('todayFortune'));
     }
-    
+
     /**
      * 🎨 カラーパレット
      */
@@ -2901,7 +2901,7 @@ class FunController extends Controller
             ['name' => 'サンセットオレンジ', 'hex' => '#FF8C00', 'emoji' => '🌅'],
             ['name' => 'ラベンダー', 'hex' => '#E6E6FA', 'emoji' => '💜']
         ];
-        
+
         return response()->json([
             'message' => '今日のカラーパレット！🎨',
             'colors' => $colors
@@ -2912,7 +2912,7 @@ class FunController extends Controller
 ```
 
 > 💡 **初心者向けヒント**：
-> コントローラーは Laravel アプリケーションのロジックを整理する重要な部分だよ！🎯 1つのコントローラーには関連する機能をまとめて、各メソッドは単一の責任を持つようにしよう！RESTful な設計を心がけることで、一貫性のある API を構築できるよ！また、適切なバリデーションとエラーハンドリングを行うことで、堅牢なアプリケーションを作成できるよ！✨
+> コントローラーは Laravel アプリケーションのロジックを整理する重要な部分だよ！🎯 1 つのコントローラーには関連する機能をまとめて、各メソッドは単一の責任を持つようにしよう！RESTful な設計を心がけることで、一貫性のある API を構築できるよ！また、適切なバリデーションとエラーハンドリングを行うことで、堅牢なアプリケーションを作成できるよ！✨
 
 ---
 
@@ -3002,7 +3002,7 @@ Blade は Laravel の超強力なテンプレートエンジン！✨ PHP コー
 <div class="row">
     <div class="col-md-12">
         <h1 class="mb-4">ユーザー一覧 👥</h1>
-        
+
         {{-- 🎯 switch文 --}}
     @switch($user->role)
         @case('admin')
@@ -3017,7 +3017,7 @@ Blade は Laravel の超強力なテンプレートエンジン！✨ PHP コー
         @default
             <span class="badge bg-secondary">不明 ❓</span>
     @endswitch
-    
+
     {{-- 🎯 foreach文 --}}
     <div class="row mt-4">
         @foreach($categories as $category)
@@ -3039,7 +3039,7 @@ Blade は Laravel の超強力なテンプレートエンジン！✨ PHP コー
             </div>
         @endforeach
     </div>
-    
+
     {{-- 🎯 for文 --}}
     <div class="mt-4">
         <h4>数字のカウント 🔢</h4>
@@ -3047,7 +3047,7 @@ Blade は Laravel の超強力なテンプレートエンジン！✨ PHP コー
             <span class="badge bg-secondary me-2">{{ $i }} ⭐</span>
         @endfor
     </div>
-    
+
     {{-- 🎯 forelse文（要素がない場合の処理） --}}
     <div class="mt-4">
         <h4>アイテム一覧 📦</h4>
@@ -3079,16 +3079,16 @@ Blade は Laravel の超強力なテンプレートエンジン！✨ PHP コー
             <div class="card-body">
                 <form method="POST" action="{{ route('users.store') }}" enctype="multipart/form-data">
                     @csrf
-                    
+
                     <div class="mb-3">
                         <label for="name" class="form-label">
                             <strong>名前 👤</strong>
                         </label>
-                        <input type="text" 
-                               class="form-control @error('name') is-invalid @enderror" 
-                               id="name" 
-                               name="name" 
-                               value="{{ old('name') }}" 
+                        <input type="text"
+                               class="form-control @error('name') is-invalid @enderror"
+                               id="name"
+                               name="name"
+                               value="{{ old('name') }}"
                                placeholder="例: 山田太郎"
                                required>
                         @error('name')
@@ -3097,16 +3097,16 @@ Blade は Laravel の超強力なテンプレートエンジン！✨ PHP コー
                             </div>
                         @enderror
                     </div>
-                    
+
                     <div class="mb-3">
                         <label for="email" class="form-label">
                             <strong>メールアドレス 📧</strong>
                         </label>
-                        <input type="email" 
-                               class="form-control @error('email') is-invalid @enderror" 
-                               id="email" 
-                               name="email" 
-                               value="{{ old('email') }}" 
+                        <input type="email"
+                               class="form-control @error('email') is-invalid @enderror"
+                               id="email"
+                               name="email"
+                               value="{{ old('email') }}"
                                placeholder="例: yamada@example.com"
                                required>
                         @error('email')
@@ -3115,15 +3115,15 @@ Blade は Laravel の超強力なテンプレートエンジン！✨ PHP コー
                             </div>
                         @enderror
                     </div>
-                    
+
                     <div class="mb-3">
                         <label for="password" class="form-label">
                             <strong>パスワード 🔐</strong>
                         </label>
-                        <input type="password" 
-                               class="form-control @error('password') is-invalid @enderror" 
-                               id="password" 
-                               name="password" 
+                        <input type="password"
+                               class="form-control @error('password') is-invalid @enderror"
+                               id="password"
+                               name="password"
                                placeholder="8文字以上で入力してください"
                                required>
                         @error('password')
@@ -3132,19 +3132,19 @@ Blade は Laravel の超強力なテンプレートエンジン！✨ PHP コー
                             </div>
                         @enderror
                     </div>
-                    
+
                     <div class="mb-3">
                         <label for="password_confirmation" class="form-label">
                             <strong>パスワード確認 🔐</strong>
                         </label>
-                        <input type="password" 
-                               class="form-control" 
-                               id="password_confirmation" 
-                               name="password_confirmation" 
+                        <input type="password"
+                               class="form-control"
+                               id="password_confirmation"
+                               name="password_confirmation"
                                placeholder="パスワードを再入力してください"
                                required>
                     </div>
-                    
+
                     <div class="mb-3">
                         <label for="role" class="form-label">
                             <strong>役割 🎭</strong>
@@ -3161,15 +3161,15 @@ Blade は Laravel の超強力なテンプレートエンジン！✨ PHP コー
                             </div>
                         @enderror
                     </div>
-                    
+
                     <div class="mb-3">
                         <label for="avatar" class="form-label">
                             <strong>アバター 📸</strong>
                         </label>
-                        <input type="file" 
-                               class="form-control @error('avatar') is-invalid @enderror" 
-                               id="avatar" 
-                               name="avatar" 
+                        <input type="file"
+                               class="form-control @error('avatar') is-invalid @enderror"
+                               id="avatar"
+                               name="avatar"
                                accept="image/*">
                         @error('avatar')
                             <div class="invalid-feedback">
@@ -3177,31 +3177,31 @@ Blade は Laravel の超強力なテンプレートエンジン！✨ PHP コー
                             </div>
                         @enderror
                     </div>
-                    
+
                     <div class="mb-3">
                         <div class="form-check">
-                            <input type="checkbox" 
-                                   class="form-check-input" 
-                                   id="is_active" 
-                                   name="is_active" 
-                                   value="1" 
+                            <input type="checkbox"
+                                   class="form-check-input"
+                                   id="is_active"
+                                   name="is_active"
+                                   value="1"
                                    {{ old('is_active') ? 'checked' : '' }}>
                             <label class="form-check-label" for="is_active">
                                 <strong>アクティブ ✅</strong>
                             </label>
                         </div>
                     </div>
-                    
+
                     <div class="mb-3">
                         <label class="form-label">
                             <strong>興味のある分野 🎯</strong>
                         </label>
                         @foreach(['技術 💻', '芸術 🎨', 'スポーツ ⚽', '音楽 🎵'] as $interest)
                             <div class="form-check">
-                                <input type="checkbox" 
-                                       class="form-check-input" 
-                                       id="interest_{{ $loop->index }}" 
-                                       name="interests[]" 
+                                <input type="checkbox"
+                                       class="form-check-input"
+                                       id="interest_{{ $loop->index }}"
+                                       name="interests[]"
                                        value="{{ $interest }}"
                                        {{ in_array($interest, old('interests', [])) ? 'checked' : '' }}>
                                 <label class="form-check-label" for="interest_{{ $loop->index }}">
@@ -3210,7 +3210,7 @@ Blade は Laravel の超強力なテンプレートエンジン！✨ PHP コー
                             </div>
                         @endforeach
                     </div>
-                    
+
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                         <a href="{{ route('users.index') }}" class="btn btn-secondary me-md-2">
                             ⬅️ キャンセル
@@ -3246,13 +3246,13 @@ class UserCard extends Component
 {
     public $user;
     public $showActions;
-    
+
     public function __construct($user, $showActions = true)
     {
         $this->user = $user;
         $this->showActions = $showActions;
     }
-    
+
     public function render()
     {
         return view('components.user-card');
@@ -3281,11 +3281,11 @@ class UserCard extends Component
             @if($showActions)
                 <div class="col-auto">
                     <div class="btn-group">
-                        <a href="{{ route('users.show', $user['id']) }}" 
+                        <a href="{{ route('users.show', $user['id']) }}"
                            class="btn btn-sm btn-outline-primary">
                             👁️ 詳細
                         </a>
-                        <a href="{{ route('users.edit', $user['id']) }}" 
+                        <a href="{{ route('users.edit', $user['id']) }}"
                            class="btn btn-sm btn-outline-warning">
                             ✏️ 編集
                         </a>
@@ -3329,11 +3329,11 @@ class UserCard extends Component
 @section('content')
 <div class="container">
     <h1>ユーザー一覧 👥</h1>
-    
+
     @foreach($users as $user)
         <x-user-card :user="$user" :show-actions="true" />
     @endforeach
-    
+
     {{-- 🎯 匿名コンポーネント --}}
     <x-alert type="info" :dismissible="true">
         <strong>情報:</strong> {{ count($users) }}人のユーザーが登録されています。📊
@@ -3375,10 +3375,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class User extends Model
 {
     use SoftDeletes; // 🗑️ ソフトデリート機能
-    
+
     // 🏷️ テーブル名（デフォルトは複数形）
     protected $table = 'users';
-    
+
     // 🔧 一括代入可能な属性
     protected $fillable = [
         'name',
@@ -3388,70 +3388,70 @@ class User extends Model
         'role',
         'is_active'
     ];
-    
+
     // 🔒 一括代入禁止の属性
     protected $guarded = ['id', 'created_at', 'updated_at'];
-    
+
     // 🙈 JSONに含めない属性
     protected $hidden = [
         'password',
         'remember_token'
     ];
-    
+
     // 📅 日付として扱う属性
     protected $dates = [
         'email_verified_at',
         'last_login_at',
         'deleted_at'
     ];
-    
+
     // 🎯 キャスト（型変換）
     protected $casts = [
         'is_active' => 'boolean',
         'settings' => 'array',
         'email_verified_at' => 'datetime'
     ];
-    
+
     // 🎯 アクセサ（データ取得時の加工）
     public function getNameAttribute($value)
     {
         return ucfirst($value); // 名前の最初を大文字に
     }
-    
+
     public function getAvatarUrlAttribute()
     {
-        return $this->avatar 
-            ? Storage::url($this->avatar) 
+        return $this->avatar
+            ? Storage::url($this->avatar)
             : 'https://via.placeholder.com/150x150.png?text=👤';
     }
-    
+
     // 🔧 ミューテータ（データ保存時の加工）
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = bcrypt($value);
     }
-    
+
     public function setEmailAttribute($value)
     {
         $this->attributes['email'] = strtolower($value);
     }
-    
+
     // 🎯 カスタムメソッド
     public function isAdmin()
     {
         return $this->role === 'admin';
     }
-    
+
     public function isActive()
     {
         return $this->is_active;
     }
-    
+
     public function getStatusEmoji()
     {
         return $this->is_active ? '✅' : '❌';
     }
-    
+
     public function getRoleEmoji()
     {
         return match($this->role) {
@@ -3484,22 +3484,22 @@ class UserController extends Controller
     {
         // 🎯 全件取得
         $users = User::all();
-        
+
         // 🎯 ページネーション付きで取得
         $users = User::paginate(10);
-        
+
         // 🎯 条件付きで取得
         $activeUsers = User::where('is_active', true)->get();
-        
+
         // 🎯 複数条件で取得
         $adminUsers = User::where('role', 'admin')
                          ->where('is_active', true)
                          ->orderBy('created_at', 'desc')
                          ->get();
-        
+
         return view('users.index', compact('users'));
     }
-    
+
     /**
      * 👤 特定のユーザーを取得
      */
@@ -3507,19 +3507,19 @@ class UserController extends Controller
     {
         // 🎯 IDで検索
         $user = User::find($id);
-        
+
         // 🎯 見つからない場合は404エラー
         $user = User::findOrFail($id);
-        
+
         // 🎯 条件で検索
         $user = User::where('email', 'user@example.com')->first();
-        
+
         // 🎯 見つからない場合は404エラー
         $user = User::where('email', 'user@example.com')->firstOrFail();
-        
+
         return view('users.show', compact('user'));
     }
-    
+
     /**
      * ➕ ユーザーを作成
      */
@@ -3531,104 +3531,104 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->password = $request->password;
         $user->save();
-        
+
         // 🎯 方法2: 一括代入
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => $request->password,
         ]);
-        
+
         // 🎯 方法3: リクエストデータをそのまま
         $user = User::create($request->validated());
-        
+
         return redirect()->route('users.show', $user->id)
                         ->with('success', 'ユーザーが作成されました！🎉');
     }
-    
+
     /**
      * 🔄 ユーザーを更新
      */
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
-        
+
         // 🎯 方法1: 個別に更新
         $user->name = $request->name;
         $user->email = $request->email;
         $user->save();
-        
+
         // 🎯 方法2: 一括更新
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
         ]);
-        
+
         // 🎯 方法3: リクエストデータをそのまま
         $user->update($request->validated());
-        
+
         return redirect()->route('users.show', $user->id)
                         ->with('success', 'ユーザー情報が更新されました！✅');
     }
-    
+
     /**
      * 🗑️ ユーザーを削除
      */
     public function destroy($id)
     {
         $user = User::findOrFail($id);
-        
+
         // 🎯 物理削除
         $user->delete();
-        
+
         // 🎯 ソフトデリート（SoftDeletesトレイト使用時）
         $user->delete(); // deleted_atに日時が入る
-        
+
         // 🎯 完全削除（ソフトデリート後）
         $user->forceDelete();
-        
+
         return redirect()->route('users.index')
                         ->with('success', 'ユーザーが削除されました！🗑️');
     }
-    
+
     /**
      * 🔍 高度な検索
      */
     public function search(Request $request)
     {
         $query = User::query();
-        
+
         // 🎯 名前で検索
         if ($request->filled('name')) {
             $query->where('name', 'like', '%' . $request->name . '%');
         }
-        
+
         // 🎯 メールで検索
         if ($request->filled('email')) {
             $query->where('email', 'like', '%' . $request->email . '%');
         }
-        
+
         // 🎯 役割で検索
         if ($request->filled('role')) {
             $query->where('role', $request->role);
         }
-        
+
         // 🎯 アクティブ状態で検索
         if ($request->filled('is_active')) {
             $query->where('is_active', $request->is_active);
         }
-        
+
         // 🎯 日付範囲で検索
         if ($request->filled('created_from')) {
             $query->whereDate('created_at', '>=', $request->created_from);
         }
-        
+
         if ($request->filled('created_to')) {
             $query->whereDate('created_at', '<=', $request->created_to);
         }
-        
+
         $users = $query->orderBy('created_at', 'desc')->paginate(10);
-        
+
         return view('users.search', compact('users'));
     }
 }
@@ -3651,13 +3651,13 @@ class User extends Model
     {
         return $this->hasMany(Post::class);
     }
-    
+
     // 🎯 1対1の関係（ユーザーは1つのプロフィールを持つ）
     public function profile()
     {
         return $this->hasOne(Profile::class);
     }
-    
+
     // 🎯 多対多の関係（ユーザーは複数の役割を持つ）
     public function roles()
     {
@@ -3665,7 +3665,7 @@ class User extends Model
                     ->withTimestamps()
                     ->withPivot('assigned_at', 'assigned_by');
     }
-    
+
     // 🎯 多態関係（ユーザーは複数のコメントを持つ）
     public function comments()
     {
@@ -3683,41 +3683,41 @@ class Post extends Model
         'published_at',
         'user_id'
     ];
-    
+
     protected $casts = [
         'published_at' => 'datetime'
     ];
-    
+
     // 🎯 逆の関係（投稿はユーザーに属する）
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-    
+
     // 🎯 多対多の関係（投稿は複数のタグを持つ）
     public function tags()
     {
         return $this->belongsToMany(Tag::class);
     }
-    
+
     // 🎯 多態関係（投稿は複数のコメントを持つ）
     public function comments()
     {
         return $this->morphMany(Comment::class, 'commentable');
     }
-    
+
     // 🎯 カスタムメソッド
     public function isPublished()
     {
-        return $this->published_at !== null && 
+        return $this->published_at !== null &&
                $this->published_at->isPast();
     }
-    
+
     public function getStatusEmoji()
     {
         return $this->isPublished() ? '✅' : '⏳';
     }
-    
+
     public function getExcerpt($length = 100)
     {
         return Str::limit(strip_tags($this->content), $length);
@@ -3733,13 +3733,13 @@ class Comment extends Model
         'commentable_id',
         'commentable_type'
     ];
-    
+
     // 🎯 多態関係（コメントは投稿やユーザーに属する）
     public function commentable()
     {
         return $this->morphTo();
     }
-    
+
     // 🎯 コメントの作成者
     public function user()
     {
@@ -3763,38 +3763,38 @@ class PostController extends Controller
                     ->where('published_at', '<=', now())
                     ->orderBy('published_at', 'desc')
                     ->paginate(10);
-        
+
         return view('posts.index', compact('posts'));
     }
-    
+
     public function show($id)
     {
         $post = Post::with(['user', 'tags', 'comments.user'])
                    ->findOrFail($id);
-        
+
         // 🎯 コメント数を取得
         $commentCount = $post->comments()->count();
-        
+
         // 🎯 関連投稿を取得
         $relatedPosts = Post::where('user_id', $post->user_id)
                            ->where('id', '!=', $post->id)
                            ->limit(5)
                            ->get();
-        
+
         return view('posts.show', compact('post', 'commentCount', 'relatedPosts'));
     }
-    
+
     public function userPosts($userId)
     {
         $user = User::findOrFail($userId);
-        
+
         // 🎯 ユーザーの投稿を取得
         $posts = $user->posts()
                      ->with('tags')
                      ->published()
                      ->orderBy('created_at', 'desc')
                      ->paginate(10);
-        
+
         return view('users.posts', compact('user', 'posts'));
     }
 }
@@ -3814,7 +3814,7 @@ class PostController extends Controller
             <h1>{{ $post->title }} 📝</h1>
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <strong>作成者:</strong> 
+                    <strong>作成者:</strong>
                     {{ $post->user->getRoleEmoji() }} {{ $post->user->name }}
                     <span class="text-muted">{{ $post->created_at->format('Y年m月d日') }}</span>
                 </div>
@@ -3825,12 +3825,12 @@ class PostController extends Controller
                 </div>
             </div>
         </div>
-        
+
         <div class="card-body">
             <div class="content">
                 {!! nl2br(e($post->content)) !!}
             </div>
-            
+
             {{-- 🏷️ タグ表示 --}}
             @if($post->tags->count() > 0)
                 <div class="mt-4">
@@ -3844,7 +3844,7 @@ class PostController extends Controller
             @endif
         </div>
     </article>
-    
+
     {{-- 💬 コメント表示 --}}
     <div class="card shadow mt-4">
         <div class="card-header">
@@ -3881,17 +3881,17 @@ class Post extends Model
         return $query->whereNotNull('published_at')
                     ->where('published_at', '<=', now());
     }
-    
+
     public function scopePopular($query, $threshold = 100)
     {
         return $query->where('views', '>=', $threshold);
     }
-    
+
     public function scopeByAuthor($query, $authorId)
     {
         return $query->where('user_id', $authorId);
     }
-    
+
     public function scopeRecent($query, $days = 30)
     {
         return $query->where('created_at', '>=', now()->subDays($days));
@@ -3948,34 +3948,34 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             // 🎯 主キー（自動増分）
             $table->id();
-            
+
             // 📝 基本的な文字列フィールド
             $table->string('name');
             $table->string('email')->unique();
-            
+
             // 🔐 パスワードフィールド
             $table->string('password');
-            
+
             // 🎭 役割フィールド（enum）
             $table->enum('role', ['user', 'editor', 'admin'])->default('user');
-            
+
             // ✅ 真偽値フィールド
             $table->boolean('is_active')->default(true);
-            
+
             // 📧 メール確認日時
             $table->timestamp('email_verified_at')->nullable();
-            
+
             // 🔄 Remember tokenフィールド
             $table->rememberToken();
-            
+
             // 📅 作成日時・更新日時
             $table->timestamps();
-            
+
             // 🗑️ ソフトデリート用
             $table->softDeletes();
         });
     }
-    
+
     /**
      * ⬇️ マイグレーションをロールバック
      */
@@ -3998,33 +3998,33 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            
+
             // 📝 文字列関連
             $table->string('title', 255);           // VARCHAR(255)
             $table->text('content');                // TEXT
             $table->longText('full_content');       // LONGTEXT
             $table->char('code', 10);              // CHAR(10)
             $table->json('metadata');              // JSON
-            
+
             // 🔢 数値関連
             $table->integer('views')->default(0);  // INT
             $table->bigInteger('big_number');      // BIGINT
             $table->smallInteger('small_number');  // SMALLINT
             $table->tinyInteger('tiny_number');    // TINYINT
             $table->unsignedInteger('positive');   // UNSIGNED INT
-            
+
             // 💰 小数点数関連
             $table->decimal('price', 8, 2);        // DECIMAL(8,2)
             $table->float('rating', 3, 2);         // FLOAT(3,2)
             $table->double('precise_value');       // DOUBLE
-            
+
             // 📅 日付・時刻関連
             $table->date('published_date');        // DATE
             $table->time('published_time');        // TIME
             $table->dateTime('published_at');      // DATETIME
             $table->timestamp('created_at');       // TIMESTAMP
             $table->year('year');                  // YEAR
-            
+
             // 🎯 その他の特殊なタイプ
             $table->boolean('is_featured')->default(false);
             $table->enum('status', ['draft', 'published', 'archived']);
@@ -4033,15 +4033,15 @@ return new class extends Migration
             $table->uuid('unique_id');             // UUID
             $table->ipAddress('ip');               // IP Address
             $table->macAddress('mac');             // MAC Address
-            
+
             // 🔗 外部キー
             $table->foreignId('user_id')->constrained();
             $table->foreignId('category_id')->constrained('categories');
-            
+
             // 📅 タイムスタンプ
             $table->timestamps();
             $table->softDeletes();
-            
+
             // 🎯 インデックス
             $table->index('title');
             $table->index(['user_id', 'created_at'], 'user_created_index');
@@ -4049,7 +4049,7 @@ return new class extends Migration
             $table->fullText(['title', 'content']);
         });
     }
-    
+
     public function down()
     {
         Schema::dropIfExists('posts');
@@ -4070,36 +4070,36 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             // 🖼️ アバター画像のパスを追加
             $table->string('avatar')->nullable()->after('email');
-            
+
             // 📱 電話番号を追加
             $table->string('phone', 20)->nullable()->after('email');
-            
+
             // 🏠 住所情報を追加
             $table->text('address')->nullable();
-            
-            // 🎂 生年月日を追加 
+
+            // 🎂 生年月日を追加
             $table->date('birthday')->nullable();
-            
+
             // 📊 プロフィール設定（JSON）
             $table->json('settings')->nullable();
-            
+
             // 🎯 インデックスの追加
             $table->index('phone');
         });
     }
-    
+
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
             // 🗑️ 追加したカラムを削除
             $table->dropColumn([
                 'avatar',
-                'phone', 
+                'phone',
                 'address',
                 'birthday',
                 'settings'
             ]);
-            
+
             // 🎯 インデックスの削除
             $table->dropIndex(['phone']);
         });
@@ -4122,16 +4122,16 @@ return new class extends Migration
             $table->string('name', 100)->change();           // 長さを変更
             $table->text('bio')->nullable()->change();       // NULLを許可
             $table->integer('age')->unsigned()->change();    // UNSIGNED に変更
-            
+
             // 🏷️ カラム名の変更
             $table->renameColumn('old_name', 'new_name');
-            
+
             // 🎯 インデックスの変更
             $table->dropIndex('old_index_name');
             $table->index('new_column', 'new_index_name');
         });
     }
-    
+
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
@@ -4139,9 +4139,9 @@ return new class extends Migration
             $table->string('name', 255)->change();
             $table->text('bio')->nullable(false)->change();
             $table->integer('age')->change();
-            
+
             $table->renameColumn('new_name', 'old_name');
-            
+
             $table->dropIndex('new_index_name');
             $table->index('old_column', 'old_index_name');
         });
@@ -4163,27 +4163,27 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('content');
-            
+
             // 🔗 外部キー（簡単な方法）
             $table->foreignId('user_id')->constrained();
-            
+
             // 🔗 外部キー（詳細設定）
             $table->foreignId('category_id')
                   ->constrained('categories')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
-            
+
             // 🔗 外部キー（手動設定）
             $table->unsignedBigInteger('author_id');
             $table->foreign('author_id')
                   ->references('id')
                   ->on('users')
                   ->onDelete('cascade');
-            
+
             $table->timestamps();
         });
     }
-    
+
     public function down()
     {
         Schema::dropIfExists('posts');
@@ -4203,26 +4203,26 @@ return new class extends Migration
     {
         Schema::create('post_tag', function (Blueprint $table) {
             $table->id();
-            
+
             // 🔗 両方のテーブルへの外部キー
             $table->foreignId('post_id')->constrained()->onDelete('cascade');
             $table->foreignId('tag_id')->constrained()->onDelete('cascade');
-            
+
             // 🎯 追加情報（ピボットテーブルの拡張）
             $table->timestamp('assigned_at')->nullable();
             $table->unsignedBigInteger('assigned_by')->nullable();
             $table->integer('sort_order')->default(0);
-            
+
             $table->timestamps();
-            
+
             // 🎯 複合ユニークキー
             $table->unique(['post_id', 'tag_id']);
-            
+
             // 🎯 インデックス
             $table->index(['post_id', 'sort_order']);
         });
     }
-    
+
     public function down()
     {
         Schema::dropIfExists('post_tag');
@@ -4286,16 +4286,16 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->integer('sort_order')->default(0);
             $table->timestamps();
-            
+
             $table->index(['is_active', 'sort_order']);
         });
-        
+
         // 🌱 マイグレーション後にシーダーを実行
         $this->call([
             CategorySeeder::class
         ]);
     }
-    
+
     public function down()
     {
         Schema::dropIfExists('categories');
@@ -4321,14 +4321,14 @@ return new class extends Migration
                 $table->timestamps();
             });
         }
-        
+
         // 🔍 カラムが存在しない場合のみ追加
         Schema::table('users', function (Blueprint $table) {
             if (!Schema::hasColumn('users', 'profile_image')) {
                 $table->string('profile_image')->nullable();
             }
         });
-        
+
         // 🔍 インデックスが存在しない場合のみ追加
         Schema::table('posts', function (Blueprint $table) {
             if (!$this->hasIndex('posts', 'title_index')) {
@@ -4336,7 +4336,7 @@ return new class extends Migration
             }
         });
     }
-    
+
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
@@ -4344,10 +4344,10 @@ return new class extends Migration
                 $table->dropColumn('profile_image');
             }
         });
-        
+
         Schema::dropIfExists('safe_table');
     }
-    
+
     /**
      * 🔍 インデックスの存在チェック
      */
@@ -4386,46 +4386,46 @@ class EloquentExampleController extends Controller
     {
         // 🎯 全件取得
         $users = User::all();
-        
+
         // 🎯 最初の1件取得
         $user = User::first();
-        
+
         // 🎯 IDで検索
         $user = User::find(1);
         $users = User::find([1, 2, 3]); // 複数ID
-        
+
         // 🎯 見つからない場合は404エラー
         $user = User::findOrFail(1);
-        
+
         // 🎯 条件指定で検索
         $activeUsers = User::where('is_active', true)->get();
-        
+
         // 🎯 複数条件
         $adminUsers = User::where('role', 'admin')
                          ->where('is_active', true)
                          ->get();
-        
+
         // 🎯 OR条件
         $users = User::where('role', 'admin')
                     ->orWhere('role', 'editor')
                     ->get();
-        
+
         // 🎯 WHERE IN
         $users = User::whereIn('role', ['admin', 'editor'])->get();
-        
+
         // 🎯 LIKE検索
         $users = User::where('name', 'like', '%田中%')->get();
-        
+
         // 🎯 日付範囲検索
         $recentPosts = Post::whereBetween('created_at', [
             now()->subDays(7),
             now()
         ])->get();
-        
+
         // 🎯 NULL検索
         $unverifiedUsers = User::whereNull('email_verified_at')->get();
         $verifiedUsers = User::whereNotNull('email_verified_at')->get();
-        
+
         return response()->json([
             'message' => 'クエリ実行完了！🎉',
             'total_users' => $users->count()
@@ -4449,35 +4449,35 @@ class AdvancedQueryController extends Controller
         $maxAge = User::max('age');
         $minAge = User::min('age');
         $totalViews = Post::sum('views');
-        
+
         // 🎯 グループ化
         $usersByRole = User::select('role', DB::raw('count(*) as count'))
                           ->groupBy('role')
                           ->get();
-        
+
         // 🎯 並び替え
         $users = User::orderBy('created_at', 'desc')
                     ->orderBy('name', 'asc')
                     ->get();
-        
+
         // 🎯 ランダム取得
         $randomUsers = User::inRandomOrder()->limit(5)->get();
-        
+
         // 🎯 重複除去
         $uniqueRoles = User::distinct()->pluck('role');
-        
+
         // 🎯 件数制限
         $topUsers = User::orderBy('created_at', 'desc')
                        ->limit(10)
                        ->get();
-        
+
         // 🎯 オフセット
         $users = User::skip(10)->take(5)->get();
-        
+
         // 🎯 ページネーション
         $users = User::paginate(10);
         $users = User::simplePaginate(10);
-        
+
         // 🎯 チャンク処理（大量データ処理）
         User::chunk(100, function ($users) {
             foreach ($users as $user) {
@@ -4485,12 +4485,12 @@ class AdvancedQueryController extends Controller
                 $this->processUser($user);
             }
         });
-        
+
         // 🎯 サブクエリ
         $usersWithPosts = User::whereHas('posts', function ($query) {
             $query->where('published_at', '>', now()->subDays(30));
         })->get();
-        
+
         // 🎯 EXISTS/NOT EXISTS
         $activeAuthors = User::whereExists(function ($query) {
             $query->select(DB::raw(1))
@@ -4498,7 +4498,7 @@ class AdvancedQueryController extends Controller
                   ->whereRaw('posts.user_id = users.id')
                   ->where('published_at', '>', now()->subDays(30));
         })->get();
-        
+
         return response()->json([
             'statistics' => [
                 'total_users' => $userCount,
@@ -4508,7 +4508,7 @@ class AdvancedQueryController extends Controller
             ]
         ]);
     }
-    
+
     private function processUser($user)
     {
         // ユーザー処理のロジック
@@ -4528,43 +4528,43 @@ class RelationshipQueryController extends Controller
     {
         // 🎯 Eager Loading（N+1問題を解決）
         $users = User::with('posts')->get();
-        
+
         // 🎯 複数のリレーションを読み込み
         $users = User::with(['posts', 'profile', 'roles'])->get();
-        
+
         // 🎯 ネストしたリレーション
         $users = User::with('posts.comments.user')->get();
-        
+
         // 🎯 条件付きEager Loading
         $users = User::with(['posts' => function ($query) {
             $query->where('published_at', '>', now()->subDays(30))
                   ->orderBy('published_at', 'desc');
         }])->get();
-        
+
         // 🎯 リレーションの存在確認
         $usersWithPosts = User::has('posts')->get();
         $usersWithManyPosts = User::has('posts', '>=', 10)->get();
-        
+
         // 🎯 リレーションの条件
         $usersWithRecentPosts = User::whereHas('posts', function ($query) {
             $query->where('published_at', '>', now()->subDays(7));
         })->get();
-        
+
         // 🎯 リレーションが存在しない
         $usersWithoutPosts = User::doesntHave('posts')->get();
         $usersWithoutRecentPosts = User::whereDoesntHave('posts', function ($query) {
             $query->where('published_at', '>', now()->subDays(30));
         })->get();
-        
+
         // 🎯 リレーションの件数を取得
         $users = User::withCount('posts')->get();
         $users = User::withCount(['posts', 'comments'])->get();
-        
+
         // 🎯 条件付きリレーション件数
         $users = User::withCount(['posts as published_posts_count' => function ($query) {
             $query->whereNotNull('published_at');
         }])->get();
-        
+
         return response()->json([
             'users_with_posts' => $usersWithPosts->count(),
             'users_without_posts' => $usersWithoutPosts->count(),
@@ -4592,14 +4592,14 @@ class CrudController extends Controller
         $user->email = 'yamada@example.com';
         $user->password = 'password123';
         $user->save();
-        
+
         // 🎯 方法2: 一括代入
         $user = User::create([
             'name' => '佐藤花子',
             'email' => 'sato@example.com',
             'password' => 'password123',
         ]);
-        
+
         // 🎯 方法3: firstOrCreate（存在しなければ作成）
         $user = User::firstOrCreate(
             ['email' => 'suzuki@example.com'],
@@ -4608,7 +4608,7 @@ class CrudController extends Controller
                 'password' => 'password123',
             ]
         );
-        
+
         // 🎯 方法4: updateOrCreate（存在すれば更新、なければ作成）
         $user = User::updateOrCreate(
             ['email' => 'tanaka@example.com'],
@@ -4618,76 +4618,76 @@ class CrudController extends Controller
                 'is_active' => true
             ]
         );
-        
+
         return response()->json([
             'message' => 'ユーザーが作成されました！🎉',
             'user' => $user
         ]);
     }
-    
+
     /**
      * 🔄 データの更新
      */
     public function update($id)
     {
         $user = User::findOrFail($id);
-        
+
         // 🎯 方法1: 個別フィールド更新
         $user->name = '更新された名前';
         $user->save();
-        
+
         // 🎯 方法2: 一括更新
         $user->update([
             'name' => '一括更新された名前',
             'email' => 'updated@example.com'
         ]);
-        
+
         // 🎯 方法3: 条件付き一括更新
         User::where('role', 'user')
             ->where('is_active', false)
             ->update(['is_active' => true]);
-        
+
         // 🎯 方法4: インクリメント/デクリメント
         $post = Post::find(1);
         $post->increment('views');           // views + 1
         $post->increment('views', 5);        // views + 5
         $post->decrement('likes');           // likes - 1
         $post->decrement('likes', 2);        // likes - 2
-        
+
         return response()->json([
             'message' => 'ユーザーが更新されました！✅',
             'user' => $user
         ]);
     }
-    
+
     /**
      * 🗑️ データの削除
      */
     public function delete($id)
     {
         $user = User::findOrFail($id);
-        
+
         // 🎯 ソフトデリート（SoftDeletesトレイト使用時）
         $user->delete();
-        
+
         // 🎯 完全削除
         $user->forceDelete();
-        
+
         // 🎯 条件付き削除
         User::where('is_active', false)
             ->where('created_at', '<', now()->subYears(2))
             ->delete();
-        
+
         // 🎯 削除されたデータの取得（ソフトデリート使用時）
         $deletedUsers = User::onlyTrashed()->get();
-        
+
         // 🎯 削除されたデータの復元
         $deletedUser = User::onlyTrashed()->find($id);
         $deletedUser->restore();
-        
+
         // 🎯 削除されたデータも含めて取得
         $allUsers = User::withTrashed()->get();
-        
+
         return response()->json([
             'message' => 'ユーザーが削除されました！🗑️'
         ]);
@@ -4705,31 +4705,31 @@ class CollectionController extends Controller
     public function collections()
     {
         $users = User::all();
-        
+
         // 🎯 基本的なコレクション操作
         $activeUsers = $users->where('is_active', true);
         $adminUsers = $users->where('role', 'admin');
         $userNames = $users->pluck('name');
         $userEmails = $users->pluck('email', 'id'); // キー付き
-        
+
         // 🎯 条件チェック
         $hasAdmins = $users->contains('role', 'admin');
         $hasActiveUsers = $users->contains(function ($user) {
             return $user->is_active && $user->role === 'admin';
         });
-        
+
         // 🎯 検索
         $admin = $users->first(function ($user) {
             return $user->role === 'admin';
         });
-        
+
         $userById = $users->find(1);
-        
+
         // 🎯 フィルタリング
         $recentUsers = $users->filter(function ($user) {
             return $user->created_at->isAfter(now()->subDays(30));
         });
-        
+
         // 🎯 変換
         $userSummaries = $users->map(function ($user) {
             return [
@@ -4739,22 +4739,22 @@ class CollectionController extends Controller
                 'role_emoji' => $user->getRoleEmoji()
             ];
         });
-        
+
         // 🎯 グループ化
         $usersByRole = $users->groupBy('role');
         $usersByStatus = $users->groupBy(function ($user) {
             return $user->is_active ? 'active' : 'inactive';
         });
-        
+
         // 🎯 並び替え
         $sortedUsers = $users->sortBy('name');
         $sortedByDate = $users->sortByDesc('created_at');
-        
+
         // 🎯 統計
         $totalUsers = $users->count();
         $activeCount = $users->where('is_active', true)->count();
         $roles = $users->pluck('role')->unique()->values();
-        
+
         // 🎯 チャンク処理
         $users->chunk(10)->each(function ($chunk) {
             foreach ($chunk as $user) {
@@ -4762,7 +4762,7 @@ class CollectionController extends Controller
                 Log::info("Processing user: {$user->name} 👤");
             }
         });
-        
+
         return response()->json([
             'statistics' => [
                 'total_users' => $totalUsers,
@@ -4791,25 +4791,25 @@ class QueryBuilderController extends Controller
                     ->where('is_active', true)
                     ->whereRaw('created_at > DATE_SUB(NOW(), INTERVAL 30 DAY)')
                     ->get();
-        
+
         // 🎯 JOIN
         $users = User::join('posts', 'users.id', '=', 'posts.user_id')
                     ->select('users.*', 'posts.title as latest_post')
                     ->where('posts.published_at', '>', now()->subDays(30))
                     ->get();
-        
+
         // 🎯 LEFT JOIN
         $users = User::leftJoin('posts', 'users.id', '=', 'posts.user_id')
                     ->select('users.*', DB::raw('COUNT(posts.id) as post_count'))
                     ->groupBy('users.id')
                     ->having('post_count', '>', 0)
                     ->get();
-        
+
         // 🎯 UNION
         $activeUsers = User::where('is_active', true);
         $adminUsers = User::where('role', 'admin');
         $combinedUsers = $activeUsers->union($adminUsers)->get();
-        
+
         // 🎯 WITH句（Common Table Expression）
         $users = DB::table('users')
                    ->select('*')
@@ -4819,7 +4819,7 @@ class QueryBuilderController extends Controller
                              ->where('published_at', '>', now()->subDays(30));
                    })
                    ->get();
-        
+
         return response()->json([
             'complex_query_results' => $users->count(),
             'message' => '複雑なクエリ実行完了！🔥'
@@ -4839,44 +4839,44 @@ class TransactionController extends Controller
     {
         try {
             DB::beginTransaction();
-            
+
             // 🎯 ユーザー作成
             $user = User::create([
                 'name' => 'トランザクションユーザー',
                 'email' => 'transaction@example.com',
                 'password' => 'password123'
             ]);
-            
+
             // 🎯 プロフィール作成
             $user->profile()->create([
                 'bio' => 'トランザクションで作成されたプロフィール',
                 'website' => 'https://example.com'
             ]);
-            
+
             // 🎯 初期投稿作成
             $user->posts()->create([
                 'title' => '初めての投稿',
                 'content' => 'トランザクションで作成された投稿です。',
                 'published_at' => now()
             ]);
-            
+
             DB::commit();
-            
+
             return response()->json([
                 'message' => 'トランザクション成功！🎉',
                 'user' => $user->load(['profile', 'posts'])
             ]);
-            
+
         } catch (\Exception $e) {
             DB::rollback();
-            
+
             return response()->json([
                 'message' => 'トランザクション失敗！🚨',
                 'error' => $e->getMessage()
             ], 500);
         }
     }
-    
+
     // 🎯 クロージャを使ったトランザクション
     public function transactionWithClosure()
     {
@@ -4886,16 +4886,16 @@ class TransactionController extends Controller
                 'email' => 'closure@example.com',
                 'password' => 'password123'
             ]);
-            
+
             $user->posts()->create([
                 'title' => 'クロージャで作成',
                 'content' => 'クロージャトランザクションで作成された投稿です。',
                 'published_at' => now()
             ]);
-            
+
             return $user;
         });
-        
+
         return response()->json([
             'message' => 'クロージャトランザクション成功！✨',
             'user' => $result
@@ -4940,13 +4940,13 @@ class FormController extends Controller
             'website' => 'nullable|url',
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-        
+
         return response()->json([
             'message' => 'バリデーション成功！✅',
             'data' => $validatedData
         ]);
     }
-    
+
     /**
      * 🎯 カスタムエラーメッセージ
      */
@@ -4965,13 +4965,13 @@ class FormController extends Controller
             'password.required' => 'パスワードは必須です 🔐',
             'password.min' => 'パスワードは8文字以上で入力してください 🔐',
         ]);
-        
+
         return response()->json([
             'message' => 'カスタムメッセージでバリデーション成功！🎉',
             'data' => $validatedData
         ]);
     }
-    
+
     /**
      * 🎯 条件付きバリデーション
      */
@@ -4982,21 +4982,21 @@ class FormController extends Controller
             'email' => 'required|email',
             'user_type' => 'required|in:individual,company',
         ];
-        
+
         // 🎯 会社の場合は会社名が必須
         if ($request->user_type === 'company') {
             $rules['company_name'] = 'required|string|max:255';
             $rules['tax_number'] = 'required|string|max:20';
         }
-        
+
         // 🎯 個人の場合は年齢が必須
         if ($request->user_type === 'individual') {
             $rules['age'] = 'required|integer|min:18|max:120';
             $rules['birthday'] = 'required|date|before:today';
         }
-        
+
         $validatedData = $request->validate($rules);
-        
+
         return response()->json([
             'message' => '条件付きバリデーション成功！🎯',
             'data' => $validatedData
@@ -5019,47 +5019,47 @@ class ValidationRulesController extends Controller
             'name' => 'required|string|min:2|max:50',
             'slug' => 'required|string|alpha_dash', // 英数字、ハイフン、アンダースコア
             'description' => 'nullable|string|max:1000',
-            
+
             // 📧 メール関連
             'email' => 'required|email:rfc,dns', // RFC準拠＋DNS確認
             'backup_email' => 'nullable|email|different:email',
-            
+
             // 🔢 数値関連
             'age' => 'required|integer|between:18,120',
             'price' => 'required|numeric|min:0.01',
             'quantity' => 'required|integer|min:1',
             'percentage' => 'required|numeric|between:0,100',
-            
+
             // 📅 日付関連
             'birthday' => 'required|date|before:today',
             'appointment_date' => 'required|date|after:tomorrow',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after:start_date',
-            
+
             // 📁 ファイル関連
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // 2MB
             'resume' => 'nullable|file|mimes:pdf,doc,docx|max:5120', // 5MB
             'photos.*' => 'image|mimes:jpeg,png,jpg|max:1024', // 配列の各要素
-            
+
             // 🔗 URL関連
             'website' => 'nullable|url',
             'social_url' => 'nullable|url|regex:/^https:\/\/(twitter|facebook|instagram)\.com\//',
-            
+
             // 🎯 選択関連
             'gender' => 'required|in:male,female,other',
             'country' => 'required|exists:countries,code',
             'category_id' => 'required|exists:categories,id,deleted_at,NULL',
-            
+
             // 📋 配列関連
             'tags' => 'required|array|min:1|max:5',
             'tags.*' => 'string|max:20',
             'skills' => 'array',
             'skills.*' => 'exists:skills,id',
-            
+
             // 🔐 パスワード関連
             'password' => 'required|string|min:8|confirmed|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/',
             'current_password' => 'required|current_password',
-            
+
             // 📱 その他
             'phone' => 'nullable|regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
             'ip_address' => 'nullable|ip',
@@ -5068,7 +5068,7 @@ class ValidationRulesController extends Controller
             'boolean_field' => 'required|boolean',
             'uuid' => 'nullable|uuid',
         ]);
-        
+
         return response()->json([
             'message' => '全ルールバリデーション成功！🎉',
             'validated_fields' => array_keys($validatedData)
@@ -5103,14 +5103,14 @@ class UserStoreRequest extends FormRequest
     {
         // 🎯 認証済みユーザーのみ許可
         return auth()->check();
-        
+
         // 🎯 管理者のみ許可
         // return auth()->user()?->isAdmin() ?? false;
-        
+
         // 🎯 全員許可
         // return true;
     }
-    
+
     /**
      * 📋 バリデーションルール
      */
@@ -5128,7 +5128,7 @@ class UserStoreRequest extends FormRequest
             'settings.theme' => 'in:light,dark',
         ];
     }
-    
+
     /**
      * 📝 カスタムエラーメッセージ
      */
@@ -5148,7 +5148,7 @@ class UserStoreRequest extends FormRequest
             'avatar.max' => 'アバターは2MB以下のファイルを選択してください 📸',
         ];
     }
-    
+
     /**
      * 🏷️ 属性名のカスタマイズ
      */
@@ -5163,7 +5163,7 @@ class UserStoreRequest extends FormRequest
             'is_active' => 'アクティブ状態',
         ];
     }
-    
+
     /**
      * 🔧 バリデーション前の準備処理
      */
@@ -5175,7 +5175,7 @@ class UserStoreRequest extends FormRequest
             'is_active' => $this->boolean('is_active'),
         ]);
     }
-    
+
     /**
      * ✅ バリデーション後の処理
      */
@@ -5186,7 +5186,7 @@ class UserStoreRequest extends FormRequest
             if ($this->name && str_contains(strtolower($this->name), 'admin')) {
                 $validator->errors()->add('name', '名前に"admin"を含めることはできません 🚫');
             }
-            
+
             // 🎯 複数フィールドの関連チェック
             if ($this->role === 'admin' && !$this->is_active) {
                 $validator->errors()->add('is_active', '管理者は必ずアクティブである必要があります 👑');
@@ -5217,49 +5217,49 @@ class UserController extends Controller
     {
         // 🎯 バリデーション済みデータを取得
         $validatedData = $request->validated();
-        
+
         // 🎯 パスワードをハッシュ化
         $validatedData['password'] = bcrypt($validatedData['password']);
-        
+
         // 🎯 アバターファイルの処理
         if ($request->hasFile('avatar')) {
             $avatarPath = $request->file('avatar')->store('avatars', 'public');
             $validatedData['avatar'] = $avatarPath;
         }
-        
+
         // 🎯 ユーザー作成
         $user = User::create($validatedData);
-        
+
         return redirect()->route('users.show', $user->id)
                         ->with('success', 'ユーザーが作成されました！🎉');
     }
-    
+
     /**
      * 🔄 ユーザー更新
      */
     public function update(UserUpdateRequest $request, User $user)
     {
         $validatedData = $request->validated();
-        
+
         // 🎯 アバター更新処理
         if ($request->hasFile('avatar')) {
             // 古いアバターを削除
             if ($user->avatar) {
                 Storage::disk('public')->delete($user->avatar);
             }
-            
+
             // 新しいアバターを保存
             $avatarPath = $request->file('avatar')->store('avatars', 'public');
             $validatedData['avatar'] = $avatarPath;
         }
-        
+
         // 🎯 パスワード更新処理
         if (isset($validatedData['password'])) {
             $validatedData['password'] = bcrypt($validatedData['password']);
         }
-        
+
         $user->update($validatedData);
-        
+
         return redirect()->route('users.show', $user->id)
                         ->with('success', 'ユーザー情報が更新されました！✅');
     }
@@ -5293,30 +5293,30 @@ class StrongPassword implements Rule
         if (strlen($value) < 8) {
             return false;
         }
-        
+
         // 🎯 英小文字を含む
         if (!preg_match('/[a-z]/', $value)) {
             return false;
         }
-        
+
         // 🎯 英大文字を含む
         if (!preg_match('/[A-Z]/', $value)) {
             return false;
         }
-        
+
         // 🎯 数字を含む
         if (!preg_match('/[0-9]/', $value)) {
             return false;
         }
-        
+
         // 🎯 記号を含む
         if (!preg_match('/[!@#$%^&*(),.?":{}|<>]/', $value)) {
             return false;
         }
-        
+
         return true;
     }
-    
+
     /**
      * 📝 エラーメッセージ
      */
@@ -5334,27 +5334,27 @@ use Illuminate\Contracts\Validation\Rule;
 class PhoneNumber implements Rule
 {
     private $country;
-    
+
     public function __construct($country = 'JP')
     {
         $this->country = $country;
     }
-    
+
     public function passes($attribute, $value)
     {
         // 🎯 日本の電話番号パターン
         if ($this->country === 'JP') {
             return preg_match('/^(0[5-9]0[0-9]{8}|0[1-9][1-9][0-9]{7})$/', $value);
         }
-        
+
         // 🎯 アメリカの電話番号パターン
         if ($this->country === 'US') {
             return preg_match('/^\+1[2-9][0-9]{2}[2-9][0-9]{2}[0-9]{4}$/', $value);
         }
-        
+
         return false;
     }
-    
+
     public function message()
     {
         return '正しい電話番号形式で入力してください 📱';
@@ -5419,7 +5419,7 @@ class UserStoreRequest extends FormRequest
                 <div class="card-body">
                     <form method="POST" action="{{ route('users.store') }}" enctype="multipart/form-data">
                         @csrf
-                        
+
                         {{-- 🎯 成功メッセージ --}}
                         @if(session('success'))
                             <div class="alert alert-success alert-dismissible fade show">
@@ -5427,7 +5427,7 @@ class UserStoreRequest extends FormRequest
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                             </div>
                         @endif
-                        
+
                         {{-- 🎯 エラーサマリー --}}
                         @if($errors->any())
                             <div class="alert alert-danger">
@@ -5439,18 +5439,18 @@ class UserStoreRequest extends FormRequest
                                 </ul>
                             </div>
                         @endif
-                        
+
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="name" class="form-label">
                                         <strong>名前 👤</strong> <span class="text-danger">*</span>
                                     </label>
-                                    <input type="text" 
-                                           class="form-control @error('name') is-invalid @enderror" 
-                                           id="name" 
-                                           name="name" 
-                                           value="{{ old('name') }}" 
+                                    <input type="text"
+                                           class="form-control @error('name') is-invalid @enderror"
+                                           id="name"
+                                           name="name"
+                                           value="{{ old('name') }}"
                                            placeholder="例: 山田太郎"
                                            required>
                                     @error('name')
@@ -5460,17 +5460,17 @@ class UserStoreRequest extends FormRequest
                                     @enderror
                                 </div>
                             </div>
-                            
+
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="email" class="form-label">
                                         <strong>メールアドレス 📧</strong> <span class="text-danger">*</span>
                                     </label>
-                                    <input type="email" 
-                                           class="form-control @error('email') is-invalid @enderror" 
-                                           id="email" 
-                                           name="email" 
-                                           value="{{ old('email') }}" 
+                                    <input type="email"
+                                           class="form-control @error('email') is-invalid @enderror"
+                                           id="email"
+                                           name="email"
+                                           value="{{ old('email') }}"
                                            placeholder="例: yamada@example.com"
                                            required>
                                     @error('email')
@@ -5481,17 +5481,17 @@ class UserStoreRequest extends FormRequest
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="password" class="form-label">
                                         <strong>パスワード 🔐</strong> <span class="text-danger">*</span>
                                     </label>
-                                    <input type="password" 
-                                           class="form-control @error('password') is-invalid @enderror" 
-                                           id="password" 
-                                           name="password" 
+                                    <input type="password"
+                                           class="form-control @error('password') is-invalid @enderror"
+                                           id="password"
+                                           name="password"
                                            placeholder="8文字以上の強力なパスワード"
                                            required>
                                     @error('password')
@@ -5504,31 +5504,31 @@ class UserStoreRequest extends FormRequest
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="password_confirmation" class="form-label">
                                         <strong>パスワード確認 🔐</strong> <span class="text-danger">*</span>
                                     </label>
-                                    <input type="password" 
-                                           class="form-control" 
-                                           id="password_confirmation" 
-                                           name="password_confirmation" 
+                                    <input type="password"
+                                           class="form-control"
+                                           id="password_confirmation"
+                                           name="password_confirmation"
                                            placeholder="パスワードを再入力"
                                            required>
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="role" class="form-label">
                                         <strong>役割 🎭</strong> <span class="text-danger">*</span>
                                     </label>
-                                    <select class="form-select @error('role') is-invalid @enderror" 
-                                            id="role" 
-                                            name="role" 
+                                    <select class="form-select @error('role') is-invalid @enderror"
+                                            id="role"
+                                            name="role"
                                             required>
                                         <option value="">選択してください</option>
                                         <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}>
@@ -5548,16 +5548,16 @@ class UserStoreRequest extends FormRequest
                                     @enderror
                                 </div>
                             </div>
-                            
+
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="avatar" class="form-label">
                                         <strong>アバター 📸</strong>
                                     </label>
-                                    <input type="file" 
-                                           class="form-control @error('avatar') is-invalid @enderror" 
-                                           id="avatar" 
-                                           name="avatar" 
+                                    <input type="file"
+                                           class="form-control @error('avatar') is-invalid @enderror"
+                                           id="avatar"
+                                           name="avatar"
                                            accept="image/*">
                                     @error('avatar')
                                         <div class="invalid-feedback">
@@ -5570,21 +5570,21 @@ class UserStoreRequest extends FormRequest
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="mb-3">
                             <div class="form-check">
-                                <input type="checkbox" 
-                                       class="form-check-input" 
-                                       id="is_active" 
-                                       name="is_active" 
-                                       value="1" 
+                                <input type="checkbox"
+                                       class="form-check-input"
+                                       id="is_active"
+                                       name="is_active"
+                                       value="1"
                                        {{ old('is_active', true) ? 'checked' : '' }}>
                                 <label class="form-check-label" for="is_active">
                                     <strong>アクティブ ✅</strong>
                                 </label>
                             </div>
                         </div>
-                        
+
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                             <a href="{{ route('users.index') }}" class="btn btn-secondary me-md-2">
                                 ⬅️ キャンセル
@@ -5607,18 +5607,18 @@ class UserStoreRequest extends FormRequest
 document.addEventListener('DOMContentLoaded', function() {
     const passwordInput = document.getElementById('password');
     const confirmInput = document.getElementById('password_confirmation');
-    
+
     function validatePassword() {
         const password = passwordInput.value;
         const confirm = confirmInput.value;
-        
+
         if (confirm && password !== confirm) {
             confirmInput.setCustomValidity('パスワードが一致しません 🔐');
         } else {
             confirmInput.setCustomValidity('');
         }
     }
-    
+
     passwordInput.addEventListener('input', validatePassword);
     confirmInput.addEventListener('input', validatePassword);
 });
@@ -5675,7 +5675,7 @@ class AuthController extends Controller
     {
         return view('auth.register');
     }
-    
+
     /**
      * ➕ ユーザー登録処理
      */
@@ -5694,21 +5694,21 @@ class AuthController extends Controller
             'password.min' => 'パスワードは8文字以上で入力してください 🔐',
             'password.confirmed' => 'パスワード確認が一致しません 🔐',
         ]);
-        
+
         // 🎯 ユーザー作成
         $user = User::create([
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
             'password' => Hash::make($validatedData['password']),
         ]);
-        
+
         // 🎯 自動ログイン
         Auth::login($user);
-        
+
         return redirect()->route('dashboard')
                         ->with('success', 'アカウントが作成されました！🎉');
     }
-    
+
     /**
      * 📝 ログイン画面表示
      */
@@ -5716,7 +5716,7 @@ class AuthController extends Controller
     {
         return view('auth.login');
     }
-    
+
     /**
      * 🔐 ログイン処理
      */
@@ -5730,39 +5730,39 @@ class AuthController extends Controller
             'email.email' => '正しいメールアドレス形式で入力してください 📧',
             'password.required' => 'パスワードは必須です 🔐',
         ]);
-        
+
         $remember = $request->boolean('remember');
-        
+
         // 🎯 認証試行
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
-            
+
             // 🎯 最終ログイン時刻を更新
             Auth::user()->update([
                 'last_login_at' => now()
             ]);
-            
+
             return redirect()->intended('dashboard')
                             ->with('success', 'ログインしました！✅');
         }
-        
+
         throw ValidationException::withMessages([
             'email' => 'メールアドレスまたはパスワードが正しくありません 🚨',
         ]);
     }
-    
+
     /**
      * 🚪 ログアウト処理
      */
     public function logout(Request $request)
     {
         $userName = Auth::user()->name;
-        
+
         Auth::logout();
-        
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        
+
         return redirect()->route('login')
                         ->with('success', "{$userName}さん、お疲れさまでした！👋");
     }
@@ -5788,21 +5788,21 @@ class DashboardController extends Controller
     {
         // 🔐 認証チェック
         $this->middleware('auth');
-        
+
         // 🔍 メール認証チェック
         $this->middleware('verified')->only(['premium']);
-        
+
         // 🎯 特定のメソッドのみ認証
         $this->middleware('auth')->except(['public']);
     }
-    
+
     /**
      * 📊 ダッシュボード表示
      */
     public function index()
     {
         $user = auth()->user();
-        
+
         // 🎯 ユーザーの統計情報を取得
         $stats = [
             'posts_count' => $user->posts()->count(),
@@ -5811,32 +5811,32 @@ class DashboardController extends Controller
             'followers_count' => $user->followers()->count(),
             'following_count' => $user->following()->count(),
         ];
-        
+
         // 🎯 最近の活動を取得
         $recentPosts = $user->posts()
                            ->latest()
                            ->limit(5)
                            ->get();
-        
+
         $recentComments = $user->comments()
                               ->with('post')
                               ->latest()
                               ->limit(5)
                               ->get();
-        
+
         return view('dashboard', compact('user', 'stats', 'recentPosts', 'recentComments'));
     }
-    
+
     /**
      * 👤 プロフィール画面
      */
     public function profile()
     {
         $user = auth()->user();
-        
+
         return view('profile.show', compact('user'));
     }
-    
+
     /**
      * 💎 プレミアム機能（メール認証必須）
      */
@@ -5844,7 +5844,7 @@ class DashboardController extends Controller
     {
         return view('premium.index');
     }
-    
+
     /**
      * 🌐 パブリック画面（認証不要）
      */
@@ -5875,69 +5875,69 @@ class User extends Authenticatable
         'is_active',
         'last_login_at'
     ];
-    
+
     protected $casts = [
         'email_verified_at' => 'datetime',
         'last_login_at' => 'datetime',
         'is_active' => 'boolean',
     ];
-    
+
     // 🎯 役割チェックメソッド
     public function isAdmin()
     {
         return $this->role === 'admin';
     }
-    
+
     public function isEditor()
     {
         return $this->role === 'editor';
     }
-    
+
     public function isModerator()
     {
         return in_array($this->role, ['admin', 'editor', 'moderator']);
     }
-    
+
     public function hasRole($role)
     {
         if (is_array($role)) {
             return in_array($this->role, $role);
         }
-        
+
         return $this->role === $role;
     }
-    
+
     // 🎯 権限チェックメソッド
     public function canManageUsers()
     {
         return $this->isAdmin();
     }
-    
+
     public function canEditPosts()
     {
         return $this->isModerator();
     }
-    
+
     public function canDeletePost($post)
     {
         return $this->isAdmin() || $post->user_id === $this->id;
     }
-    
+
     // 🎯 アクティブ状態チェック
     public function isActive()
     {
         return $this->is_active;
     }
-    
+
     // 🎯 最終ログインからの経過時間
     public function getLastLoginDaysAttribute()
     {
         if (!$this->last_login_at) {
             return '未ログイン';
         }
-        
+
         $days = $this->last_login_at->diffInDays(now());
-        
+
         if ($days === 0) {
             return '今日';
         } elseif ($days === 1) {
@@ -5946,7 +5946,7 @@ class User extends Authenticatable
             return "{$days}日前";
         }
     }
-    
+
     // 🎯 役割に応じた絵文字取得
     public function getRoleEmoji()
     {
@@ -5989,13 +5989,13 @@ class CheckRole
             return redirect()->route('login')
                            ->with('error', 'ログインが必要です 🔐');
         }
-        
+
         $user = auth()->user();
-        
+
         if (!$user->hasRole($roles)) {
             abort(403, 'この機能にアクセスする権限がありません 🚫');
         }
-        
+
         return $next($request);
     }
 }
@@ -6015,11 +6015,11 @@ class CheckActive
     {
         if (auth()->check() && !auth()->user()->isActive()) {
             auth()->logout();
-            
+
             return redirect()->route('login')
                            ->with('error', 'アカウントが無効化されています 🚫');
         }
-        
+
         return $next($request);
     }
 }
@@ -6044,7 +6044,7 @@ class Kernel extends HttpKernel
         'auth' => \App\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        
+
         // 🎯 カスタムミドルウェア
         'role' => \App\Http\Middleware\CheckRole::class,
         'active' => \App\Http\Middleware\CheckActive::class,
@@ -6070,19 +6070,19 @@ Route::get('/about', 'HomeController@about')->name('about');
 Route::middleware(['auth', 'active'])->group(function () {
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
     Route::get('/profile', 'DashboardController@profile')->name('profile');
-    
+
     // 👤 一般ユーザー向け
     Route::middleware('role:user,editor,admin')->group(function () {
         Route::resource('posts', 'PostController');
         Route::resource('comments', 'CommentController');
     });
-    
+
     // ✏️ 編集者以上
     Route::middleware('role:editor,admin')->group(function () {
         Route::get('/editor/dashboard', [EditorController::class, 'dashboard'])->name('editor.dashboard');
         Route::resource('categories', 'CategoryController');
     });
-    
+
     // 👑 管理者のみ
     Route::middleware('role:admin')->group(function () {
         Route::prefix('admin')->name('admin.')->group(function () {
@@ -6118,7 +6118,7 @@ Route::post('/logout', 'Auth\AuthController@logout')
         <a class="navbar-brand" href="{{ route('home') }}">
             🚀 Laravel App
         </a>
-        
+
         <div class="navbar-nav ms-auto">
             @auth
                 {{-- 🔐 認証済みユーザー向けメニュー --}}
@@ -6137,7 +6137,7 @@ Route::post('/logout', 'Auth\AuthController@logout')
                                 👤 プロフィール
                             </a>
                         </li>
-                        
+
                         @can('admin')
                             <li><hr class="dropdown-divider"></li>
                             <li>
@@ -6146,7 +6146,7 @@ Route::post('/logout', 'Auth\AuthController@logout')
                                 </a>
                             </li>
                         @endcan
-                        
+
                         @can('editor')
                             <li>
                                 <a class="dropdown-item" href="{{ route('editor.dashboard') }}">
@@ -6154,7 +6154,7 @@ Route::post('/logout', 'Auth\AuthController@logout')
                                 </a>
                             </li>
                         @endcan
-                        
+
                         <li><hr class="dropdown-divider"></li>
                         <li>
                             <form method="POST" action="{{ route('logout') }}">
@@ -6192,7 +6192,7 @@ Route::post('/logout', 'Auth\AuthController@logout')
                     作成者: {{ $post->user->name }} 👤
                     作成日: {{ $post->created_at->format('Y年m月d日') }}
                 </small>
-                
+
                 @auth
                     @if(auth()->user()->canDeletePost($post))
                         <div class="btn-group">
@@ -6202,7 +6202,7 @@ Route::post('/logout', 'Auth\AuthController@logout')
                             <form method="POST" action="{{ route('posts.destroy', $post) }}" class="d-inline">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger" 
+                                <button type="submit" class="btn btn-sm btn-danger"
                                         onclick="return confirm('本当に削除しますか？ 🗑️')">
                                     🗑️ 削除
                                 </button>
@@ -6212,14 +6212,14 @@ Route::post('/logout', 'Auth\AuthController@logout')
                 @endauth
             </div>
         </div>
-        
+
         <div class="card-body">
             <div class="content">
                 {!! nl2br(e($post->content)) !!}
             </div>
         </div>
     </article>
-    
+
     @auth
         {{-- 🔐 認証済みユーザーのみコメント投稿可能 --}}
         <div class="card mt-4">
@@ -6231,7 +6231,7 @@ Route::post('/logout', 'Auth\AuthController@logout')
                     @csrf
                     <input type="hidden" name="post_id" value="{{ $post->id }}">
                     <div class="mb-3">
-                        <textarea class="form-control" name="content" rows="3" 
+                        <textarea class="form-control" name="content" rows="3"
                                   placeholder="コメントを入力してください..." required></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">
@@ -6255,7 +6255,6 @@ Route::post('/logout', 'Auth\AuthController@logout')
 > 認証機能は Web アプリケーションのセキュリティの要！🛡️ Laravel Breeze を使えば、基本的な認証システムがあっという間に構築できるよ！役割ベースの認証を実装すれば、ユーザーごとに異なる機能を提供できる！ミドルウェアを活用して、適切なアクセス制御を行うことが重要だよ！✨
 
 ---
-
 
 ## 16. 🛡️ ミドルウェア
 
@@ -6289,7 +6288,7 @@ class CheckAge
     {
         // 🔍 年齢パラメータの取得
         $age = $request->input('age');
-        
+
         // 🎯 年齢チェック
         if (!$age || $age < $minAge) {
             return response()->json([
@@ -6298,7 +6297,7 @@ class CheckAge
                 'your_age' => $age ?: '未入力'
             ], 403);
         }
-        
+
         // ✅ 条件を満たす場合は次の処理へ
         return $next($request);
     }
@@ -6325,7 +6324,7 @@ class LogRequests
     public function handle(Request $request, Closure $next)
     {
         $startTime = microtime(true);
-        
+
         // 📝 リクエスト開始ログ
         Log::info('リクエスト開始', [
             'method' => $request->method(),
@@ -6335,13 +6334,13 @@ class LogRequests
             'user_id' => auth()->id(),
             'timestamp' => now()->toISOString()
         ]);
-        
+
         // 🎯 次の処理を実行
         $response = $next($request);
-        
+
         $endTime = microtime(true);
         $duration = round(($endTime - $startTime) * 1000, 2); // ミリ秒
-        
+
         // 📝 レスポンス完了ログ
         Log::info('リクエスト完了', [
             'method' => $request->method(),
@@ -6351,7 +6350,7 @@ class LogRequests
             'memory_usage' => round(memory_get_peak_usage(true) / 1024 / 1024, 2) . 'MB',
             'user_id' => auth()->id()
         ]);
-        
+
         // 🚨 遅いリクエストの警告
         if ($duration > 2000) { // 2秒以上
             Log::warning('遅いリクエストを検出', [
@@ -6359,7 +6358,7 @@ class LogRequests
                 'duration_ms' => $duration
             ]);
         }
-        
+
         return $response;
     }
 }
@@ -6392,9 +6391,9 @@ class CorsMiddleware
                 ->header('Access-Control-Allow-Credentials', 'true')
                 ->header('Access-Control-Max-Age', '86400');
         }
-        
+
         $response = $next($request);
-        
+
         // 🎯 CORS ヘッダーを追加
         return $response
             ->header('Access-Control-Allow-Origin', '*')
@@ -6426,11 +6425,11 @@ class ApiRateLimit
     public function handle(Request $request, Closure $next, $maxAttempts = 60, $decayMinutes = 1)
     {
         $key = $this->resolveRequestSignature($request);
-        
+
         // 🎯 レート制限チェック
         if (RateLimiter::tooManyAttempts($key, $maxAttempts)) {
             $retryAfter = RateLimiter::availableIn($key);
-            
+
             return response()->json([
                 'error' => 'レート制限に達しました 🚫',
                 'message' => "しばらくお待ちください。{$retryAfter}秒後に再試行できます。",
@@ -6439,21 +6438,21 @@ class ApiRateLimit
                 'period' => $decayMinutes . '分'
             ], 429)->header('Retry-After', $retryAfter);
         }
-        
+
         // 🎯 リクエストカウントを増加
         RateLimiter::hit($key, $decayMinutes * 60);
-        
+
         $response = $next($request);
-        
+
         // 🎯 レスポンスヘッダーを追加
         $remaining = $maxAttempts - RateLimiter::attempts($key);
-        
+
         return $response
             ->header('X-RateLimit-Limit', $maxAttempts)
             ->header('X-RateLimit-Remaining', max(0, $remaining))
             ->header('X-RateLimit-Reset', time() + RateLimiter::availableIn($key));
     }
-    
+
     /**
      * 🔑 リクエスト署名を生成
      */
@@ -6462,7 +6461,7 @@ class ApiRateLimit
         if ($user = $request->user()) {
             return 'api_rate_limit:user:' . $user->id;
         }
-        
+
         return 'api_rate_limit:ip:' . $request->ip();
     }
 }
@@ -6491,7 +6490,7 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
     ];
-    
+
     /**
      * 🎯 Web ミドルウェアグループ
      */
@@ -6503,21 +6502,21 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            
+
             // 🎯 カスタムミドルウェア
             \App\Http\Middleware\LogRequests::class,
         ],
-        
+
         'api' => [
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            
+
             // 🎯 APIカスタムミドルウェア
             \App\Http\Middleware\CorsMiddleware::class,
         ],
     ];
-    
+
     /**
      * 🎯 ルートミドルウェア
      */
@@ -6531,7 +6530,7 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        
+
         // 🎯 カスタムミドルウェア
         'check.age' => \App\Http\Middleware\CheckAge::class,
         'cors' => \App\Http\Middleware\CorsMiddleware::class,
@@ -6602,7 +6601,7 @@ class TerminableMiddleware
     {
         return $next($request);
     }
-    
+
     /**
      * 🔚 レスポンス送信後の処理
      */
@@ -6610,30 +6609,30 @@ class TerminableMiddleware
     {
         // 🎯 重い処理をレスポンス後に実行
         $this->performHeavyTask($request, $response);
-        
+
         // 📊 分析データの送信
         $this->sendAnalytics($request, $response);
-        
+
         // 🧹 一時ファイルのクリーンアップ
         $this->cleanupTempFiles();
-        
+
         Log::info('終了処理完了', [
             'url' => $request->fullUrl(),
             'status' => $response->getStatusCode()
         ]);
     }
-    
+
     private function performHeavyTask($request, $response)
     {
         // 重い処理をここで実行
         // メール送信、画像処理、データ分析など
     }
-    
+
     private function sendAnalytics($request, $response)
     {
         // Google Analytics や独自の分析システムにデータ送信
     }
-    
+
     private function cleanupTempFiles()
     {
         // 一時ファイルの削除
@@ -6647,7 +6646,7 @@ class TerminableMiddleware
 
 ---
 
-## 17. 🔌 API開発
+## 17. 🔌 API 開発
 
 Laravel での API 開発は超簡単！✨ RESTful API から GraphQL まで、モダンな Web API を構築できるよ！
 
@@ -6682,11 +6681,11 @@ class PostController extends Controller
         $category = $request->input('category');
         $sortBy = $request->input('sort_by', 'created_at');
         $sortOrder = $request->input('sort_order', 'desc');
-        
+
         // 🔍 クエリビルダーの構築
         $query = Post::with(['user', 'categories', 'tags'])
                     ->where('published_at', '<=', now());
-        
+
         // 🎯 検索条件の適用
         if ($search) {
             $query->where(function ($q) use ($search) {
@@ -6694,19 +6693,19 @@ class PostController extends Controller
                   ->orWhere('content', 'like', "%{$search}%");
             });
         }
-        
+
         if ($category) {
             $query->whereHas('categories', function ($q) use ($category) {
                 $q->where('slug', $category);
             });
         }
-        
+
         // 🎯 ソート
         $query->orderBy($sortBy, $sortOrder);
-        
+
         // 📋 ページネーション
         $posts = $query->paginate($perPage);
-        
+
         return response()->json([
             'success' => true,
             'message' => '投稿一覧を取得しました 📋',
@@ -6727,7 +6726,7 @@ class PostController extends Controller
             ]
         ]);
     }
-    
+
     /**
      * 📝 投稿詳細を取得
      */
@@ -6736,10 +6735,10 @@ class PostController extends Controller
         try {
             $post = Post::with(['user', 'categories', 'tags', 'comments.user'])
                        ->findOrFail($id);
-            
+
             // 🎯 閲覧数をインクリメント
             $post->increment('views');
-            
+
             return response()->json([
                 'success' => true,
                 'message' => '投稿詳細を取得しました 📝',
@@ -6780,7 +6779,7 @@ class PostController extends Controller
                     })
                 ]
             ]);
-            
+
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -6789,7 +6788,7 @@ class PostController extends Controller
             ], 404);
         }
     }
-    
+
     /**
      * ➕ 投稿を作成
      */
@@ -6808,7 +6807,7 @@ class PostController extends Controller
             'content.required' => '本文は必須です 📝',
             'categories.*.exists' => '存在しないカテゴリが指定されています 🚫'
         ]);
-        
+
         try {
             $post = new Post();
             $post->title = $validatedData['title'];
@@ -6817,12 +6816,12 @@ class PostController extends Controller
             $post->user_id = auth()->id();
             $post->published_at = $validatedData['published_at'] ?? null;
             $post->save();
-            
+
             // 🎯 カテゴリの関連付け
             if (isset($validatedData['categories'])) {
                 $post->categories()->attach($validatedData['categories']);
             }
-            
+
             // 🎯 タグの関連付け
             if (isset($validatedData['tags'])) {
                 $tagIds = [];
@@ -6832,13 +6831,13 @@ class PostController extends Controller
                 }
                 $post->tags()->attach($tagIds);
             }
-            
+
             return response()->json([
                 'success' => true,
                 'message' => '投稿が作成されました 🎉',
                 'data' => $post->load(['categories', 'tags'])
             ], 201);
-            
+
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -6847,7 +6846,7 @@ class PostController extends Controller
             ], 500);
         }
     }
-    
+
     /**
      * 🔄 投稿を更新
      */
@@ -6855,7 +6854,7 @@ class PostController extends Controller
     {
         try {
             $post = Post::findOrFail($id);
-            
+
             // 🔐 認可チェック
             if ($post->user_id !== auth()->id() && !auth()->user()->isAdmin()) {
                 return response()->json([
@@ -6863,7 +6862,7 @@ class PostController extends Controller
                     'message' => 'この投稿を編集する権限がありません 🚫'
                 ], 403);
             }
-            
+
             $validatedData = $request->validate([
                 'title' => 'sometimes|required|string|max:255',
                 'content' => 'sometimes|required|string',
@@ -6873,14 +6872,14 @@ class PostController extends Controller
                 'tags.*' => 'string|max:50',
                 'published_at' => 'nullable|date'
             ]);
-            
+
             $post->update($validatedData);
-            
+
             // 🎯 カテゴリの更新
             if (isset($validatedData['categories'])) {
                 $post->categories()->sync($validatedData['categories']);
             }
-            
+
             // 🎯 タグの更新
             if (isset($validatedData['tags'])) {
                 $tagIds = [];
@@ -6890,13 +6889,13 @@ class PostController extends Controller
                 }
                 $post->tags()->sync($tagIds);
             }
-            
+
             return response()->json([
                 'success' => true,
                 'message' => '投稿が更新されました ✅',
                 'data' => $post->load(['categories', 'tags'])
             ]);
-            
+
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -6905,7 +6904,7 @@ class PostController extends Controller
             ], 500);
         }
     }
-    
+
     /**
      * 🗑️ 投稿を削除
      */
@@ -6913,7 +6912,7 @@ class PostController extends Controller
     {
         try {
             $post = Post::findOrFail($id);
-            
+
             // 🔐 認可チェック
             if ($post->user_id !== auth()->id() && !auth()->user()->isAdmin()) {
                 return response()->json([
@@ -6921,14 +6920,14 @@ class PostController extends Controller
                     'message' => 'この投稿を削除する権限がありません 🚫'
                 ], 403);
             }
-            
+
             $post->delete();
-            
+
             return response()->json([
                 'success' => true,
                 'message' => '投稿が削除されました 🗑️'
             ]);
-            
+
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -6976,20 +6975,20 @@ class PostResource extends JsonResource
             'published_at' => $this->published_at?->toISOString(),
             'created_at' => $this->created_at->toISOString(),
             'updated_at' => $this->updated_at->toISOString(),
-            
+
             // 🎯 リレーションシップ
             'author' => new UserResource($this->whenLoaded('user')),
             'categories' => CategoryResource::collection($this->whenLoaded('categories')),
             'tags' => TagResource::collection($this->whenLoaded('tags')),
             'comments' => CommentResource::collection($this->whenLoaded('comments')),
-            
+
             // 🎯 統計情報
             'stats' => [
                 'comments_count' => $this->comments_count ?? $this->comments()->count(),
                 'likes_count' => $this->likes_count ?? 0,
                 'shares_count' => $this->shares_count ?? 0
             ],
-            
+
             // 🎯 URL
             'urls' => [
                 'self' => route('api.posts.show', $this->id),
@@ -7004,7 +7003,7 @@ class PostResource extends JsonResource
             ]
         ];
     }
-    
+
     /**
      * 🎯 追加のメタデータ
      */
@@ -7055,7 +7054,7 @@ public function index(Request $request): JsonResponse
     $posts = Post::with(['user', 'categories', 'tags'])
                 ->published()
                 ->paginate(15);
-    
+
     return PostResource::collection($posts)->response();
 }
 
@@ -7063,7 +7062,7 @@ public function show($id): JsonResponse
 {
     $post = Post::with(['user', 'categories', 'tags', 'comments.user'])
                ->findOrFail($id);
-    
+
     return (new PostResource($post))->response();
 }
 ?>
@@ -7105,21 +7104,21 @@ class AuthController extends Controller
             'password' => 'required',
             'device_name' => 'required|string'
         ]);
-        
+
         $user = User::where('email', $request->email)->first();
-        
+
         if (!$user || !Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
                 'email' => ['メールアドレスまたはパスワードが正しくありません 🚨'],
             ]);
         }
-        
+
         // 🎯 既存のトークンを削除（オプション）
         $user->tokens()->where('name', $request->device_name)->delete();
-        
+
         // 🎯 新しいトークンを作成
         $token = $user->createToken($request->device_name, ['*']);
-        
+
         return response()->json([
             'success' => true,
             'message' => 'ログインしました ✅',
@@ -7136,7 +7135,7 @@ class AuthController extends Controller
             ]
         ]);
     }
-    
+
     /**
      * 📝 ユーザー登録
      */
@@ -7148,15 +7147,15 @@ class AuthController extends Controller
             'password' => 'required|string|min:8|confirmed',
             'device_name' => 'required|string'
         ]);
-        
+
         $user = User::create([
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
             'password' => Hash::make($validatedData['password']),
         ]);
-        
+
         $token = $user->createToken($validatedData['device_name']);
-        
+
         return response()->json([
             'success' => true,
             'message' => 'アカウントが作成されました 🎉',
@@ -7171,14 +7170,14 @@ class AuthController extends Controller
             ]
         ], 201);
     }
-    
+
     /**
      * 👤 認証済みユーザー情報を取得
      */
     public function me(Request $request)
     {
         $user = $request->user();
-        
+
         return response()->json([
             'success' => true,
             'data' => [
@@ -7192,7 +7191,7 @@ class AuthController extends Controller
             ]
         ]);
     }
-    
+
     /**
      * 🚪 ログアウト（トークン削除）
      */
@@ -7200,13 +7199,13 @@ class AuthController extends Controller
     {
         // 🎯 現在のトークンを削除
         $request->user()->currentAccessToken()->delete();
-        
+
         return response()->json([
             'success' => true,
             'message' => 'ログアウトしました 👋'
         ]);
     }
-    
+
     /**
      * 🗑️ 全デバイスからログアウト
      */
@@ -7214,7 +7213,7 @@ class AuthController extends Controller
     {
         // 🎯 ユーザーの全トークンを削除
         $request->user()->tokens()->delete();
-        
+
         return response()->json([
             'success' => true,
             'message' => '全デバイスからログアウトしました 🚪'
@@ -7254,7 +7253,7 @@ Route::get('/', function () {
 Route::prefix('auth')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/register', [AuthController::class, 'register']);
-    
+
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/me', [AuthController::class, 'me']);
         Route::post('/logout', [AuthController::class, 'logout']);
@@ -7272,11 +7271,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/posts', [PostController::class, 'store']);
     Route::put('/posts/{id}', [PostController::class, 'update']);
     Route::delete('/posts/{id}', [PostController::class, 'destroy']);
-    
+
     // 👤 ユーザー管理
     Route::get('/users/me', [UserController::class, 'profile']);
     Route::put('/users/me', [UserController::class, 'updateProfile']);
-    
+
     // 👑 管理者のみ
     Route::middleware('role:admin')->group(function () {
         Route::get('/users', [UserController::class, 'index']);
@@ -7319,10 +7318,10 @@ class Handler extends ExceptionHandler
         if ($request->expectsJson()) {
             return $this->handleApiException($request, $exception);
         }
-        
+
         return parent::render($request, $exception);
     }
-    
+
     /**
      * 🔌 API例外の処理
      */
@@ -7336,7 +7335,7 @@ class Handler extends ExceptionHandler
                 'errors' => $exception->errors()
             ], 422);
         }
-        
+
         // 🔐 認証エラー
         if ($exception instanceof AuthenticationException) {
             return response()->json([
@@ -7345,7 +7344,7 @@ class Handler extends ExceptionHandler
                 'error' => 'Unauthenticated'
             ], 401);
         }
-        
+
         // 🚫 モデルが見つからない
         if ($exception instanceof ModelNotFoundException) {
             return response()->json([
@@ -7354,7 +7353,7 @@ class Handler extends ExceptionHandler
                 'error' => 'Resource not found'
             ], 404);
         }
-        
+
         // 🚫 ページが見つからない
         if ($exception instanceof NotFoundHttpException) {
             return response()->json([
@@ -7363,12 +7362,12 @@ class Handler extends ExceptionHandler
                 'error' => 'Endpoint not found'
             ], 404);
         }
-        
+
         // 🚨 その他のエラー
-        $statusCode = method_exists($exception, 'getStatusCode') 
-            ? $exception->getStatusCode() 
+        $statusCode = method_exists($exception, 'getStatusCode')
+            ? $exception->getStatusCode()
             : 500;
-        
+
         return response()->json([
             'success' => false,
             'message' => 'サーバーエラーが発生しました 🚨',
@@ -7394,7 +7393,7 @@ use Tests\TestCase;
 class PostApiTest extends TestCase
 {
     use RefreshDatabase;
-    
+
     /**
      * 📋 投稿一覧取得のテスト
      */
@@ -7403,10 +7402,10 @@ class PostApiTest extends TestCase
         // 🎯 テストデータの準備
         $user = User::factory()->create();
         $posts = Post::factory()->count(5)->create(['user_id' => $user->id]);
-        
+
         // 🔌 APIリクエスト
         $response = $this->getJson('/api/posts');
-        
+
         // ✅ レスポンスの検証
         $response->assertStatus(200)
                 ->assertJsonStructure([
@@ -7424,7 +7423,7 @@ class PostApiTest extends TestCase
                     'meta'
                 ]);
     }
-    
+
     /**
      * 📝 投稿詳細取得のテスト
      */
@@ -7432,9 +7431,9 @@ class PostApiTest extends TestCase
     {
         $user = User::factory()->create();
         $post = Post::factory()->create(['user_id' => $user->id]);
-        
+
         $response = $this->getJson("/api/posts/{$post->id}");
-        
+
         $response->assertStatus(200)
                 ->assertJson([
                     'success' => true,
@@ -7444,7 +7443,7 @@ class PostApiTest extends TestCase
                     ]
                 ]);
     }
-    
+
     /**
      * ➕ 投稿作成のテスト
      */
@@ -7452,17 +7451,17 @@ class PostApiTest extends TestCase
     {
         $user = User::factory()->create();
         $token = $user->createToken('test-token')->plainTextToken;
-        
+
         $postData = [
             'title' => 'テスト投稿',
             'content' => 'これはテスト投稿の内容です。'
         ];
-        
+
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
             'Accept' => 'application/json'
         ])->postJson('/api/posts', $postData);
-        
+
         $response->assertStatus(201)
                 ->assertJson([
                     'success' => true,
@@ -7470,13 +7469,13 @@ class PostApiTest extends TestCase
                         'title' => 'テスト投稿'
                     ]
                 ]);
-        
+
         $this->assertDatabaseHas('posts', [
             'title' => 'テスト投稿',
             'user_id' => $user->id
         ]);
     }
-    
+
     /**
      * 🔐 認証なしでの投稿作成失敗テスト
      */
@@ -7486,9 +7485,9 @@ class PostApiTest extends TestCase
             'title' => 'テスト投稿',
             'content' => 'これはテスト投稿の内容です。'
         ];
-        
+
         $response = $this->postJson('/api/posts', $postData);
-        
+
         $response->assertStatus(401)
                 ->assertJson([
                     'success' => false,
@@ -7547,11 +7546,11 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->integer('sort_order')->default(0);
             $table->timestamps();
-            
+
             $table->index(['is_active', 'sort_order']);
         });
     }
-    
+
     public function down()
     {
         Schema::dropIfExists('categories');
@@ -7571,7 +7570,7 @@ return new class extends Migration
             $table->timestamps();
         });
     }
-    
+
     public function down()
     {
         Schema::dropIfExists('tags');
@@ -7597,13 +7596,13 @@ return new class extends Migration
             $table->json('meta_data')->nullable();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
-            
+
             $table->index(['status', 'published_at']);
             $table->index(['user_id', 'status']);
             $table->fullText(['title', 'content']);
         });
     }
-    
+
     public function down()
     {
         Schema::dropIfExists('posts');
@@ -7620,11 +7619,11 @@ return new class extends Migration
             $table->foreignId('post_id')->constrained()->onDelete('cascade');
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->timestamps();
-            
+
             $table->unique(['post_id', 'category_id']);
         });
     }
-    
+
     public function down()
     {
         Schema::dropIfExists('post_category');
@@ -7641,11 +7640,11 @@ return new class extends Migration
             $table->foreignId('post_id')->constrained()->onDelete('cascade');
             $table->foreignId('tag_id')->constrained()->onDelete('cascade');
             $table->timestamps();
-            
+
             $table->unique(['post_id', 'tag_id']);
         });
     }
-    
+
     public function down()
     {
         Schema::dropIfExists('post_tag');
@@ -7665,11 +7664,11 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('parent_id')->nullable()->constrained('comments')->onDelete('cascade');
             $table->timestamps();
-            
+
             $table->index(['post_id', 'is_approved', 'created_at']);
         });
     }
-    
+
     public function down()
     {
         Schema::dropIfExists('comments');
@@ -7692,7 +7691,7 @@ use Spatie\Sluggable\SlugOptions;
 class Category extends Model
 {
     use HasSlug;
-    
+
     protected $fillable = [
         'name',
         'slug',
@@ -7702,11 +7701,11 @@ class Category extends Model
         'is_active',
         'sort_order'
     ];
-    
+
     protected $casts = [
         'is_active' => 'boolean'
     ];
-    
+
     /**
      * 🎯 スラッグ設定
      */
@@ -7716,7 +7715,7 @@ class Category extends Model
             ->generateSlugsFrom('name')
             ->saveSlugsTo('slug');
     }
-    
+
     /**
      * 🎯 投稿とのリレーション
      */
@@ -7724,7 +7723,7 @@ class Category extends Model
     {
         return $this->belongsToMany(Post::class);
     }
-    
+
     /**
      * 🎯 アクティブなカテゴリのスコープ
      */
@@ -7732,7 +7731,7 @@ class Category extends Model
     {
         return $query->where('is_active', true);
     }
-    
+
     /**
      * 🎯 並び順のスコープ
      */
@@ -7740,7 +7739,7 @@ class Category extends Model
     {
         return $query->orderBy('sort_order')->orderBy('name');
     }
-    
+
     /**
      * 🎯 アイコン付きの名前を取得
      */
@@ -7760,25 +7759,25 @@ use Spatie\Sluggable\SlugOptions;
 class Tag extends Model
 {
     use HasSlug;
-    
+
     protected $fillable = [
         'name',
         'slug',
         'color'
     ];
-    
+
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
             ->generateSlugsFrom('name')
             ->saveSlugsTo('slug');
     }
-    
+
     public function posts()
     {
         return $this->belongsToMany(Post::class);
     }
-    
+
     /**
      * 🎯 投稿数を取得
      */
@@ -7799,7 +7798,7 @@ use Spatie\Sluggable\SlugOptions;
 class Post extends Model
 {
     use HasSlug, SoftDeletes;
-    
+
     protected $fillable = [
         'title',
         'slug',
@@ -7811,19 +7810,19 @@ class Post extends Model
         'meta_data',
         'user_id'
     ];
-    
+
     protected $casts = [
         'published_at' => 'datetime',
         'meta_data' => 'array'
     ];
-    
+
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
             ->generateSlugsFrom('title')
             ->saveSlugsTo('slug');
     }
-    
+
     /**
      * 🎯 リレーション
      */
@@ -7831,27 +7830,27 @@ class Post extends Model
     {
         return $this->belongsTo(User::class);
     }
-    
+
     public function categories()
     {
         return $this->belongsToMany(Category::class);
     }
-    
+
     public function tags()
     {
         return $this->belongsToMany(Tag::class);
     }
-    
+
     public function comments()
     {
         return $this->hasMany(Comment::class);
     }
-    
+
     public function approvedComments()
     {
         return $this->hasMany(Comment::class)->where('is_approved', true);
     }
-    
+
     /**
      * 🎯 スコープ
      */
@@ -7860,31 +7859,31 @@ class Post extends Model
         return $query->where('status', 'published')
                     ->where('published_at', '<=', now());
     }
-    
+
     public function scopeDraft($query)
     {
         return $query->where('status', 'draft');
     }
-    
+
     public function scopeByCategory($query, $categorySlug)
     {
         return $query->whereHas('categories', function ($q) use ($categorySlug) {
             $q->where('slug', $categorySlug);
         });
     }
-    
+
     public function scopeByTag($query, $tagSlug)
     {
         return $query->whereHas('tags', function ($q) use ($tagSlug) {
             $q->where('slug', $tagSlug);
         });
     }
-    
+
     public function scopeByAuthor($query, $authorId)
     {
         return $query->where('user_id', $authorId);
     }
-    
+
     public function scopeSearch($query, $keyword)
     {
         return $query->where(function ($q) use ($keyword) {
@@ -7893,17 +7892,17 @@ class Post extends Model
               ->orWhere('excerpt', 'like', "%{$keyword}%");
         });
     }
-    
+
     /**
      * 🎯 カスタムメソッド
      */
     public function isPublished()
     {
-        return $this->status === 'published' && 
-               $this->published_at && 
+        return $this->status === 'published' &&
+               $this->published_at &&
                $this->published_at->isPast();
     }
-    
+
     public function getStatusEmoji()
     {
         return match($this->status) {
@@ -7913,33 +7912,33 @@ class Post extends Model
             default => '❓'
         };
     }
-    
+
     public function getExcerpt($length = 200)
     {
         if ($this->excerpt) {
             return $this->excerpt;
         }
-        
+
         return str_limit(strip_tags($this->content), $length);
     }
-    
+
     public function getReadingTime()
     {
         $wordCount = str_word_count(strip_tags($this->content));
         $minutes = ceil($wordCount / 200); // 1分間200語として計算
-        
+
         return $minutes . '分で読める';
     }
-    
+
     public function getFeaturedImageUrl()
     {
         if ($this->featured_image) {
             return Storage::url($this->featured_image);
         }
-        
+
         return 'https://via.placeholder.com/800x400.png?text=No+Image';
     }
-    
+
     public function incrementViews()
     {
         $this->increment('views');
@@ -7960,41 +7959,41 @@ class Comment extends Model
         'user_id',
         'parent_id'
     ];
-    
+
     protected $casts = [
         'is_approved' => 'boolean'
     ];
-    
+
     public function post()
     {
         return $this->belongsTo(Post::class);
     }
-    
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-    
+
     public function parent()
     {
         return $this->belongsTo(Comment::class, 'parent_id');
     }
-    
+
     public function replies()
     {
         return $this->hasMany(Comment::class, 'parent_id');
     }
-    
+
     public function scopeApproved($query)
     {
         return $query->where('is_approved', true);
     }
-    
+
     public function scopeParent($query)
     {
         return $query->whereNull('parent_id');
     }
-    
+
     public function isReply()
     {
         return !is_null($this->parent_id);
@@ -8025,46 +8024,46 @@ class BlogController extends Controller
         $query = Post::with(['user', 'categories', 'tags'])
                     ->published()
                     ->latest('published_at');
-        
+
         // 🔍 検索機能
         if ($search = $request->get('search')) {
             $query->search($search);
         }
-        
+
         // 📁 カテゴリフィルター
         if ($category = $request->get('category')) {
             $query->byCategory($category);
         }
-        
+
         // 🏷️ タグフィルター
         if ($tag = $request->get('tag')) {
             $query->byTag($tag);
         }
-        
+
         $posts = $query->paginate(12);
-        
+
         // 🎯 サイドバー用データ
         $recentPosts = Post::published()
                           ->latest('published_at')
                           ->limit(5)
                           ->get();
-        
+
         $popularPosts = Post::published()
                            ->orderBy('views', 'desc')
                            ->limit(5)
                            ->get();
-        
+
         $categories = Category::active()
                              ->ordered()
                              ->withCount('posts')
                              ->get();
-        
+
         $tags = Tag::has('posts')
                   ->withCount('posts')
                   ->orderBy('posts_count', 'desc')
                   ->limit(20)
                   ->get();
-        
+
         return view('blog.index', compact(
             'posts',
             'recentPosts',
@@ -8074,7 +8073,7 @@ class BlogController extends Controller
             'search'
         ));
     }
-    
+
     /**
      * 📝 投稿詳細
      */
@@ -8084,10 +8083,10 @@ class BlogController extends Controller
                    ->where('slug', $slug)
                    ->published()
                    ->firstOrFail();
-        
+
         // 🎯 閲覧数をインクリメント
         $post->incrementViews();
-        
+
         // 🎯 関連投稿
         $relatedPosts = Post::published()
                            ->where('id', '!=', $post->id)
@@ -8102,18 +8101,18 @@ class BlogController extends Controller
                            ->inRandomOrder()
                            ->limit(4)
                            ->get();
-        
+
         // 🎯 前後の投稿
         $previousPost = Post::published()
                            ->where('published_at', '<', $post->published_at)
                            ->latest('published_at')
                            ->first();
-        
+
         $nextPost = Post::published()
                        ->where('published_at', '>', $post->published_at)
                        ->oldest('published_at')
                        ->first();
-        
+
         return view('blog.show', compact(
             'post',
             'relatedPosts',
@@ -8121,52 +8120,52 @@ class BlogController extends Controller
             'nextPost'
         ));
     }
-    
+
     /**
      * 📁 カテゴリ別投稿
      */
     public function category($slug)
     {
         $category = Category::where('slug', $slug)->firstOrFail();
-        
+
         $posts = Post::with(['user', 'categories', 'tags'])
                     ->published()
                     ->byCategory($slug)
                     ->latest('published_at')
                     ->paginate(12);
-        
+
         return view('blog.category', compact('category', 'posts'));
     }
-    
+
     /**
      * 🏷️ タグ別投稿
      */
     public function tag($slug)
     {
         $tag = Tag::where('slug', $slug)->firstOrFail();
-        
+
         $posts = Post::with(['user', 'categories', 'tags'])
                     ->published()
                     ->byTag($slug)
                     ->latest('published_at')
                     ->paginate(12);
-        
+
         return view('blog.tag', compact('tag', 'posts'));
     }
-    
+
     /**
      * 👤 著者別投稿
      */
     public function author($id)
     {
         $author = User::findOrFail($id);
-        
+
         $posts = Post::with(['user', 'categories', 'tags'])
                     ->published()
                     ->byAuthor($id)
                     ->latest('published_at')
                     ->paginate(12);
-        
+
         return view('blog.author', compact('author', 'posts'));
     }
 }
@@ -8184,7 +8183,7 @@ class CommentController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     /**
      * 💬 コメント投稿
      */
@@ -8200,13 +8199,13 @@ class CommentController extends Controller
             'post_id.exists' => '投稿が見つかりません 🚫',
             'parent_id.exists' => '返信先のコメントが見つかりません 🚫'
         ]);
-        
+
         $post = Post::findOrFail($validatedData['post_id']);
-        
+
         if (!$post->isPublished()) {
             return back()->with('error', 'この投稿にはコメントできません 🚫');
         }
-        
+
         $comment = Comment::create([
             'content' => $validatedData['content'],
             'post_id' => $validatedData['post_id'],
@@ -8214,11 +8213,11 @@ class CommentController extends Controller
             'user_id' => auth()->id(),
             'is_approved' => true // 自動承認（必要に応じて変更）
         ]);
-        
-        $message = $validatedData['parent_id'] 
-            ? '返信を投稿しました 💬' 
+
+        $message = $validatedData['parent_id']
+            ? '返信を投稿しました 💬'
             : 'コメントを投稿しました 💬';
-        
+
         return back()->with('success', $message);
     }
 }
@@ -8236,12 +8235,12 @@ class CommentController extends Controller
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Awesome Blog 🚀')</title>
     <meta name="description" content="@yield('description', 'Laravel で作成したブログです')">
-    
+
     <!-- CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
-    
+
     <style>
         body {
             font-family: 'Noto Sans JP', sans-serif;
@@ -8249,14 +8248,14 @@ class CommentController extends Controller
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
         }
-        
+
         .blog-header {
             background: rgba(255,255,255,0.95);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(255,255,255,0.2);
             box-shadow: 0 2px 20px rgba(0,0,0,0.1);
         }
-        
+
         .blog-content {
             background: white;
             border-radius: 15px;
@@ -8264,7 +8263,7 @@ class CommentController extends Controller
             margin: 20px 0;
             overflow: hidden;
         }
-        
+
         .post-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             border: none;
@@ -8272,18 +8271,18 @@ class CommentController extends Controller
             overflow: hidden;
             height: 100%;
         }
-        
+
         .post-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 35px rgba(0,0,0,0.1);
         }
-        
+
         .post-image {
             height: 200px;
             object-fit: cover;
             width: 100%;
         }
-        
+
         .category-badge {
             display: inline-block;
             padding: 4px 12px;
@@ -8295,7 +8294,7 @@ class CommentController extends Controller
             margin-right: 8px;
             margin-bottom: 8px;
         }
-        
+
         .tag-badge {
             display: inline-block;
             padding: 2px 8px;
@@ -8307,7 +8306,7 @@ class CommentController extends Controller
             margin-right: 4px;
             margin-bottom: 4px;
         }
-        
+
         .sidebar-widget {
             background: white;
             border-radius: 10px;
@@ -8315,16 +8314,16 @@ class CommentController extends Controller
             margin-bottom: 20px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
-        
+
         .search-box {
             position: relative;
         }
-        
+
         .search-box input {
             border-radius: 25px;
             padding-left: 45px;
         }
-        
+
         .search-box .fa-search {
             position: absolute;
             left: 15px;
@@ -8332,18 +8331,18 @@ class CommentController extends Controller
             transform: translateY(-50%);
             color: #6c757d;
         }
-        
+
         .comment-item {
             border-left: 3px solid #007bff;
             padding-left: 15px;
             margin-bottom: 20px;
         }
-        
+
         .comment-reply {
             margin-left: 30px;
             border-left: 3px solid #6c757d;
         }
-        
+
         @media (max-width: 768px) {
             .blog-content {
                 margin: 10px;
@@ -8351,7 +8350,7 @@ class CommentController extends Controller
             }
         }
     </style>
-    
+
     @stack('styles')
 </head>
 <body>
@@ -8362,11 +8361,11 @@ class CommentController extends Controller
                 <a class="navbar-brand fw-bold" href="{{ route('blog.index') }}">
                     <i class="fas fa-blog"></i> Awesome Blog 🚀
                 </a>
-                
+
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                
+
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
@@ -8389,7 +8388,7 @@ class CommentController extends Controller
                             </ul>
                         </li>
                     </ul>
-                    
+
                     <ul class="navbar-nav">
                         @auth
                             <li class="nav-item dropdown">
@@ -8424,7 +8423,7 @@ class CommentController extends Controller
             </div>
         </nav>
     </header>
-    
+
     <!-- メインコンテンツ -->
     <main class="container my-4">
         @if(session('success'))
@@ -8433,17 +8432,17 @@ class CommentController extends Controller
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
-        
+
         @if(session('error'))
             <div class="alert alert-danger alert-dismissible fade show">
                 <i class="fas fa-exclamation-circle"></i> {{ session('error') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
-        
+
         @yield('content')
     </main>
-    
+
     <!-- フッター -->
     <footer class="bg-dark text-white py-4 mt-5">
         <div class="container">
@@ -8459,7 +8458,7 @@ class CommentController extends Controller
             </div>
         </div>
     </footer>
-    
+
     <!-- JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     @stack('scripts')
@@ -8482,13 +8481,13 @@ class CommentController extends Controller
                 <form method="GET" action="{{ route('blog.index') }}">
                     <div class="search-box">
                         <i class="fas fa-search"></i>
-                        <input type="text" 
-                               class="form-control" 
-                               name="search" 
-                               value="{{ request('search') }}" 
+                        <input type="text"
+                               class="form-control"
+                               name="search"
+                               value="{{ request('search') }}"
                                placeholder="記事を検索... 🔍">
                     </div>
-                    
+
                     @if(request('category') || request('tag'))
                         <div class="mt-2">
                             @if(request('category'))
@@ -8498,7 +8497,7 @@ class CommentController extends Controller
                                     <a href="{{ route('blog.index', request()->except('category')) }}" class="text-white ms-1">×</a>
                                 </span>
                             @endif
-                            
+
                             @if(request('tag'))
                                 <input type="hidden" name="tag" value="{{ request('tag') }}">
                                 <span class="badge bg-secondary">
@@ -8510,48 +8509,48 @@ class CommentController extends Controller
                     @endif
                 </form>
             </div>
-            
+
             <!-- 投稿一覧 -->
             @if($posts->count() > 0)
                 <div class="row">
                     @foreach($posts as $post)
                         <div class="col-md-6 mb-4">
                             <div class="card post-card h-100">
-                                <img src="{{ $post->getFeaturedImageUrl() }}" 
-                                     class="card-img-top post-image" 
+                                <img src="{{ $post->getFeaturedImageUrl() }}"
+                                     class="card-img-top post-image"
                                      alt="{{ $post->title }}">
-                                
+
                                 <div class="card-body d-flex flex-column">
                                     <!-- カテゴリ -->
                                     <div class="mb-2">
                                         @foreach($post->categories as $category)
-                                            <a href="{{ route('blog.category', $category->slug) }}" 
-                                               class="category-badge" 
+                                            <a href="{{ route('blog.category', $category->slug) }}"
+                                               class="category-badge"
                                                style="background-color: {{ $category->color }}">
                                                 {{ $category->name_with_icon }}
                                             </a>
                                         @endforeach
                                     </div>
-                                    
+
                                     <!-- タイトル -->
                                     <h5 class="card-title">
-                                        <a href="{{ route('blog.show', $post->slug) }}" 
+                                        <a href="{{ route('blog.show', $post->slug) }}"
                                            class="text-decoration-none text-dark">
                                             {{ $post->title }}
                                         </a>
                                     </h5>
-                                    
+
                                     <!-- 抜粋 -->
                                     <p class="card-text text-muted flex-grow-1">
                                         {{ $post->getExcerpt(120) }}
                                     </p>
-                                    
+
                                     <!-- メタ情報 -->
                                     <div class="card-footer bg-transparent border-0 p-0 mt-auto">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <small class="text-muted">
-                                                <i class="fas fa-user"></i> 
-                                                <a href="{{ route('blog.author', $post->user->id) }}" 
+                                                <i class="fas fa-user"></i>
+                                                <a href="{{ route('blog.author', $post->user->id) }}"
                                                    class="text-decoration-none">
                                                     {{ $post->user->name }}
                                                 </a>
@@ -8560,7 +8559,7 @@ class CommentController extends Controller
                                                 <i class="fas fa-clock"></i> {{ $post->published_at->format('Y/m/d') }}
                                             </small>
                                         </div>
-                                        
+
                                         <div class="d-flex justify-content-between align-items-center mt-2">
                                             <div>
                                                 <small class="text-muted">
@@ -8574,12 +8573,12 @@ class CommentController extends Controller
                                                 </small>
                                             </div>
                                         </div>
-                                        
+
                                         <!-- タグ -->
                                         @if($post->tags->count() > 0)
                                             <div class="mt-2">
                                                 @foreach($post->tags->take(3) as $tag)
-                                                    <a href="{{ route('blog.tag', $tag->slug) }}" 
+                                                    <a href="{{ route('blog.tag', $tag->slug) }}"
                                                        class="tag-badge">
                                                         #{{ $tag->name }}
                                                     </a>
@@ -8592,7 +8591,7 @@ class CommentController extends Controller
                         </div>
                     @endforeach
                 </div>
-                
+
                 <!-- ページネーション -->
                 <div class="d-flex justify-content-center">
                     {{ $posts->appends(request()->query())->links() }}
@@ -8609,7 +8608,7 @@ class CommentController extends Controller
             @endif
         </div>
     </div>
-    
+
     <!-- サイドバー -->
     <div class="col-lg-4">
         <!-- 最新投稿 -->
@@ -8619,13 +8618,13 @@ class CommentController extends Controller
             </h5>
             @foreach($recentPosts as $post)
                 <div class="d-flex mb-3">
-                    <img src="{{ $post->getFeaturedImageUrl() }}" 
-                         class="rounded me-3" 
-                         style="width: 60px; height: 60px; object-fit: cover;" 
+                    <img src="{{ $post->getFeaturedImageUrl() }}"
+                         class="rounded me-3"
+                         style="width: 60px; height: 60px; object-fit: cover;"
                          alt="{{ $post->title }}">
                     <div class="flex-grow-1">
                         <h6 class="mb-1">
-                            <a href="{{ route('blog.show', $post->slug) }}" 
+                            <a href="{{ route('blog.show', $post->slug) }}"
                                class="text-decoration-none text-dark">
                                 {{ Str::limit($post->title, 40) }}
                             </a>
@@ -8637,7 +8636,7 @@ class CommentController extends Controller
                 </div>
             @endforeach
         </div>
-        
+
         <!-- 人気投稿 -->
         <div class="sidebar-widget">
             <h5 class="fw-bold mb-3">
@@ -8645,13 +8644,13 @@ class CommentController extends Controller
             </h5>
             @foreach($popularPosts as $post)
                 <div class="d-flex mb-3">
-                    <img src="{{ $post->getFeaturedImageUrl() }}" 
-                         class="rounded me-3" 
-                         style="width: 60px; height: 60px; object-fit: cover;" 
+                    <img src="{{ $post->getFeaturedImageUrl() }}"
+                         class="rounded me-3"
+                         style="width: 60px; height: 60px; object-fit: cover;"
                          alt="{{ $post->title }}">
                     <div class="flex-grow-1">
                         <h6 class="mb-1">
-                            <a href="{{ route('blog.show', $post->slug) }}" 
+                            <a href="{{ route('blog.show', $post->slug) }}"
                                class="text-decoration-none text-dark">
                                 {{ Str::limit($post->title, 40) }}
                             </a>
@@ -8663,7 +8662,7 @@ class CommentController extends Controller
                 </div>
             @endforeach
         </div>
-        
+
         <!-- カテゴリ -->
         <div class="sidebar-widget">
             <h5 class="fw-bold mb-3">
@@ -8671,7 +8670,7 @@ class CommentController extends Controller
             </h5>
             @foreach($categories as $category)
                 <div class="d-flex justify-content-between align-items-center mb-2">
-                    <a href="{{ route('blog.category', $category->slug) }}" 
+                    <a href="{{ route('blog.category', $category->slug) }}"
                        class="text-decoration-none">
                         {!! $category->name_with_icon !!}
                     </a>
@@ -8679,7 +8678,7 @@ class CommentController extends Controller
                 </div>
             @endforeach
         </div>
-        
+
         <!-- タグクラウド -->
         <div class="sidebar-widget">
             <h5 class="fw-bold mb-3">
@@ -8687,7 +8686,7 @@ class CommentController extends Controller
             </h5>
             <div class="tag-cloud">
                 @foreach($tags as $tag)
-                    <a href="{{ route('blog.tag', $tag->slug) }}" 
+                    <a href="{{ route('blog.tag', $tag->slug) }}"
                        class="tag-badge"
                        style="font-size: {{ 0.8 + ($tag->posts_count / 10) }}rem;">
                         #{{ $tag->name }}
@@ -8703,7 +8702,7 @@ class CommentController extends Controller
 
 ### 🎯 シーダーの作成
 
-```php
+````php
 <?php
 // database/seeders/BlogSeeder.php
 namespace Database\Seeders;
@@ -8728,10 +8727,10 @@ class BlogSeeder extends Seeder
             'is_active' => true,
             'email_verified_at' => now()
         ]);
-        
+
         // 🎯 一般ユーザーの作成
         User::factory(10)->create();
-        
+
         // 🎯 カテゴリの作成
         $categories = [
             ['name' => 'テクノロジー', 'icon' => '💻', 'color' => '#007bff', 'description' => '最新のテクノロジー情報'],
@@ -8740,11 +8739,11 @@ class BlogSeeder extends Seeder
             ['name' => 'ライフスタイル', 'icon' => '🌟', 'color' => '#ffc107', 'description' => '日常生活に関する記事'],
             ['name' => 'エンターテイメント', 'icon' => '🎬', 'color' => '#dc3545', 'description' => '映画、音楽、ゲームなど'],
         ];
-        
+
         foreach ($categories as $categoryData) {
             Category::create($categoryData);
         }
-        
+
         // 🎯 タグの作成
         $tags = [
             'Laravel', 'PHP', 'JavaScript', 'React', 'Vue.js', 'Node.js',
@@ -8752,14 +8751,14 @@ class BlogSeeder extends Seeder
             'スタートアップ', 'マーケティング', 'SEO', 'SNS',
             '旅行', '料理', '読書', '映画', '音楽', 'ゲーム'
         ];
-        
+
         foreach ($tags as $tagName) {
             Tag::create([
                 'name' => $tagName,
                 'color' => '#' . dechex(rand(0x000000, 0xFFFFFF))
             ]);
         }
-        
+
         // 🎯 投稿の作成
         $posts = [
             [
@@ -8791,35 +8790,39 @@ Laravel を始めるために必要な環境を整えましょう：
 composer create-project laravel/laravel my-project
 cd my-project
 php artisan serve
-```
+````
 
 これで Laravel アプリケーションが起動します！
 
 ## まとめ
 
 Laravel は学習しやすく、強力な機能を持つフレームワークです。この記事を参考に、ぜひ Laravel の世界に飛び込んでみてください。',
-                'excerpt' => 'Laravel の基本概念と開発環境の準備方法について、初心者向けに分かりやすく解説します。',
-                'status' => 'published',
-                'published_at' => now()->subDays(1),
-                'categories' => [1], // テクノロジー
-                'tags' => ['Laravel', 'PHP', 'フロントエンド']
-            ],
-            [
-                'title' => 'モダンWebデザインのトレンド2024',
-                'content' => '2024年のWebデザインは、ユーザーエクスペリエンスを重視したモダンなアプローチが主流になっています。
+'excerpt' => 'Laravel の基本概念と開発環境の準備方法について、初心者向けに分かりやすく解説します。',
+'status' => 'published',
+'published_at' => now()->subDays(1),
+'categories' => [1], // テクノロジー
+'tags' => ['Laravel', 'PHP', 'フロントエンド']
+],
+[
+'title' => 'モダン Web デザインのトレンド 2024',
+'content' => '2024 年の Web デザインは、ユーザーエクスペリエンスを重視したモダンなアプローチが主流になっています。
 
 ## 主要なトレンド
 
 ### 1. ダークモード対応
+
 多くのユーザーがダークモードを好むようになり、サイトでも対応が必須となっています。
 
 ### 2. ミニマリズム
+
 シンプルで洗練されたデザインが人気です。余白を活用し、重要な要素に焦点を当てます。
 
 ### 3. アニメーションとマイクロインタラクション
+
 適度なアニメーションで、ユーザーの注意を引きつけ、操作の楽しさを演出します。
 
 ### 4. レスポンシブデザイン
+
 モバイルファーストの考え方で、あらゆるデバイスに対応したデザインが重要です。
 
 ## 実装のポイント
@@ -8831,35 +8834,38 @@ Laravel は学習しやすく、強力な機能を持つフレームワークで
 ## ツールとフレームワーク
 
 - Figma: デザインプロトタイプ
-- Tailwind CSS: ユーティリティファーストCSS
+- Tailwind CSS: ユーティリティファースト CSS
 - Framer Motion: React アニメーション
 
-モダンなWebデザインは、技術とクリエイティビティの融合です。ユーザーのことを第一に考えたデザインを心がけましょう。',
-                'excerpt' => '2024年のWebデザイントレンドについて、実装のポイントと併せて詳しく解説します。',
-                'status' => 'published',
-                'published_at' => now()->subDays(2),
-                'categories' => [2], // デザイン
-                'tags' => ['デザイン', 'UI/UX', 'フロントエンド']
-            ],
-            [
-                'title' => 'スタートアップ成功の秘訣：実体験から学ぶ',
-                'content' => 'スタートアップの世界は厳しいですが、正しいアプローチで成功への道筋を作ることができます。
+モダンな Web デザインは、技術とクリエイティビティの融合です。ユーザーのことを第一に考えたデザインを心がけましょう。',
+'excerpt' => '2024 年の Web デザイントレンドについて、実装のポイントと併せて詳しく解説します。',
+'status' => 'published',
+'published_at' => now()->subDays(2),
+'categories' => [2], // デザイン
+'tags' => ['デザイン', 'UI/UX', 'フロントエンド']
+],
+[
+'title' => 'スタートアップ成功の秘訣：実体験から学ぶ',
+'content' => 'スタートアップの世界は厳しいですが、正しいアプローチで成功への道筋を作ることができます。
 
 ## 成功のための基本原則
 
 ### 1. 市場のニーズを理解する
+
 - 顧客の問題を深く理解する
 - 競合分析を徹底的に行う
 - MVP（最小実用製品）でテストする
 
 ### 2. 強固なチームを作る
+
 - 補完的なスキルセットを持つメンバー
 - 共通のビジョンと価値観
 - オープンなコミュニケーション
 
 ### 3. 資金調達戦略
+
 - エンジェル投資家とのネットワーク構築
-- VCとの関係性構築
+- VC との関係性構築
 - クラウドファンディングの活用
 
 ## よくある失敗パターン
@@ -8871,20 +8877,21 @@ Laravel は学習しやすく、強力な機能を持つフレームワークで
 ## 成功事例から学ぶ
 
 多くの成功したスタートアップに共通するのは：
+
 - 顧客第一の思考
 - データドリブンな意思決定
 - 失敗から学ぶ姿勢
 - 継続的な改善
 
 スタートアップの成功に絶対的な公式はありませんが、これらの原則を守ることで成功確率を高めることができます。',
-                'excerpt' => 'スタートアップで成功するための基本原則と、よくある失敗パターンについて実体験を交えて解説します。',
-                'status' => 'published',
-                'published_at' => now()->subDays(3),
-                'categories' => [3], // ビジネス
-                'tags' => ['スタートアップ', 'ビジネス', 'マーケティング']
-            ]
-        ];
-        
+'excerpt' => 'スタートアップで成功するための基本原則と、よくある失敗パターンについて実体験を交えて解説します。',
+'status' => 'published',
+'published_at' => now()->subDays(3),
+'categories' => [3], // ビジネス
+'tags' => ['スタートアップ', 'ビジネス', 'マーケティング']
+]
+];
+
         foreach ($posts as $postData) {
             $post = Post::create([
                 'title' => $postData['title'],
@@ -8895,14 +8902,14 @@ Laravel は学習しやすく、強力な機能を持つフレームワークで
                 'user_id' => $admin->id,
                 'views' => rand(100, 1000)
             ]);
-            
+
             // カテゴリの関連付け
             $post->categories()->attach($postData['categories']);
-            
+
             // タグの関連付け
             $tagIds = Tag::whereIn('name', $postData['tags'])->pluck('id');
             $post->tags()->attach($tagIds);
-            
+
             // コメントの作成
             $users = User::where('id', '!=', $admin->id)->take(3)->get();
             foreach ($users as $user) {
@@ -8914,7 +8921,7 @@ Laravel は学習しやすく、強力な機能を持つフレームワークで
                 ]);
             }
         }
-        
+
         // 🎯 追加の投稿をファクトリーで作成
         User::all()->each(function ($user) {
             Post::factory()
@@ -8927,6 +8934,7 @@ Laravel は学習しやすく、強力な機能を持つフレームワークで
                 });
         });
     }
+
 }
 
 // database/seeders/DatabaseSeeder.php
@@ -8936,15 +8944,16 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    public function run()
-    {
-        $this->call([
-            BlogSeeder::class,
-        ]);
-    }
+public function run()
+{
+$this->call([
+BlogSeeder::class,
+]);
+}
 }
 ?>
-```
+
+````
 
 ### 🎯 実行とテスト
 
@@ -8965,7 +8974,7 @@ php artisan view:cache
 
 # 📊 デバッグ情報の確認
 php artisan debugbar:clear
-```
+````
 
 ### 🎯 デプロイメント
 
@@ -9001,6 +9010,7 @@ Laravel 学習中によく遭遇する質問と、その解決方法をまとめ
 ### 🔧 環境構築・インストール関連
 
 **Q1: Laravel のインストールでエラーが出る**
+
 ```bash
 # 🚨 よくあるエラー: "composer: command not found"
 # 💡 解決方法: Composer をインストール
@@ -9017,6 +9027,7 @@ sudo yum install php-mbstring php-xml php-zip php-curl
 ```
 
 **Q2: `php artisan serve` が動かない**
+
 ```bash
 # 🔍 ポート番号を変更してみる
 php artisan serve --port=8080
@@ -9031,6 +9042,7 @@ chmod -R 755 /path/to/your/project/bootstrap/cache
 ```
 
 **Q3: データベース接続エラー**
+
 ```php
 // .env ファイルの設定を確認
 DB_CONNECTION=mysql
@@ -9048,6 +9060,7 @@ php artisan config:cache
 ### 🗄️ データベース・マイグレーション関連
 
 **Q4: マイグレーションでエラーが発生する**
+
 ```bash
 # 🚨 "Base table or view already exists" エラー
 # 💡 解決方法: マイグレーションをリセット
@@ -9064,6 +9077,7 @@ php artisan migrate
 ```
 
 **Q5: シーダーが実行されない**
+
 ```php
 <?php
 // database/seeders/DatabaseSeeder.php で正しく呼び出されているかチェック
@@ -9084,6 +9098,7 @@ php artisan migrate:fresh --seed
 ### 🎮 ルーティング・コントローラー関連
 
 **Q6: 404 エラーが出る**
+
 ```php
 <?php
 // routes/web.php でルートが正しく定義されているかチェック
@@ -9099,6 +9114,7 @@ php artisan route:list
 ```
 
 **Q7: コントローラーが見つからないエラー**
+
 ```bash
 # 🔍 名前空間を確認
 # app/Http/Controllers/PostController.php
@@ -9111,9 +9127,10 @@ use App\Http\Controllers\PostController;
 php artisan make:controller PostController
 ```
 
-### 🖼️ ビュー・Blade関連
+### 🖼️ ビュー・Blade 関連
 
 **Q8: ビューが表示されない**
+
 ```php
 <?php
 // コントローラーで正しくビューを返しているかチェック
@@ -9127,7 +9144,8 @@ php artisan view:clear
 ?>
 ```
 
-**Q9: Blade構文でエラーが出る**
+**Q9: Blade 構文でエラーが出る**
+
 ```php
 {{-- ❌ 間違った書き方 --}}
 {{ $user->name or 'ゲスト' }}
@@ -9145,6 +9163,7 @@ php artisan view:clear
 ### 🔐 認証・認可関連
 
 **Q10: ログイン後にリダイレクトされない**
+
 ```php
 <?php
 // app/Http/Controllers/Auth/LoginController.php
@@ -9159,6 +9178,7 @@ public function redirectTo()
 ```
 
 **Q11: ミドルウェアが動作しない**
+
 ```php
 <?php
 // app/Http/Kernel.php で正しく登録されているかチェック
@@ -9176,7 +9196,8 @@ Route::middleware(['auth', 'custom'])->group(function () {
 
 ### 💾 Eloquent・データベース関連
 
-**Q12: N+1問題で動作が遅い**
+**Q12: N+1 問題で動作が遅い**
+
 ```php
 <?php
 // ❌ N+1問題が発生するコード
@@ -9194,6 +9215,7 @@ foreach ($posts as $post) {
 ```
 
 **Q13: リレーションシップが動作しない**
+
 ```php
 <?php
 // モデルでリレーションが正しく定義されているかチェック
@@ -9203,7 +9225,7 @@ class Post extends Model
     {
         return $this->belongsTo(User::class); // 外部キーは user_id
     }
-    
+
     public function comments()
     {
         return $this->hasMany(Comment::class); // 外部キーは post_id
@@ -9221,6 +9243,7 @@ public function user()
 ### 📝 フォーム・バリデーション関連
 
 **Q14: バリデーションエラーが表示されない**
+
 ```php
 <!-- ビューでエラーを表示 -->
 @if($errors->any())
@@ -9239,7 +9262,8 @@ public function user()
 @enderror
 ```
 
-**Q15: CSRFトークンエラー**
+**Q15: CSRF トークンエラー**
+
 ```php
 <!-- フォームに CSRF トークンを必ず追加 -->
 <form method="POST" action="{{ route('posts.store') }}">
@@ -9258,9 +9282,10 @@ $.ajaxSetup({
 </script>
 ```
 
-### 🔌 API・JSON関連
+### 🔌 API・JSON 関連
 
 **Q16: API レスポンスが正しく返らない**
+
 ```php
 <?php
 // Content-Type を正しく設定
@@ -9279,6 +9304,7 @@ Route::get('/posts', [PostController::class, 'index']);
 ```
 
 **Q17: CORS エラーが発生する**
+
 ```php
 <?php
 // config/cors.php または CORS ミドルウェアを設定
@@ -9298,6 +9324,7 @@ return [
 ### 🎯 パフォーマンス・最適化関連
 
 **Q18: アプリケーションが遅い**
+
 ```bash
 # 🔧 設定キャッシュ
 php artisan config:cache
@@ -9320,6 +9347,7 @@ $table->index(['user_id', 'created_at']);
 ```
 
 **Q19: メモリ不足エラー**
+
 ```php
 <?php
 // 大量データの処理では chunk() を使用
@@ -9340,6 +9368,7 @@ ini_set('memory_limit', '512M');
 ### 🐛 デバッグ・エラー処理関連
 
 **Q20: エラーの詳細が表示されない**
+
 ```php
 // .env ファイルでデバッグモードを有効化
 APP_DEBUG=true
@@ -9383,11 +9412,11 @@ class ResponseTimeMiddleware
         $start = microtime(true);
         $response = $next($request);
         $end = microtime(true);
-        
+
         Log::info('Response time: ' . ($end - $start) . 's', [
             'url' => $request->fullUrl()
         ]);
-        
+
         return $response;
     }
 }
@@ -9399,23 +9428,27 @@ class ResponseTimeMiddleware
 **Q21: さらに学習を進めたい**
 
 **公式ドキュメント**
-- 📖 [Laravel公式ドキュメント](https://laravel.com/docs)
-- 🎥 [Laracasts](https://laracasts.com/) - Laravel学習動画
+
+- 📖 [Laravel 公式ドキュメント](https://laravel.com/docs)
+- 🎥 [Laracasts](https://laracasts.com/) - Laravel 学習動画
 - 📚 [Laravel News](https://laravel-news.com/) - 最新情報
 
 **日本語リソース**
-- 📖 [Laravel公式ドキュメント日本語版](https://readouble.com/laravel/)
+
+- 📖 [Laravel 公式ドキュメント日本語版](https://readouble.com/laravel/)
 - 👥 [Laravel Japan](https://laravel.jp/) - 日本のコミュニティ
 - 📱 [Qiita Laravel タグ](https://qiita.com/tags/laravel) - 技術記事
 
 **コミュニティ**
-- 💬 [Laravel公式Discord](https://discord.gg/laravel)
-- 📱 [Laravel日本語Slack](https://laravel-jp.slack.com/)
+
+- 💬 [Laravel 公式 Discord](https://discord.gg/laravel)
+- 📱 [Laravel 日本語 Slack](https://laravel-jp.slack.com/)
 - 🐦 Twitter: #Laravel #PHP
 
 **練習プロジェクト**
+
 - 📝 ブログシステム
-- 🛒 ECサイト
+- 🛒 EC サイト
 - 📊 管理システム
 - 🔌 REST API
 - 📱 リアルタイムチャット
@@ -9432,6 +9465,7 @@ class ResponseTimeMiddleware
 ### 🚀 学習の振り返り
 
 **🎯 身につけたスキル**
+
 - ✅ PHP の基本構文とオブジェクト指向プログラミング
 - ✅ Laravel の MVC アーキテクチャ
 - ✅ データベース設計とマイグレーション
@@ -9442,6 +9476,7 @@ class ResponseTimeMiddleware
 - ✅ 実践的なブログアプリケーションの開発
 
 **🌟 成長のポイント**
+
 - 基礎から応用まで段階的に学習できた
 - 実際に動くアプリケーションを作成できた
 - トラブルシューティングのスキルを身につけた
@@ -9450,6 +9485,7 @@ class ResponseTimeMiddleware
 ### 🎯 次のステップ：中級者への道
 
 **1. 🔧 Laravel の高度な機能**
+
 ```php
 // 🎯 イベントとリスナー
 php artisan make:event UserRegistered
@@ -9467,23 +9503,24 @@ php artisan make:event MessageSent
 ```
 
 **2. 📊 テスト駆動開発（TDD）**
+
 ```php
 <?php
 // tests/Feature/PostTest.php
 class PostTest extends TestCase
 {
     use RefreshDatabase;
-    
+
     public function test_user_can_create_post()
     {
         $user = User::factory()->create();
-        
+
         $response = $this->actingAs($user)
                         ->post('/posts', [
                             'title' => 'Test Post',
                             'content' => 'Test content'
                         ]);
-        
+
         $response->assertStatus(201);
         $this->assertDatabaseHas('posts', [
             'title' => 'Test Post'
@@ -9498,6 +9535,7 @@ php artisan test --coverage
 ```
 
 **3. 🚀 パフォーマンス最適化**
+
 ```php
 <?php
 // Redis キャッシュの活用
@@ -9524,6 +9562,7 @@ Schema::table('posts', function (Blueprint $table) {
 ```
 
 **4. 🔌 API 設計とマイクロサービス**
+
 ```php
 <?php
 // API リソースの活用
@@ -9552,6 +9591,7 @@ php artisan vendor:publish --provider="Rebing\GraphQL\GraphQLServiceProvider"
 ### 🌟 専門分野への展開
 
 **1. 🎨 フロントエンド統合**
+
 ```bash
 # React との連携
 npm install react react-dom
@@ -9567,6 +9607,7 @@ npm install @inertiajs/inertia @inertiajs/inertia-react
 ```
 
 **2. 📱 モバイルアプリ開発**
+
 ```bash
 # Laravel Sanctum でモバイル認証
 composer require laravel/sanctum
@@ -9577,6 +9618,7 @@ php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
 ```
 
 **3. ☁️ クラウド・DevOps**
+
 ```bash
 # Docker での環境構築
 # Dockerfile
@@ -9597,6 +9639,7 @@ vapor deploy production
 ```
 
 **4. 🔒 セキュリティ強化**
+
 ```php
 <?php
 // セキュリティベストプラクティス
@@ -9606,25 +9649,25 @@ class SecurityController extends Controller
     {
         // レート制限
         $this->middleware('throttle:60,1');
-        
+
         // CSRF保護
         $this->middleware('csrf');
-        
+
         // XSS対策
         $this->middleware('xss');
     }
-    
+
     // SQL インジェクション対策（Eloquent使用）
     public function search(Request $request)
     {
         $query = $request->input('q');
-        
+
         // ❌ 危険な方法
         // $posts = DB::select("SELECT * FROM posts WHERE title LIKE '%{$query}%'");
-        
+
         // ✅ 安全な方法
         $posts = Post::where('title', 'like', "%{$query}%")->get();
-        
+
         return view('search.results', compact('posts'));
     }
 }
@@ -9640,7 +9683,7 @@ class PostRequest extends FormRequest
             'email' => 'required|email|filter:validate_email'
         ];
     }
-    
+
     public function prepareForValidation()
     {
         $this->merge([
@@ -9655,6 +9698,7 @@ class PostRequest extends FormRequest
 ### 📚 継続学習の戦略
 
 **1. 🎯 プロジェクトベース学習**
+
 ```bash
 # 学習用プロジェクトのアイデア
 📝 ブログ・CMS システム
@@ -9670,6 +9714,7 @@ class PostRequest extends FormRequest
 ```
 
 **2. 👥 コミュニティ参加**
+
 ```bash
 # 参加すべきコミュニティ
 🌐 Laravel Japan（Slack, Discord）
@@ -9683,22 +9728,25 @@ class PostRequest extends FormRequest
 **3. 📖 推奨学習リソース**
 
 **書籍**
-- 📚 「Laravel実践開発」
-- 📚 「PHPフレームワーク Laravel入門」
-- 📚 「Laravel Webアプリケーション設計・実装」
+
+- 📚 「Laravel 実践開発」
+- 📚 「PHP フレームワーク Laravel 入門」
+- 📚 「Laravel Web アプリケーション設計・実装」
 - 📚 「Clean Architecture」
 - 📚 「リーダブルコード」
 
 **オンライン学習**
+
 - 🎥 Laracasts（英語）
 - 🎥 Udemy Laravel コース
-- 📖 Laravel公式ドキュメント
+- 📖 Laravel 公式ドキュメント
 - 🎯 Codecademy PHP/Laravel コース
 - 📱 YouTube チュートリアル
 
 ### 🎖️ 実務レベルへの道筋
 
-**Phase 1: 基礎固め（1-3ヶ月）**
+**Phase 1: 基礎固め（1-3 ヶ月）**
+
 ```bash
 ✅ Laravel基本機能の理解
 ✅ 小規模アプリケーションの開発
@@ -9707,7 +9755,8 @@ class PostRequest extends FormRequest
 ✅ デプロイの経験
 ```
 
-**Phase 2: 実践力向上（3-6ヶ月）**
+**Phase 2: 実践力向上（3-6 ヶ月）**
+
 ```bash
 ✅ 中規模アプリケーションの開発
 ✅ API設計と実装
@@ -9716,7 +9765,8 @@ class PostRequest extends FormRequest
 ✅ セキュリティ対策
 ```
 
-**Phase 3: 専門性獲得（6-12ヶ月）**
+**Phase 3: 専門性獲得（6-12 ヶ月）**
+
 ```bash
 ✅ 大規模アプリケーション設計
 ✅ マイクロサービス化
@@ -9727,22 +9777,26 @@ class PostRequest extends FormRequest
 
 ### 🎯 キャリアパス
 
-**1. 🚀 Webエンジニア**
+**1. 🚀 Web エンジニア**
+
 - フルスタック開発者
 - バックエンドスペシャリスト
 - フロントエンドエンジニア
 
 **2. 🏗️ アーキテクト**
+
 - システムアーキテクト
 - ソリューションアーキテクト
 - テクニカルリード
 
 **3. 🎓 技術伝道師**
+
 - 技術ブロガー
 - カンファレンススピーカー
 - 技術コンサルタント
 
 **4. 🚀 起業家**
+
 - スタートアップ創業
 - フリーランス開発者
 - プロダクトオーナー
@@ -9750,6 +9804,7 @@ class PostRequest extends FormRequest
 ### 💡 成功のための心構え
 
 **1. 📈 継続的な学習**
+
 ```bash
 # 学習習慣の作り方
 📅 毎日30分の学習時間確保
@@ -9760,6 +9815,7 @@ class PostRequest extends FormRequest
 ```
 
 **2. 🤝 コミュニティとの関わり**
+
 ```bash
 # コミュニティ活動
 💬 質問・回答の積極的参加
@@ -9770,6 +9826,7 @@ class PostRequest extends FormRequest
 ```
 
 **3. 🔄 実践の重要性**
+
 ```bash
 # 実践の積み重ね
 🛠️ 個人プロジェクトの開発
@@ -9786,12 +9843,14 @@ class PostRequest extends FormRequest
 このガイドを通じて、Laravel の基本から実践的な応用まで学習できました。でも、これはゴールではなく、スタートライン！🚀
 
 **大切なのは：**
+
 - 💪 継続して学習すること
 - 🛠️ 実際に手を動かして作ること
 - 👥 コミュニティと一緒に成長すること
 - 🎯 楽しみながら学ぶこと
 
 **エラーを恐れず、挑戦しよう！**
+
 - 🐛 バグは学習の機会
 - 🚫 エラーは成長の証
 - 🤔 困ったときは仲間に相談
@@ -9800,13 +9859,15 @@ class PostRequest extends FormRequest
 ### 📞 サポートとリソース
 
 **困ったときの相談先**
+
 - 💬 Laravel Japan Slack/Discord
 - 📝 Stack Overflow
 - 🐙 GitHub Issues
 - 📱 Twitter #Laravel
-- 📖 Laravel公式ドキュメント
+- 📖 Laravel 公式ドキュメント
 
 **継続学習のために**
+
 - 📚 技術書の定期購読
 - 🎥 オンライン学習サービス
 - 🏆 ハッカソン参加
@@ -9816,16 +9877,18 @@ class PostRequest extends FormRequest
 ### 🎯 Final Challenge
 
 **最後のチャレンジ！**
-1. 🎨 オリジナルのWebアプリケーションを企画
+
+1. 🎨 オリジナルの Web アプリケーションを企画
 2. 🏗️ 設計・実装・デプロイまで完了
 3. 📝 開発過程をブログで共有
 4. 👥 コミュニティでフィードバック収集
 5. 🚀 継続的な改善と機能追加
 
 **目標：**
-- 📊 月間100人以上の利用者獲得
-- ⭐ GitHub で10スター獲得
-- 📝 技術記事で1000view達成
+
+- 📊 月間 100 人以上の利用者獲得
+- ⭐ GitHub で 10 スター獲得
+- 📝 技術記事で 1000view 達成
 - 👥 開発チームの結成
 
 ---
@@ -9835,18 +9898,21 @@ class PostRequest extends FormRequest
 **🎉 Laravel 学習ガイド完走おめでとう！**
 
 あなたは今：
+
 - ✅ PHP と Laravel の基礎をマスター
 - ✅ 実践的なアプリケーション開発を経験
 - ✅ トラブルシューティングのスキルを獲得
 - ✅ 次のステップへの道筋を理解
 
 **これからの道のり：**
+
 - 🚀 更なる高度な機能の習得
 - 🌟 専門分野での深い知識獲得
 - 👥 チーム開発での実践経験
 - 🎯 自分だけのプロダクト開発
 
 **最後に、覚えておいて欲しいこと：**
+
 - 🌱 学習に終わりはない
 - 💪 継続が最も重要
 - 🤝 一人じゃない、コミュニティがある
@@ -9856,7 +9922,7 @@ class PostRequest extends FormRequest
 
 ---
 
-*このガイドがあなたの Laravel エンジニアとしての成長の第一歩となれば幸いです。質問があれば、いつでもコミュニティで聞いてくださいね！一緒に素晴らしいアプリケーションを作っていきましょう！*
+_このガイドがあなたの Laravel エンジニアとしての成長の第一歩となれば幸いです。質問があれば、いつでもコミュニティで聞いてくださいね！一緒に素晴らしいアプリケーションを作っていきましょう！_
 
 📧 **フィードバック大歓迎！**
 このガイドについてのご意見・ご感想・改善提案があれば、ぜひお聞かせください！
@@ -9864,8 +9930,3 @@ class PostRequest extends FormRequest
 🔗 **次回予告：**
 「Laravel 上級編：エンタープライズ開発とアーキテクチャ設計」
 お楽しみに！ 🎬✨
-
-
-
-
-
