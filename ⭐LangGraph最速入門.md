@@ -775,10 +775,10 @@ from langchain_core.messages import HumanMessage
 
 | モジュール | 必須? | 役割 |
 |-----------|------|------|
-| `os` | 🔴 | 環境変数の設定・取得 |
+| `os` | 🔴必須 | 環境変数の設定・取得 |
 | `TypedDict` | 🔴 | Stateの型定義 |
 | `StateGraph` | 🔴 | ワークフローの作成 |
-| `START, END` | 🟡 | 開始・終了マーカー |
+| `START, END` | 🟡推奨 | 開始・終了マーカー |
 | `ChatGoogleGenerativeAI` | 🔴 | Gemini LLMクライアント |
 | `HumanMessage` | 🔴 | LLMへのメッセージ形式 |
 
@@ -3047,3 +3047,4 @@ def should_continue(state: AgentState) -> Literal["tools", "end"]:
 
 これで第4章は完了です！ 🎉
 from
+
