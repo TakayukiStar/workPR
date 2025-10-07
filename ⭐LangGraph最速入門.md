@@ -1048,129 +1048,260 @@ __start__ → process → __end__
 
 ---
 
-## 2-4. よくある質問30選
+## 2-4. よくある質問41選
 
-### 基本概念
+---
 
-#### Q1: LangGraphとLangChainの違いは?
+## 基本概念（Q1-Q10）
 
-**A:** LangChainは**線形的なチェーン**、LangGraphは**グラフ構造**のワークフローを扱います。
+### Q1: LangGraphとLangChainの違いは？
+
+**簡潔な回答**:
+- **LangChain**: 線形の処理チェーン（A → B → C）
+- **LangGraph**: グラフ構造のワークフロー（条件分岐、ループ、並列実行が可能）
+
+**詳細**:
+
+LangChainは線形処理に最適ですが、複雑な制御フローには向いていません。
 
 ```python
-# LangChain - シンプルだが柔軟性に欠ける
+# ❌ LangChainでは条件分岐が困難
 chain = prompt | llm | output_parser
 result = chain.invoke({"input": "質問"})
+# 常に同じフローを実行
 
-# LangGraph - 複雑だが柔軟
-graph = StateGraph(State)
-graph.add_conditional_edges(...)  # 条件分岐
-graph.add_edge(..., ..., condition=...)  # ループ
+# ✅ LangGraphなら条件分岐が簡単
+workflow.add_conditional_edges("classify", router, {
+    "route_a": "handler_a",
+    "route_b": "handler_b"
+})
 ```
 
-#### Q2: StateGraphは必須?
+**いつLangGraphを選ぶべきか**:
+- ✅ ユーザー入力で処理を変える
+- ✅ 満足するまでループしたい
+- ✅ 複数タスクを並列実行したい
+- ✅ 複雑な状態管理が必要
 
-**A:** はい、**絶対必須**です。これがないとワークフローを作れません。
+---
 
-#### Q3: Stateのフィールドは何個まで?
+### Q2: StateGraphは必須？
 
-**A:** **制限なし**。1個でも100個でもOKです。
+**回答**: **はい、絶対必須です。**
 
 ```python
-# ✅ 最小（1フィールド）
-class MinimalState(TypedDict):
-    data: str
+# ❌ エラー（StateGraphなし）
+workflow.add_node("process", func)  # NameError
 
-# ✅ 実用的（複数フィールド）
-class RealState(TypedDict):
-    query: str
-    search_results: list
-    summary: str
-    final_answer: str
-    metadata: dict
+# ✅ 必ずStateGraphから始める
+from langgraph.graph import StateGraph
+
+workflow = StateGraph(State)
+workflow.add_node("process", func)
+app = workflow.compile()
 ```
 
-#### Q4: TypedDictは必須?
+**StateGraphの役割**:
+1. ノードとエッジの管理
+2. 実行順序の決定
+3. State更新の自動処理
+4. グラフの可視化
 
-**A:** 技術的には`dict`でも動きますが、**TypedDictを強く推奨**します。
+---
 
+### Q3: TypedDictは必須？
+
+**回答**: 技術的には不要ですが、**99.9%使うべき**です。
+
+**TypedDictを使わない場合の問題**:
+- 型安全性がない
+- IDEの補完が効かない
+- バグの早期発見が困難
+
+**推奨：TypedDict使用**:
 ```python
-# ❌ 動くが非推奨
-class State(dict):
-    pass
-
-# ✅ 推奨
 from typing import TypedDict
+
 class State(TypedDict):
-    input: str
-    output: str
-```
+    user_input: str
+    llm_response: str
+    confidence: float
 
-**理由:**
-- 型安全性
-- IDEの補完
-- タイポ防止
-
-#### Q5: STARTとENDは省略できる?
-
-**A:** 技術的には可能ですが、**99%のケースで使います**。
-
-```python
-# ❌ 動くが実践的でない
-workflow.add_edge("node1", "node2")
-
-# ✅ 推奨
-workflow.add_edge(START, "node1")
-workflow.add_edge("node2", END)
+def my_node(state: State) -> dict:
+    user_text = state["user_input"]  # ✅ IDEが補完
+    return {"llm_response": "回答"}
 ```
 
 ---
 
-### ノード関数
+### Q4: Stateのフィールド数に制限は？
 
-#### Q6: ノード関数の引数名は`state`固定?
+**回答**: **制限はありません。** 1個でも100個でもOKです。
 
-**A:** いいえ、**任意の名前でOK**ですが、`state`が慣例です。
+```python
+# ✅ ミニマム
+class MinimalState(TypedDict):
+    input: str
+    output: str
+
+# ✅ 複雑
+class ComplexState(TypedDict):
+    user_id: str
+    query: str
+    intent: str
+    search_results: list
+    final_response: str
+    # ... 好きなだけ追加可能
+```
+
+**ベストプラクティス**: 関連フィールドをグループ化
+
+---
+
+### Q5: STARTとENDは省略できる？
+
+**回答**: 技術的には可能ですが、**実用上は必ず使います。**
+
+```python
+# ✅ 明確で実用的
+from langgraph.graph import START, END
+
+workflow.add_edge(START, "node1")  # 開始点が明確
+workflow.add_edge("node2", END)    # 終了点が明確
+```
+
+**使う理由**:
+- 開始点・終了点が明確
+- 可読性が高い
+- デバッグしやすい
+
+---
+
+### Q6: __start__と__end__を直接使える？
+
+**回答**: 技術的には可能ですが、**絶対に使わないでください。**
+
+```python
+# ❌ 動くが非推奨
+workflow.add_edge("__start__", "node1")
+
+# ✅ 必ずこう書く
+from langgraph.graph import START, END
+workflow.add_edge(START, "node1")
+```
+
+**理由**: 可読性、公式ドキュメントとの一貫性、将来の互換性
+
+---
+
+### Q7: ノード名として__start__や__end__は使える？
+
+**回答**: **使えません（予約語）**。
+
+```python
+# ❌ エラー
+workflow.add_node("__start__", func)  # ValueError
+
+# ✅ OK
+workflow.add_node("start_process", func)
+workflow.add_node("initialize", func)
+```
+
+---
+
+### Q8: ノード名は日本語でもOK？
+
+**回答**: **完全にOKです！**
+
+```python
+# ✅ 日本語ノード名
+workflow.add_node("質問受付", receive)
+workflow.add_node("LLM処理", process)
+workflow.add_node("結果整形", format)
+```
+
+**推奨**: 英語 + コメントが国際的
+```python
+workflow.add_node("classify_intent", classify)  # 意図分類
+```
+
+---
+
+### Q9: ノードの追加順序は重要？
+
+**回答**: **いいえ、無関係です。** 実行順序はエッジで決まります。
+
+```python
+# ✅ これらは全て同じ動作
+# パターン1: 順番通り
+workflow.add_node("step1", func1)
+workflow.add_node("step2", func2)
+
+# パターン2: 逆順
+workflow.add_node("step2", func2)
+workflow.add_node("step1", func1)
+
+# 実行順序はエッジで決まる
+workflow.add_edge(START, "step1")
+workflow.add_edge("step1", "step2")
+```
+
+---
+
+### Q10: エッジの追加順序は？
+
+**回答**: **無関係です。** グラフの接続関係のみが重要。
+
+---
+
+## ノード関数（Q11-Q20）
+
+### Q11: ノード関数の引数名はstate固定？
+
+**回答**: **いいえ、任意の名前でOK**（慣例は`state`）。
 
 ```python
 # ✅ すべて有効
-def node1(state: State) -> dict:
-    return {"output": "OK"}
-
-def node2(data: State) -> dict:
-    return {"output": "OK"}
-
-def node3(s: State) -> dict:
-    return {"output": "OK"}
+def node1(state: State) -> dict: ...
+def node2(s: State) -> dict: ...
+def node3(data: State) -> dict: ...
 ```
 
-#### Q7: 戻り値は必ずdict?
+**重要**: 型ヒント（`: State`）は必須
 
-**A:** はい、**必ずdict**です。
+---
+
+### Q12: 戻り値は必ずdict？
+
+**回答**: **はい、必ずdict**です。
 
 ```python
-# ✅ 正しい
-def correct_node(state: State) -> dict:
+# ✅ OK
+def node(state: State) -> dict:
     return {"output": "結果"}
 
-# ❌ エラー
-def wrong_node(state: State) -> str:
-    return "結果"
+# ❌ NG
+def bad_node(state: State) -> str:
+    return "結果"  # エラー
 ```
 
-#### Q8: 空のdictを返してもいい?
+---
 
-**A:** はい、**OK**です（何も更新しない場合）。
+### Q13: 空のdictを返してもいい？
+
+**回答**: **はい、OKです。** Stateを更新しない場合に使います。
 
 ```python
-def no_update_node(state: State) -> dict:
-    # 何か処理はするが、Stateは更新しない
-    print("処理中...")
-    return {}  # ✅ OK
+def log_only(state: State) -> dict:
+    print(f"ログ: {state}")
+    return {}  # 何も更新しない
 ```
 
-#### Q9: すべてのフィールドを返す必要は?
+---
 
-**A:** いいえ、**更新するフィールドだけ**返せばOKです。
+### Q14: すべてのフィールドを返す必要は？
+
+**回答**: **いいえ、更新分だけ**返せばOKです。
 
 ```python
 class State(TypedDict):
@@ -1178,266 +1309,397 @@ class State(TypedDict):
     b: str
     c: str
 
+# ✅ 良い例: aだけ更新
 def node(state: State) -> dict:
-    # aだけ更新
-    return {"a": "新しい値"}  # ✅ bとcはそのまま
+    return {"a": "新値"}
+# b・cはそのまま保持される
 ```
 
-#### Q10: ノード関数内でエラーが起きたら?
+---
 
-**A:** **ワークフロー全体が停止**します（第5章で対策を学びます）。
+### Q15: lambda式とdef関数の使い分けは？
+
+**回答**: **1行ならlambda、それ以外はdef関数**。
 
 ```python
-def risky_node(state: State) -> dict:
-    result = 10 / 0  # ZeroDivisionError
+# ✅ lambda向き
+workflow.add_node("inc", lambda s: {"count": s["count"] + 1})
+
+# ✅ def向き
+def process(state: State) -> dict:
+    result = complex_logic(state["input"])
+    return {"output": result}
+```
+
+---
+
+### Q16: lambda式で複数行はできる？
+
+**回答**: 技術的には可能ですが、**絶対に推奨しません。**
+
+可読性が最悪になるため、複数行なら必ずdef関数を使いましょう。
+
+---
+
+### Q17: ノード関数内でエラーが起きたら？
+
+**回答**: **ワークフロー全体が停止**します。
+
+**対策**: try-exceptでキャッチ
+```python
+def safe_node(state: State) -> dict:
+    try:
+        result = risky_operation(state["input"])
+        return {"output": result, "error": None}
+    except Exception as e:
+        return {"output": None, "error": str(e)}
+```
+
+---
+
+### Q18: ノード関数でprintデバッグはできる？
+
+**回答**: **はい、完全にできます。**
+
+```python
+def debug_node(state: State) -> dict:
+    print(f"入力: {state['input']}")
+    result = process(state["input"])
+    print(f"出力: {result}")
+    return {"output": result}
+```
+
+---
+
+### Q19: ノード関数は非同期（async）にできる？
+
+**回答**: **はい、できます。**
+
+```python
+async def async_node(state: State) -> dict:
+    result = await async_api_call(state["input"])
     return {"output": result}
 
-# → ワークフロー停止、エラーが伝播
+# 非同期実行
+result = await app.ainvoke({"input": "test"})
 ```
 
 ---
 
-### グラフ構造
+### Q20: 同じノードを複数回追加できる？
 
-#### Q11: ノードの追加順序は重要?
-
-**A:** いいえ、**順序は無関係**です。
+**回答**: **いいえ、エラー**になります。ノード名は一意。
 
 ```python
-# どちらも同じ結果
-# パターン1
-workflow.add_node("a", func_a)
-workflow.add_node("b", func_b)
-
-# パターン2
-workflow.add_node("b", func_b)
-workflow.add_node("a", func_a)
-```
-
-#### Q12: エッジの追加順序は?
-
-**A:** いいえ、**順序は無関係**です。
-
-```python
-# どちらも同じ
-# パターン1
-workflow.add_edge(START, "a")
-workflow.add_edge("a", END)
-
-# パターン2
-workflow.add_edge("a", END)
-workflow.add_edge(START, "a")
-```
-
-#### Q13: 同じノードを複数回追加できる?
-
-**A:** いいえ、**エラー**になります。
-
-```python
+# ❌ エラー
 workflow.add_node("process", func)
-workflow.add_node("process", func)  # ❌ エラー
-```
+workflow.add_node("process", func)  # ValueError
 
-#### Q14: ノード名は日本語OK?
-
-**A:** はい、**完全にOK**です。
-
-```python
-workflow.add_node("処理1", func1)
-workflow.add_node("検索", func2)
-workflow.add_node("要約生成", func3)
-# ✅ すべて有効
-```
-
-#### Q15: ノード名の制限は?
-
-**A:** `__start__`と`__end__`は**予約語**なので使えません。
-
-```python
-workflow.add_node("__start__", func)  # ❌ エラー
-workflow.add_node("__end__", func)    # ❌ エラー
-workflow.add_node("my_node", func)    # ✅ OK
+# ✅ 異なる名前で
+workflow.add_node("process_1", func)
+workflow.add_node("process_2", func)
 ```
 
 ---
 
-### 実行とデバッグ
+## 実行とデバッグ（Q21-Q30）
 
-#### Q16: invoke()の引数は?
+### Q21: invoke()の引数は？
 
-**A:** **Stateの初期値**を辞書で渡します。
-
-```python
-class State(TypedDict):
-    input: str
-    output: str
-
-# すべてのフィールドを渡す必要はない
-result = app.invoke({"input": "質問"})  # ✅ OK
-result = app.invoke({"input": "質問", "output": ""})  # ✅ これもOK
-```
-
-#### Q17: 実行結果は何が返る?
-
-**A:** **最終的なState全体**が返ります。
+**回答**: **Stateの初期値をdictで渡します。**
 
 ```python
-result = app.invoke({"input": "こんにちは"})
-print(type(result))  # <class 'dict'>
-print(result)  # {"input": "こんにちは", "output": "こんにちは！..."}
+# ✅ 最小限
+result = app.invoke({"input": "質問"})
+
+# ✅ 詳細
+result = app.invoke({
+    "input": "質問",
+    "output": "",
+    "count": 0
+})
 ```
 
-#### Q18: 途中経過は取得できる?
+---
 
-**A:** `stream()`メソッドで可能です。
+### Q22: 実行結果は何が返る？
+
+**回答**: **最終的なState全体がdict**として返ります。
 
 ```python
-for chunk in app.stream({"input": "質問"}):
-    print(chunk)  # 各ノードの実行結果
+result = app.invoke({"input": "テスト"})
+
+print(type(result))  # 
+print(result)
+# {
+#     "input": "テスト",
+#     "output": "処理済み: テスト",
+#     "count": 1
+# }
 ```
 
-#### Q19: 実行時間を計測したい
+---
 
-**A:** Pythonの`time`モジュールを使います。
+### Q23: 途中経過を取得できる？
+
+**回答**: **はい、stream()で可能**です。
+
+```python
+for chunk in app.stream({"input": "テスト"}):
+    print(chunk)
+# 各ノードの実行ごとに出力
+```
+
+---
+
+### Q24: 実行時間を計測したい
+
+**回答**: `time`モジュールで計測できます。
 
 ```python
 import time
 
-start_time = time.time()
+start = time.time()
 result = app.invoke({"input": "質問"})
-end_time = time.time()
-
-print(f"実行時間: {end_time - start_time:.2f}秒")
-```
-
-#### Q20: デバッグ方法は?
-
-**A:** ノード関数内で`print()`を使います。
-
-```python
-def debug_node(state: State) -> dict:
-    print(f"現在のstate: {state}")  # デバッグ出力
-    result = some_processing(state)
-    print(f"処理結果: {result}")
-    return {"output": result}
+print(f"実行時間: {time.time() - start:.2f}秒")
 ```
 
 ---
 
-### APIとLLM
+### Q25: エラーハンドリングは？
 
-#### Q21: Gemini以外のLLMは使える?
-
-**A:** はい、**LangChain対応LLMならすべて使えます**。
-
-```python
-# OpenAI
-from langchain_openai import ChatOpenAI
-llm = ChatOpenAI(
-    api_key=os.environ["OPENAI_API_KEY"],
-    model="gpt-4"
-)
-
-# Anthropic Claude
-from langchain_anthropic import ChatAnthropic
-llm = ChatAnthropic(
-    api_key=os.environ["ANTHROPIC_API_KEY"],
-    model="claude-3-opus"
-)
-
-# ローカルLLM (Ollama)
-from langchain_community.llms import Ollama
-llm = Ollama(model="llama2")
-```
-
-#### Q22: APIキーをハードコードしたくない
-
-**A:** 環境変数または`.env`ファイルを使います（0-3章参照）。
-
-```python
-# .envファイルから読み込み
-from dotenv import load_dotenv
-load_dotenv()
-
-llm = ChatGoogleGenerativeAI(
-    google_api_key=os.environ["GEMINI_API_KEY"],
-    model="gemini-2.0-flash-exp"
-)
-```
-
-#### Q23: APIエラーが起きたらどうなる?
-
-**A:** **例外が発生し、ワークフロー停止**します。
-
-```python
-# エラーハンドリング例
-def safe_llm_call(state: State) -> dict:
-    try:
-        response = llm.invoke([HumanMessage(content=state["input"])])
-        return {"output": response.content}
-    except Exception as e:
-        return {"output": f"エラー: {str(e)}"}
-```
-
-#### Q24: LLM呼び出しをキャッシュできる?
-
-**A:** LangChainのキャッシュ機能を使います。
-
-```python
-from langchain.cache import InMemoryCache
-from langchain.globals import set_llm_cache
-
-set_llm_cache(InMemoryCache())
-
-# 同じ質問は2回目以降キャッシュから返る
-```
-
-#### Q25: 複数のLLMを同時に使える?
-
-**A:** はい、**ノードごとに異なるLLMを使えます**。
-
-```python
-llm_fast = ChatGoogleGenerativeAI(
-    google_api_key=os.environ["GEMINI_API_KEY"],
-    model="gemini-1.5-flash"
-)
-
-llm_smart = ChatGoogleGenerativeAI(
-    google_api_key=os.environ["GEMINI_API_KEY"],
-    model="gemini-2.0-flash-exp"
-)
-
-def fast_node(state: State) -> dict:
-    response = llm_fast.invoke([HumanMessage(content=state["input"])])
-    return {"output": response.content}
-
-def smart_node(state: State) -> dict:
-    response = llm_smart.invoke([HumanMessage(content=state["input"])])
-    return {"output": response.content}
-```
-
----
-
-### グラフ可視化
-
-#### Q26: 可視化は必須?
-
-**A:** いいえ、**オプション**ですが、複雑なグラフでは強く推奨します。
-
-#### Q27: PNGが生成できない場合は?
-
-**A:** ASCII版で表示できます。
+**回答**: **try-exceptでラップ**します。
 
 ```python
 try:
-    png_data = app.get_graph().draw_mermaid_png()
-except Exception:
-    print(app.get_graph().draw_ascii())
+    result = app.invoke({"input": "データ"})
+    print(f"成功: {result['output']}")
+except Exception as e:
+    print(f"エラー: {e}")
 ```
 
-#### Q28: グラフをJupyter Notebookで表示したい
+---
 
-**A:** `IPython.display`を使います。
+### Q26: グラフの実行順序を確認したい
+
+**回答**: **stream()で確認**できます。
+
+```python
+for i, chunk in enumerate(app.stream({"input": "データ"}), 1):
+    node_name = list(chunk.keys())[0]
+    print(f"{i}. {node_name}")
+```
+
+---
+
+### Q27: 特定のノードだけ実行できる？
+
+**回答**: **できません。** 常にSTARTからENDまで実行されます。
+
+**代替案**: 条件分岐でスキップ、または最小限のグラフを作る
+
+---
+
+### Q28: 実行をキャンセルできる？
+
+**回答**: **困難**です。タイムアウト設定や最大ステップ数制限で対応。
+
+```python
+# 最大ステップ数を制限
+result = app.invoke(
+    {"input": "データ"},
+    config={"recursion_limit": 10}
+)
+```
+
+---
+
+### Q29: 並列実行は可能？
+
+**回答**: **はい、可能です！**
+
+```python
+# 並列開始
+workflow.add_edge(START, "task1")
+workflow.add_edge(START, "task2")
+workflow.add_edge(START, "task3")
+
+# 結合
+workflow.add_edge("task1", "merge")
+workflow.add_edge("task2", "merge")
+workflow.add_edge("task3", "merge")
+```
+
+---
+
+### Q30: ストリーミング実行とは？
+
+**回答**: **結果を逐次取得**する実行方法です。
+
+```python
+# invoke: 全て完了後に返す
+result = app.invoke({"input": "質問"})
+
+# stream: 各ノードごとに返す
+for chunk in app.stream({"input": "質問"}):
+    print(chunk)  # リアルタイム表示
+```
+
+---
+
+## メッセージの使い方（Q31）
+
+### Q31: HumanMessageとSystemMessageの違いは？
+
+**回答**: **役割を定義する重要な要素**です。LangGraphで頻繁に使います。
+
+**基本**:
+```python
+from langchain_core.messages import SystemMessage, HumanMessage
+
+# SystemMessage: LLMに役割を指示
+system = SystemMessage(content="あなたは親切なアシスタントです")
+
+# HumanMessage: ユーザー入力
+human = HumanMessage(content="こんにちは")
+```
+
+**LangGraphのノード内で使用**:
+```python
+def process_node(state: State) -> dict:
+    messages = [
+        SystemMessage(content="簡潔に回答してください。"),
+        HumanMessage(content=state["user_input"])
+    ]
+    response = llm.invoke(messages)
+    return {"output": response.content}
+```
+
+**SystemMessageの効果**:
+```python
+# SystemMessageなし → 長い説明
+response1 = llm.invoke([HumanMessage("LangGraphとは？")])
+
+# SystemMessageあり → 1文で回答
+response2 = llm.invoke([
+    SystemMessage(content="1文で答えて"),
+    HumanMessage(content="LangGraphとは？")
+])
+```
+
+---
+
+## グラフ構造（Q32-Q41）
+
+### Q32: グラフに循環（ループ）を作れる？
+
+**回答**: **はい、できます。**
+
+```python
+workflow.add_edge("node1", "node2")
+workflow.add_edge("node2", "node1")  # ループ
+
+# 注意: 無限ループにならないよう条件分岐が必要
+workflow.add_conditional_edges("node2", should_continue, {
+    "continue": "node1",
+    "end": END
+})
+```
+
+---
+
+### Q33: 1つのノードから複数のノードに接続できる？
+
+**回答**: **はい、条件分岐で可能**です。
+
+```python
+workflow.add_conditional_edges("classify", route, {
+    "route_a": "node_a",
+    "route_b": "node_b",
+    "route_c": "node_c"
+})
+```
+
+---
+
+### Q34: 複数のノードから1つのノードに接続できる？
+
+**回答**: **はい、できます。**
+
+```python
+workflow.add_edge("node1", "merge")
+workflow.add_edge("node2", "merge")
+workflow.add_edge("node3", "merge")
+```
+
+---
+
+### Q35: グラフを動的に変更できる？
+
+**回答**: **compile()前なら可能、compile()後は不可**。
+
+```python
+workflow.add_node("node1", func1)
+workflow.add_node("node2", func2)  # ここまでOK
+
+app = workflow.compile()  # この後は変更不可
+```
+
+---
+
+### Q36: グラフの深さに制限は？
+
+**回答**: **実質的な制限はありません**が、深すぎると実行時間が長くなります。
+
+---
+
+### Q37: 並列ノードは作れる？
+
+**回答**: **はい、できます。**
+
+```python
+# 並列開始
+workflow.add_edge(START, "parallel1")
+workflow.add_edge(START, "parallel2")
+workflow.add_edge(START, "parallel3")
+
+# 統合
+workflow.add_edge("parallel1", "merge")
+workflow.add_edge("parallel2", "merge")
+workflow.add_edge("parallel3", "merge")
+```
+
+---
+
+### Q38: グラフ可視化は必須？
+
+**回答**: **いいえ、オプション**ですが、複雑なグラフでは強く推奨します。
+
+```python
+# PNG保存
+png_data = app.get_graph().draw_mermaid_png()
+with open("graph.png", "wb") as f:
+    f.write(png_data)
+
+# ASCII版
+print(app.get_graph().draw_ascii())
+```
+
+---
+
+### Q39: PNGが生成できない場合は？
+
+**回答**: **ASCII版で表示**できます。
+
+```python
+print(app.get_graph().draw_ascii())
+```
+
+---
+
+### Q40: グラフをJupyter Notebookで表示したい
+
+**回答**: IPythonのImage機能を使います。
 
 ```python
 from IPython.display import Image, display
@@ -1446,26 +1708,25 @@ png_data = app.get_graph().draw_mermaid_png()
 display(Image(png_data))
 ```
 
-#### Q29: グラフの色を変えられる?
+---
 
-**A:** Mermaidの設定で可能ですが、高度なトピックです。
+### Q41: グラフの実行順序はどう決まる？
 
-#### Q30: グラフをHTML出力できる?
+**回答**: **エッジで定義した接続順序**に従います。
 
-**A:** はい、可能です。
+STARTから辿れるノードを探し、エッジに従って次のノードへ進み、ENDに到達するまで続けます。
 
 ```python
-# Mermaid形式で取得
-mermaid_code = app.get_graph().draw_mermaid()
-print(mermaid_code)
+# この接続
+workflow.add_edge(START, "a")
+workflow.add_edge("a", "b")
+workflow.add_edge("b", "c")
+workflow.add_edge("c", END)
 
-# HTMLに埋め込み可能
-html = f"""
-<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-<div class="mermaid">
-{mermaid_code}
-</div>
-"""
+# この実行順序
+# START → a → b → c → END
+```
+
 ```
 
 ---
@@ -4298,3 +4559,4 @@ workflow.add_edge("improve", "process")  # ループ
 **Happy Coding! 🚀**
 
 あなたは今、LangGraphのエキスパートです。実際のサービスを構築する準備が整いました！
+
