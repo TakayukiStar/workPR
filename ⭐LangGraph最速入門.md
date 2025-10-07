@@ -1583,408 +1583,567 @@ if __name__ == "__main__":
 
 ---
 
-# 第3章: 条件分岐とルーティング
+## 第3章: 条件分岐の実装【完全解説】
 
-## 3-1. 条件分岐の基本
+### 3-1. 条件分岐の基本概念
 
-### なぜ条件分岐が必要?
+#### なぜ条件分岐が必要なのか
 
-**単純な直線フロー:**
+実際のアプリケーションでは、**入力内容によって処理を変える必要**があります。
+
+**例: カスタマーサポートボット**
 ```
-入力 → 処理 → 出力
+ユーザー入力「パスワードを忘れました」
+  ↓
+意図分類「パスワードリセット」
+  ↓
+FAQ検索 → 自動回答
+
+ユーザー入力「商品が壊れています！」
+  ↓
+意図分類「クレーム」
+  ↓
+緊急チケット作成 → 人間にエスカレーション
 ```
 
-**条件分岐フロー:**
+**線形フローでは不可能**
+```python
+# ❌ これではすべて同じ処理になってしまう
+workflow.add_edge(START, "process")
+workflow.add_edge("process", END)
 ```
-入力 → 判定 → 
-    ├─ ルートA → 処理A
-    ├─ ルートB → 処理B
-    └─ ルートC → 処理C
+
+**条件分岐で実現**
+```python
+# ✅ 入力に応じて処理を変える
+workflow.add_conditional_edges("classify", router, {
+    "password_reset": "faq_node",
+    "complaint": "escalate_node",
+    "question": "answer_node"
+})
 ```
 
-### 条件分岐の実装方法
+---
 
-LangGraphでは`add_conditional_edges()`を使います。
+#### add_conditional_edges() の完全理解
 
+**構文の分解**
 ```python
 workflow.add_conditional_edges(
-    "判定ノード",           # どのノードの後に分岐?
-    routing_function,      # どう分岐するか判断?
-    {                      # 各ルートの接続先
-        "route_a": "node_a",
-        "route_b": "node_b",
-        "route_c": END
+    source="判定を行うノード名",        # ①
+    path=ルーティング関数,              # ②
+    path_map={                         # ③
+        "ルート名A": "遷移先ノードA",
+        "ルート名B": "遷移先ノードB",
+        "ルート名C": END
     }
 )
 ```
 
-### 最小の条件分岐例
+**① source（判定を行うノード）**
+- このノードの**実行後**に条件分岐が発生
+- 文字列でノード名を指定
+
+**② path（ルーティング関数）**
+- Stateを受け取り、**次に進むルート名を返す関数**
+- 必ず文字列を返す
+- この戻り値がpath_mapのキーと一致する必要がある
+
+**③ path_map（ルートマッピング）**
+- キー: ルーティング関数が返す文字列
+- 値: 次に実行するノード名（またはEND）
+
+---
+
+### 3-2. 最小の条件分岐実装（ステップバイステップ）
+
+#### ステップ1: 要件定義
+
+**目標**: ユーザー入力を「挨拶」「質問」「その他」に分類して、それぞれ異なる処理を行う
+
+**フロー設計**
+```
+START
+  ↓
+classify（分類ノード）
+  ↓
+条件分岐
+  ├─ "greeting" → greeting_node → END
+  ├─ "question" → question_node → END
+  └─ "other" → other_node → END
+```
+
+---
+
+#### ステップ2: State設計
+
+```python
+from typing import TypedDict
+
+class State(TypedDict):
+    input: str       # ユーザー入力
+    category: str    # 分類結果（greeting/question/other）
+    output: str      # 最終的な応答
+```
+
+**重要ポイント**:
+- `category`は分岐判定に使用
+- ノード関数で`category`を更新し、ルーティング関数で読み取る
+
+---
+
+#### ステップ3: 分類ノード実装
 
 ```python
 import os
-from typing import TypedDict, Literal, NotRequired
-from langgraph.graph import StateGraph, START, END
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_core.messages import HumanMessage
+from langchain_core.messages import HumanMessage, SystemMessage
 
 os.environ["GEMINI_API_KEY"] = "your-api-key"
 
-# State定義
-class State(TypedDict):
-    input: str                     # 必須（ユーザーが渡す）
-    category: NotRequired[str]     # オプショナル（ノードが追加）
-    # output: str は定義不要（最終出力のみで使用）
-
-# LLM初期化
 llm = ChatGoogleGenerativeAI(
-    google_api_key=os.environ["GEMINI_API_KEY"],
     model="gemini-2.0-flash-exp",
-    temperature=0.3
+    temperature=0.0  # 分類は決定的にする
 )
 
-# ノード1: カテゴリ分類
-def classify_input(state: State) -> dict:
-    """入力をカテゴリ分類"""
-    user_input = state["input"]
+def classify(state: State) -> dict:
+    """ユーザー入力を分類する"""
     
-    prompt = f"""
-    以下の質問を分類してください。
-    - 挨拶なら「greeting」
-    - 質問なら「question」
-    - その他なら「other」
+    # LLMに分類を依頼
+    messages = [
+        SystemMessage(content="""
+あなたは入力分類の専門家です。
+以下のルールに従って分類してください:
+
+- 「こんにちは」「おはよう」など → greeting
+- 疑問文や説明を求める内容 → question  
+- 上記以外 → other
+
+必ず「greeting」「question」「other」のいずれか1つだけを返してください。
+余計な説明は不要です。
+        """),
+        HumanMessage(content=f"分類対象: {state['input']}")
+    ]
     
-    質問: {user_input}
-    
-    カテゴリ名のみを返してください。
-    """
-    
-    response = llm.invoke([HumanMessage(content=prompt)])
+    response = llm.invoke(messages)
     category = response.content.strip().lower()
     
+    # 予期しない値の場合はotherにフォールバック
+    if category not in ["greeting", "question", "other"]:
+        category = "other"
+    
     return {"category": category}
+```
 
-# ルーティング関数
+**ポイント解説**:
+1. **temperature=0.0**: 分類は一貫性が重要なので決定的にする
+2. **SystemMessage**: LLMに明確な指示を与える
+3. **フォールバック処理**: 予期しない値への対策（重要！）
+
+---
+
+#### ステップ4: ルーティング関数の実装
+
+```python
+from typing import Literal
+
 def route_by_category(state: State) -> Literal["greeting", "question", "other"]:
-    """カテゴリに応じてルーティング"""
+    """分類結果に基づいてルートを決定"""
+    return state["category"]
+```
+
+**重要な理解**:
+- この関数は**シンプルでOK**
+- 複雑なロジックは分類ノードで実装済み
+- ルーティング関数は単に結果を返すだけ
+
+**Literalの役割**:
+```python
+# ✅ 型安全（IDEが補完してくれる）
+def route(state: State) -> Literal["greeting", "question", "other"]:
     return state["category"]
 
-# ノード2: 挨拶処理
-def handle_greeting(state: State) -> dict:
-    return {"output": "こんにちは！何かお手伝いできることはありますか？"}
+# ❌ 型ヒントなし（動くが推奨しない）
+def route(state: State):
+    return state["category"]
+```
 
-# ノード3: 質問処理
+---
+
+#### ステップ5: 各ルートの処理ノード実装
+
+```python
+def handle_greeting(state: State) -> dict:
+    """挨拶への応答"""
+    return {
+        "output": "こんにちは！何かお手伝いできることはありますか？"
+    }
+
 def handle_question(state: State) -> dict:
-    response = llm.invoke([HumanMessage(content=state["input"])])
+    """質問への応答"""
+    # LLMを使って質問に回答
+    response = llm.invoke([
+        SystemMessage(content="親切で分かりやすく回答してください。"),
+        HumanMessage(content=state["input"])
+    ])
     return {"output": response.content}
 
-# ノード4: その他処理
 def handle_other(state: State) -> dict:
-    return {"output": "申し訳ございません、理解できませんでした。"}
+    """その他への応答"""
+    return {
+        "output": "申し訳ございません、理解できませんでした。もう一度お願いします。"
+    }
+```
 
-# グラフ構築
+**設計のポイント**:
+- `handle_greeting`: シンプルな定型応答（LLM不要）
+- `handle_question`: LLMで動的に回答生成
+- `handle_other`: フォールバック処理
+
+---
+
+#### ステップ6: グラフの組み立て
+
+```python
+from langgraph.graph import StateGraph, START, END
+
+# グラフ作成
 workflow = StateGraph(State)
 
 # ノード追加
-workflow.add_node("classify", classify_input)
+workflow.add_node("classify", classify)
 workflow.add_node("greeting", handle_greeting)
 workflow.add_node("question", handle_question)
 workflow.add_node("other", handle_other)
 
 # エッジ追加
-workflow.add_edge(START, "classify")
+workflow.add_edge(START, "classify")  # 開始点
 
-# 条件分岐
+# 条件分岐（重要！）
 workflow.add_conditional_edges(
-    "classify",
-    route_by_category,
-    {
-        "greeting": "greeting",
+    source="classify",          # 分類ノードの後で分岐
+    path=route_by_category,     # ルーティング関数
+    path_map={                  # ルートマッピング
+        "greeting": "greeting",  # キー=関数の戻り値, 値=ノード名
         "question": "question",
         "other": "other"
     }
 )
 
-# 各ルートから終了
+# 各ルートの終了
+workflow.add_edge("greeting", END)
+workflow.add_edge("question", END)
+workflow.add_edge("other", END)
+
+# コンパイル
+app = workflow.compile()
+```
+
+**グラフ構造の可視化**:
+```
+__start__
+    ↓
+classify
+    ↓
+  [条件分岐]
+    ├─ greeting → __end__
+    ├─ question → __end__
+    └─ other → __end__
+```
+
+---
+
+#### ステップ7: テストと実行
+
+```python
+# テストケース
+test_inputs = [
+    "こんにちは",
+    "LangGraphとは何ですか？",
+    "あいうえお12345",
+    "おはようございます",
+    "条件分岐の仕組みを教えて"
+]
+
+for user_input in test_inputs:
+    result = app.invoke({
+        "input": user_input,
+        "category": "",  # 初期値
+        "output": ""     # 初期値
+    })
+    
+    print(f"入力: {user_input}")
+    print(f"分類: {result['category']}")
+    print(f"応答: {result['output']}")
+    print("-" * 60)
+```
+
+**実行結果例**:
+```
+入力: こんにちは
+分類: greeting
+応答: こんにちは！何かお手伝いできることはありますか？
+------------------------------------------------------------
+入力: LangGraphとは何ですか？
+分類: question
+応答: LangGraphは、LangChainの上に構築された...（LLMの回答）
+------------------------------------------------------------
+入力: あいうえお12345
+分類: other
+応答: 申し訳ございません、理解できませんでした。もう一度お願いします。
+------------------------------------------------------------
+```
+
+---
+
+#### 完全なコード（コピペ可能）
+
+```python
+import os
+from typing import TypedDict, Literal
+from langgraph.graph import StateGraph, START, END
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_core.messages import HumanMessage, SystemMessage
+
+# APIキー設定
+os.environ["GEMINI_API_KEY"] = "your-api-key"
+
+# State定義
+class State(TypedDict):
+    input: str
+    category: str
+    output: str
+
+# LLM初期化
+llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash-exp", temperature=0.0)
+
+# ノード1: 分類
+def classify(state: State) -> dict:
+    messages = [
+        SystemMessage(content="""
+入力を分類してください:
+- greeting: 挨拶
+- question: 質問
+- other: その他
+1単語のみ返してください。
+        """),
+        HumanMessage(content=state["input"])
+    ]
+    response = llm.invoke(messages)
+    category = response.content.strip().lower()
+    if category not in ["greeting", "question", "other"]:
+        category = "other"
+    return {"category": category}
+
+# ルーティング関数
+def route_by_category(state: State) -> Literal["greeting", "question", "other"]:
+    return state["category"]
+
+# ノード2a: 挨拶処理
+def handle_greeting(state: State) -> dict:
+    return {"output": "こんにちは！何かお手伝いできることはありますか？"}
+
+# ノード2b: 質問処理
+def handle_question(state: State) -> dict:
+    response = llm.invoke([
+        SystemMessage(content="親切に回答してください。"),
+        HumanMessage(content=state["input"])
+    ])
+    return {"output": response.content}
+
+# ノード2c: その他
+def handle_other(state: State) -> dict:
+    return {"output": "申し訳ございません、理解できませんでした。"}
+
+# グラフ構築
+workflow = StateGraph(State)
+workflow.add_node("classify", classify)
+workflow.add_node("greeting", handle_greeting)
+workflow.add_node("question", handle_question)
+workflow.add_node("other", handle_other)
+
+workflow.add_edge(START, "classify")
+workflow.add_conditional_edges("classify", route_by_category, {
+    "greeting": "greeting",
+    "question": "question",
+    "other": "other"
+})
 workflow.add_edge("greeting", END)
 workflow.add_edge("question", END)
 workflow.add_edge("other", END)
 
 app = workflow.compile()
 
-# 実行（categoryは不要！）
-test_inputs = [
-    "こんにちは",
-    "LangGraphとは何ですか？",
-    "あいうえお"
-]
-
-for test_input in test_inputs:
-    print(f"\n{'='*60}")
-    print(f"入力: {test_input}")
-    result = app.invoke({"input": test_input})  # ← categoryは渡さない
-    print(f"カテゴリ: {result['category']}")
-    print(f"出力: {result['output']}")
+# テスト
+test_inputs = ["こんにちは", "LangGraphとは?", "12345"]
+for text in test_inputs:
+    result = app.invoke({"input": text, "category": "", "output": ""})
+    print(f"入力: {text} | 分類: {result['category']} | 応答: {result['output'][:50]}...")
 ```
 
-### ルーティング関数の重要ポイント
+---
 
-**ルール1: 戻り値は文字列**
+### 3-3. よくある間違いとデバッグ
+
+#### 間違い1: ルートマッピングの不一致
 
 ```python
-# ✅ 正しい
-def route_func(state: State) -> str:
-    return "route_a"
+# ❌ エラー例
+def route(state: State) -> Literal["greet", "quest", "other"]:
+    if state["category"] == "greeting":
+        return "greet"  # ここで"greet"を返す
+    elif state["category"] == "question":
+        return "quest"
+    return "other"
 
-# ✅ 型ヒント付き（推奨）
-def route_func(state: State) -> Literal["route_a", "route_b"]:
-    if state["score"] > 0.8:
+workflow.add_conditional_edges("classify", route, {
+    "greeting": "greeting_node",  # キーが"greeting"だがルーティング関数は"greet"を返す
+    "question": "question_node",  # キーが"question"だがルーティング関数は"quest"を返す
+    "other": "other_node"
+})
+# → KeyError: 'greet' が発生
+```
+
+**修正方法**:
+```python
+# ✅ 正しい実装
+def route(state: State) -> Literal["greeting", "question", "other"]:
+    return state["category"]  # Stateのcategoryをそのまま返す
+
+workflow.add_conditional_edges("classify", route, {
+    "greeting": "greeting_node",  # キーと戻り値が一致
+    "question": "question_node",
+    "other": "other_node"
+})
+```
+
+---
+
+#### 間違い2: すべてのケースをカバーしていない
+
+```python
+# ❌ エラー例
+def route(state: State) -> Literal["greeting", "question", "other"]:
+    return state["category"]
+
+workflow.add_conditional_edges("classify", route, {
+    "greeting": "greeting_node",
+    "question": "question_node"
+    # "other"のケースが抜けている
+})
+# → state["category"]が"other"のときKeyError
+```
+
+**修正方法**:
+```python
+# ✅ すべてのケースをカバー
+workflow.add_conditional_edges("classify", route, {
+    "greeting": "greeting_node",
+    "question": "question_node",
+    "other": "other_node"  # 忘れずに追加
+})
+```
+
+---
+
+#### 間違い3: ルーティング関数で直接分岐ロジックを書く
+
+```python
+# ❌ アンチパターン（動くが保守性が悪い）
+def route(state: State) -> Literal["route_a", "route_b"]:
+    user_input = state["input"]
+    
+    # ルーティング関数内で複雑なロジック
+    if "こんにちは" in user_input or "おはよう" in user_input:
         return "route_a"
-    return "route_b"
+    elif "？" in user_input or "教えて" in user_input:
+        return "route_b"
+    else:
+        return "route_a"
 ```
 
-**ルール2: 戻り値はマッピングのキーと一致**
-
+**推奨パターン**:
 ```python
-# ルーティング関数
-def route_func(state: State) -> Literal["high", "low"]:
-    return "high" if state["score"] > 0.5 else "low"
+# ✅ ベストプラクティス
+# 1. 分類ノードで判定
+def classify(state: State) -> dict:
+    # ここで複雑なロジックを実装
+    category = complex_classification_logic(state["input"])
+    return {"category": category}
 
-# マッピング（キーが一致）
-workflow.add_conditional_edges(
-    "classify",
-    route_func,
-    {
-        "high": "premium_process",  # ← "high"と一致
-        "low": "basic_process"      # ← "low"と一致
-    }
-)
+# 2. ルーティング関数はシンプルに
+def route(state: State) -> Literal["route_a", "route_b"]:
+    return state["category"]
 ```
 
-### 🔑 Stateの設計ポイント（重要）
-
-```python
-from typing import TypedDict, NotRequired
-
-class State(TypedDict):
-    # ✅ 必須フィールド：ユーザーが渡すもの
-    input: str
-    
-    # ✅ オプショナル：ノードが追加するもの（他のノードで使う）
-    category: NotRequired[str]
-    sentiment: NotRequired[str]
-    
-    # ❌ 最終出力のみで使うフィールドは定義不要
-    # output: str  ← これは不要
-```
-
-**理由:**
-- `category`や`sentiment`は**複数のノード**で参照される → 定義すべき
-- `output`は**最終結果として1回だけ**使われる → 定義不要
+**理由**:
+- 分類ロジックの再利用が容易
+- テストがしやすい
+- コードの可読性が高い
 
 ---
 
-## 3-2. 複数ルートの実装
+### 3-4. 複数条件での高度なルーティング
 
-### 実用的な例: 質問応答システム
+#### スコアベースの分岐
+
+**ユースケース**: 信頼度スコアに応じて処理を変える
 
 ```python
-import os
-from typing import TypedDict, Literal, NotRequired
+from typing import TypedDict, Literal
 from langgraph.graph import StateGraph, START, END
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.messages import HumanMessage, SystemMessage
-
-os.environ["GEMINI_API_KEY"] = "your-api-key"
-
-# State定義
-class State(TypedDict):
-    question: str                  # 必須（ユーザーが渡す）
-    intent: NotRequired[str]       # オプショナル（他のノードで参照）
-    # answer: str は定義不要（最終出力のみ）
-
-# LLM初期化
-llm = ChatGoogleGenerativeAI(
-    google_api_key=os.environ["GEMINI_API_KEY"],
-    model="gemini-2.0-flash-exp",
-    temperature=0.3
-)
-
-# ノード1: Intent分類
-def classify_intent(state: State) -> dict:
-    """質問の意図を分類"""
-    question = state["question"]
-    
-    messages = [
-        SystemMessage(content="""
-        質問を以下のカテゴリに分類してください:
-        - factual: 事実確認の質問
-        - opinion: 意見を求める質問
-        - howto: 手順を尋ねる質問
-        - other: その他
-        
-        カテゴリ名のみを返してください。
-        """),
-        HumanMessage(content=question)
-    ]
-    
-    response = llm.invoke(messages)
-    intent = response.content.strip().lower()
-    
-    return {"intent": intent}
-
-# ルーティング関数
-def route_by_intent(state: State) -> Literal["factual", "opinion", "howto", "other"]:
-    """意図に基づいてルーティング"""
-    return state["intent"]
-
-# ノード2a: 事実確認処理
-def handle_factual(state: State) -> dict:
-    """事実確認の質問に回答"""
-    messages = [
-        SystemMessage(content="事実に基づいて正確に回答してください。"),
-        HumanMessage(content=state["question"])
-    ]
-    
-    response = llm.invoke(messages)
-    return {"answer": response.content}
-
-# ノード2b: 意見処理
-def handle_opinion(state: State) -> dict:
-    """意見を求める質問に回答"""
-    messages = [
-        SystemMessage(content="バランスの取れた視点を提供してください。"),
-        HumanMessage(content=state["question"])
-    ]
-    
-    response = llm.invoke(messages)
-    return {"answer": response.content}
-
-# ノード2c: 手順説明処理
-def handle_howto(state: State) -> dict:
-    """手順を段階的に説明"""
-    messages = [
-        SystemMessage(content="ステップバイステップで説明してください。"),
-        HumanMessage(content=state["question"])
-    ]
-    
-    response = llm.invoke(messages)
-    return {"answer": response.content}
-
-# ノード2d: その他処理
-def handle_other(state: State) -> dict:
-    """その他の質問に対応"""
-    return {"answer": "申し訳ございませんが、もう少し具体的にお聞かせいただけますか？"}
-
-# グラフ構築
-workflow = StateGraph(State)
-
-# ノード追加
-workflow.add_node("classify", classify_intent)
-workflow.add_node("factual", handle_factual)
-workflow.add_node("opinion", handle_opinion)
-workflow.add_node("howto", handle_howto)
-workflow.add_node("other", handle_other)
-
-# エッジ追加
-workflow.add_edge(START, "classify")
-
-# 条件分岐
-workflow.add_conditional_edges(
-    "classify",
-    route_by_intent,
-    {
-        "factual": "factual",
-        "opinion": "opinion",
-        "howto": "howto",
-        "other": "other"
-    }
-)
-
-# 各ルートから終了
-workflow.add_edge("factual", END)
-workflow.add_edge("opinion", END)
-workflow.add_edge("howto", END)
-workflow.add_edge("other", END)
-
-app = workflow.compile()
-
-# テスト実行（intentは渡さない）
-test_questions = [
-    "東京の人口は何人ですか？",
-    "AIの未来についてどう思いますか？",
-    "Pythonで環境構築する方法を教えてください",
-    "あいうえお"
-]
-
-for question in test_questions:
-    print(f"\n{'='*60}")
-    print(f"質問: {question}")
-    result = app.invoke({"question": question})  # ← intentは不要
-    print(f"意図: {result['intent']}")
-    print(f"回答: {result['answer']}")
-```
-
----
-
-## 3-3. 動的ルーティング
-
-### スコアベースのルーティング
-
-信頼度スコアに基づいて処理を分岐する実用的なパターンです。
-
-```python
 import os
-from typing import TypedDict, Literal, NotRequired
-from langgraph.graph import StateGraph, START, END
-from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_core.messages import HumanMessage, SystemMessage
-import json
 
 os.environ["GEMINI_API_KEY"] = "your-api-key"
 
-# State定義
 class State(TypedDict):
-    query: str                      # 必須
-    confidence: NotRequired[float]  # 他のノードで参照
-    # answer: str は定義不要
+    query: str
+    confidence_score: float  # 0.0〜1.0
+    answer: str
 
-# LLM初期化
-llm = ChatGoogleGenerativeAI(
-    google_api_key=os.environ["GEMINI_API_KEY"],
-    model="gemini-2.0-flash-exp",
-    temperature=0.3
-)
+llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash-exp", temperature=0.3)
 
-# ノード1: 信頼度評価
+# ステップ1: 信頼度を評価
 def evaluate_confidence(state: State) -> dict:
-    """質問の難易度を評価して信頼度スコアを返す"""
-    query = state["query"]
+    """質問の難易度を評価してスコアを算出"""
     
     messages = [
         SystemMessage(content="""
-        以下の質問の難易度を0.0〜1.0で評価してください。
-        - 0.0〜0.3: 簡単な質問（挨拶、基本的な事実）
-        - 0.4〜0.7: 中程度の質問（説明が必要）
-        - 0.8〜1.0: 難しい質問（専門知識、複雑な推論）
-        
-        数値のみを返してください。例: 0.7
+あなたは質問の難易度評価の専門家です。
+以下の基準でスコアを0.0〜1.0で評価してください:
+
+0.0-0.3: 簡単（一般常識で答えられる）
+  例: "こんにちは", "今日の天気は?"
+  
+0.4-0.7: 中程度（ある程度の知識が必要）
+  例: "LangGraphの基本的な使い方は?", "Pythonでリストをソートする方法は?"
+  
+0.8-1.0: 難しい（専門知識が必要）
+  例: "量子コンピューティングの原理を説明して", "transformerモデルのattention機構の数式を導出して"
+
+必ず0.0〜1.0の数値のみを返してください。説明は不要です。
         """),
-        HumanMessage(content=query)
+        HumanMessage(content=f"評価対象: {state['query']}")
     ]
     
     response = llm.invoke(messages)
     
     try:
-        confidence = float(response.content.strip())
+        score = float(response.content.strip())
+        # 範囲チェック
+        score = max(0.0, min(1.0, score))
     except ValueError:
-        confidence = 0.5  # デフォルト値
+        # パースに失敗した場合は中間値
+        score = 0.5
     
-    return {"confidence": confidence}
+    return {"confidence_score": score}
 
-# ルーティング関数
+# ステップ2: スコアに基づいてルーティング
 def route_by_confidence(state: State) -> Literal["simple", "moderate", "complex"]:
-    """信頼度スコアに基づいてルーティング"""
-    score = state["confidence"]
+    """信頼度スコアに基づいてルートを決定"""
+    score = state["confidence_score"]
     
     if score < 0.4:
         return "simple"
@@ -1993,38 +2152,52 @@ def route_by_confidence(state: State) -> Literal["simple", "moderate", "complex"
     else:
         return "complex"
 
-# ノード2a: シンプル処理
+# ステップ3: 各難易度に応じた処理
 def handle_simple(state: State) -> dict:
-    """簡単な質問に素早く回答"""
-    messages = [
-        SystemMessage(content="簡潔に回答してください。"),
-        HumanMessage(content=state["query"])
-    ]
+    """簡単な質問への応答"""
+    llm_simple = ChatGoogleGenerativeAI(
+        model="gemini-1.5-flash",  # 軽量モデル
+        temperature=0.7,
+        max_tokens=256  # 短い応答
+    )
     
-    response = llm.invoke(messages)
-    return {"answer": response.content}
+    response = llm_simple.invoke([
+        SystemMessage(content="簡潔に1-2文で回答してください。"),
+        HumanMessage(content=state["query"])
+    ])
+    
+    return {"answer": f"[簡易回答] {response.content}"}
 
-# ノード2b: 標準処理
 def handle_moderate(state: State) -> dict:
-    """中程度の質問に詳しく回答"""
-    messages = [
-        SystemMessage(content="詳しく説明してください。"),
+    """中程度の質問への応答"""
+    response = llm.invoke([
+        SystemMessage(content="分かりやすく、適度な詳しさで説明してください。"),
         HumanMessage(content=state["query"])
-    ]
+    ])
     
-    response = llm.invoke(messages)
-    return {"answer": response.content}
+    return {"answer": f"[標準回答] {response.content}"}
 
-# ノード2c: 複雑処理
 def handle_complex(state: State) -> dict:
-    """難しい質問に専門的に回答"""
-    messages = [
-        SystemMessage(content="専門的かつ包括的に説明してください。"),
-        HumanMessage(content=state["query"])
-    ]
+    """難しい質問への応答"""
+    llm_advanced = ChatGoogleGenerativeAI(
+        model="gemini-2.0-flash-exp",  # 高性能モデル
+        temperature=0.3,
+        max_tokens=2048  # 詳細な応答
+    )
     
-    response = llm.invoke(messages)
-    return {"answer": response.content}
+    response = llm_advanced.invoke([
+        SystemMessage(content="""
+専門的かつ包括的に説明してください。
+必要に応じて以下を含めてください:
+- 背景知識
+- 詳細な説明
+- 具体例
+- 関連する概念
+        """),
+        HumanMessage(content=state["query"])
+    ])
+    
+    return {"answer": f"[詳細回答] {response.content}"}
 
 # グラフ構築
 workflow = StateGraph(State)
@@ -2037,9 +2210,9 @@ workflow.add_node("complex", handle_complex)
 workflow.add_edge(START, "evaluate")
 
 workflow.add_conditional_edges(
-    "evaluate",
-    route_by_confidence,
-    {
+    source="evaluate",
+    path=route_by_confidence,
+    path_map={
         "simple": "simple",
         "moderate": "moderate",
         "complex": "complex"
@@ -2052,248 +2225,134 @@ workflow.add_edge("complex", END)
 
 app = workflow.compile()
 
-# テスト実行
+# テスト
 test_queries = [
     "こんにちは",
-    "LangGraphの基本的な使い方を教えてください",
-    "量子コンピューティングと機械学習の理論的な関係性について説明してください"
+    "LangGraphの基本的な使い方を教えて",
+    "量子もつれの数学的定式化とベル不等式の導出過程を説明してください"
 ]
 
 for query in test_queries:
-    print(f"\n{'='*60}")
+    result = app.invoke({
+        "query": query,
+        "confidence_score": 0.0,
+        "answer": ""
+    })
+    
+    print(f"\n{'='*70}")
     print(f"質問: {query}")
-    result = app.invoke({"query": query})
-    print(f"信頼度: {result['confidence']:.2f}")
-    print(f"ルート: {route_by_confidence(result)}")
+    print(f"難易度スコア: {result['confidence_score']:.2f}")
     print(f"回答: {result['answer'][:100]}...")
 ```
 
-### 複数条件による複雑なルーティング
-
-```python
-import os
-from typing import TypedDict, Literal, NotRequired
-from langgraph.graph import StateGraph, START, END
-from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_core.messages import HumanMessage
-
-os.environ["GEMINI_API_KEY"] = "your-api-key"
-
-# State定義
-class State(TypedDict):
-    query: str                    # 必須
-    language: NotRequired[str]    # 他のノードで参照
-    priority: NotRequired[str]    # 他のノードで参照
-    # response: str は定義不要
-
-llm = ChatGoogleGenerativeAI(
-    google_api_key=os.environ["GEMINI_API_KEY"],
-    model="gemini-2.0-flash-exp",
-    temperature=0.3
-)
-
-# ノード1: 分析
-def analyze_query(state: State) -> dict:
-    """クエリを分析"""
-    query = state["query"]
-    
-    # 言語検出（簡易版）
-    if any(c >= '\u4e00' and c <= '\u9fff' for c in query):
-        language = "ja"
-    elif any(c >= '\uac00' and c <= '\ud7a3' for c in query):
-        language = "ko"
-    else:
-        language = "en"
-    
-    # 優先度判定（キーワードベース）
-    urgent_keywords = ["urgent", "emergency", "至急", "緊急"]
-    priority = "high" if any(kw in query.lower() for kw in urgent_keywords) else "normal"
-    
-    return {
-        "language": language,
-        "priority": priority
-    }
-
-# ルーティング関数
-def route_by_analysis(state: State) -> Literal["urgent_ja", "urgent_en", "normal_ja", "normal_en"]:
-    """言語と優先度で複合ルーティング"""
-    lang = state["language"]
-    priority = state["priority"]
-    
-    if priority == "high" and lang == "ja":
-        return "urgent_ja"
-    elif priority == "high" and lang == "en":
-        return "urgent_en"
-    elif lang == "ja":
-        return "normal_ja"
-    else:
-        return "normal_en"
-
-# ノード2a: 緊急・日本語
-def handle_urgent_ja(state: State) -> dict:
-    response = llm.invoke([HumanMessage(
-        content=f"緊急対応として迅速に回答してください: {state['query']}"
-    )])
-    return {"response": f"【緊急対応】{response.content}"}
-
-# ノード2b: 緊急・英語
-def handle_urgent_en(state: State) -> dict:
-    response = llm.invoke([HumanMessage(
-        content=f"Urgent response required: {state['query']}"
-    )])
-    return {"response": f"[URGENT] {response.content}"}
-
-# ノード2c: 通常・日本語
-def handle_normal_ja(state: State) -> dict:
-    response = llm.invoke([HumanMessage(content=state['query'])])
-    return {"response": response.content}
-
-# ノード2d: 通常・英語
-def handle_normal_en(state: State) -> dict:
-    response = llm.invoke([HumanMessage(content=state['query'])])
-    return {"response": response.content}
-
-# グラフ構築
-workflow = StateGraph(State)
-
-workflow.add_node("analyze", analyze_query)
-workflow.add_node("urgent_ja", handle_urgent_ja)
-workflow.add_node("urgent_en", handle_urgent_en)
-workflow.add_node("normal_ja", handle_normal_ja)
-workflow.add_node("normal_en", handle_normal_en)
-
-workflow.add_edge(START, "analyze")
-
-workflow.add_conditional_edges(
-    "analyze",
-    route_by_analysis,
-    {
-        "urgent_ja": "urgent_ja",
-        "urgent_en": "urgent_en",
-        "normal_ja": "normal_ja",
-        "normal_en": "normal_en"
-    }
-)
-
-workflow.add_edge("urgent_ja", END)
-workflow.add_edge("urgent_en", END)
-workflow.add_edge("normal_ja", END)
-workflow.add_edge("normal_en", END)
-
-app = workflow.compile()
-
-# テスト実行
-test_queries = [
-    "こんにちは、LangGraphについて教えてください",
-    "至急：システムエラーの対処法を教えてください",
-    "Hello, please explain LangGraph",
-    "Urgent: How to fix the system error?"
-]
-
-for query in test_queries:
-    print(f"\n{'='*60}")
-    print(f"クエリ: {query}")
-    result = app.invoke({"query": query})
-    print(f"言語: {result['language']}, 優先度: {result['priority']}")
-    print(f"応答: {result['response'][:100]}...")
+**実行結果例**:
+```
+======================================================================
+質問: こんにちは
+難易度スコア: 0.15
+回答: [簡易回答] こんにちは！何かお手伝いできることはありますか？
+======================================================================
+質問: LangGraphの基本的な使い方を教えて
+難易度スコア: 0.55
+回答: [標準回答] LangGraphは、複雑なAIワークフローをグラフ構造で表現するフレームワークです...
+======================================================================
+質問: 量子もつれの数学的定式化とベル不等式の導出過程を説明してください
+難易度スコア: 0.95
+回答: [詳細回答] 量子もつれ(quantum entanglement)は、2つ以上の量子系が分離不可能な状態...
 ```
 
 ---
 
-## 3-4. 第3章完全実装例
+### 3-5. 実践例: カスタマーサポートボット（完全実装）
 
-### 実践的なカスタマーサポートボット
+#### 要件定義
+
+**機能要件**:
+1. ユーザーメッセージの意図を分類（問い合わせ/クレーム/要望/フィードバック）
+2. 感情分析（ポジティブ/ニュートラル/ネガティブ）
+3. 優先度判定（高/中/低）
+4. 優先度に応じた応答生成
+
+**フロー設計**:
+```
+START → analyze → 
+  ├─ high priority → urgent_response → END
+  ├─ medium priority → standard_response → END
+  └─ low priority → basic_response → END
+```
+
+---
+
+#### 完全実装
 
 ```python
-"""
-第3章完全実装: カスタマーサポートボット
-- 意図分類
-- 優先度判定
-- 複数ルートの条件分岐
-"""
-
 import os
-from typing import TypedDict, Literal, NotRequired
+from typing import TypedDict, Literal
 from langgraph.graph import StateGraph, START, END
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.messages import HumanMessage, SystemMessage
 
-# ============================================
-# APIキー設定
-# ============================================
+os.environ["GEMINI_API_KEY"] = "your-api-key"
 
-os.environ["GEMINI_API_KEY"] = "your-actual-api-key"
-
-if os.environ.get("GEMINI_API_KEY") == "your-actual-api-key":
-    raise ValueError("❌ APIキーを設定してください")
-
-# ============================================
 # State定義
-# ============================================
+class SupportState(TypedDict):
+    message: str        # ユーザーメッセージ
+    intent: str         # 意図（inquiry/complaint/request/feedback）
+    sentiment: str      # 感情（positive/neutral/negative）
+    priority: str       # 優先度（high/medium/low）
+    response: str       # 最終応答
+    analysis_detail: str  # 分析の詳細（デバッグ用）
 
-class State(TypedDict):
-    # 必須（ユーザーが渡す）
-    customer_message: str
+llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash-exp", temperature=0.3)
+
+# ノード1: メッセージ分析
+def analyze_message(state: SupportState) -> dict:
+    """ユーザーメッセージを多角的に分析"""
     
-    # オプショナル（ノード間で共有）
-    intent: NotRequired[str]
-    priority: NotRequired[str]
-    sentiment: NotRequired[str]
-    
-    # 最終出力は定義不要
-    # response: str
-
-# ============================================
-# LLM初期化
-# ============================================
-
-llm = ChatGoogleGenerativeAI(
-    google_api_key=os.environ["GEMINI_API_KEY"],
-    model="gemini-2.0-flash-exp",
-    temperature=0.3,
-    max_tokens=1024
-)
-
-print("✅ LLM初期化完了")
-
-# ============================================
-# ノード関数定義
-# ============================================
-
-def analyze_message(state: State) -> dict:
-    """顧客メッセージを分析"""
-    message = state["customer_message"]
+    message = state["message"]
     
     # 意図分類
-    intent_prompt = f"""
-    以下の顧客メッセージを分類してください:
-    - inquiry: 問い合わせ
-    - complaint: クレーム
-    - request: 要望
-    - feedback: フィードバック
-    
-    メッセージ: {message}
-    カテゴリ名のみを返してください。
-    """
+    intent_prompt = """
+以下のカテゴリに分類してください:
+- inquiry: 製品やサービスについての問い合わせ
+- complaint: 不満やクレーム
+- request: 新機能や改善の要望
+- feedback: 一般的なフィードバック
+
+入力: {message}
+
+必ず上記4つのうち1つだけを返してください。
+    """.format(message=message)
     
     intent_response = llm.invoke([HumanMessage(content=intent_prompt)])
     intent = intent_response.content.strip().lower()
     
-    # 感情分析
-    sentiment_prompt = f"""
-    以下のメッセージの感情を分析してください:
-    - positive: ポジティブ
-    - neutral: 中立
-    - negative: ネガティブ
+    # バリデーション
+    valid_intents = ["inquiry", "complaint", "request", "feedback"]
+    if intent not in valid_intents:
+        intent = "inquiry"  # デフォルト
     
-    メッセージ: {message}
-    感情のみを返してください。
-    """
+    # 感情分析
+    sentiment_prompt = """
+以下のメッセージの感情を分析してください:
+- positive: ポジティブな内容
+- neutral: 中立的な内容
+- negative: ネガティブな内容
+
+入力: {message}
+
+必ず上記3つのうち1つだけを返してください。
+    """.format(message=message)
     
     sentiment_response = llm.invoke([HumanMessage(content=sentiment_prompt)])
     sentiment = sentiment_response.content.strip().lower()
     
-    # 優先度判定
+    # バリデーション
+    valid_sentiments = ["positive", "neutral", "negative"]
+    if sentiment not in valid_sentiments:
+        sentiment = "neutral"
+    
+    # 優先度判定ロジック
     if intent == "complaint" or sentiment == "negative":
         priority = "high"
     elif intent == "inquiry":
@@ -2301,302 +2360,637 @@ def analyze_message(state: State) -> dict:
     else:
         priority = "low"
     
+    # 分析詳細を記録（デバッグ用）
+    analysis_detail = f"意図={intent}, 感情={sentiment}, 優先度={priority}"
+    
     return {
         "intent": intent,
         "sentiment": sentiment,
-        "priority": priority
+        "priority": priority,
+        "analysis_detail": analysis_detail
     }
 
-def route_message(state: State) -> Literal["high_priority", "standard", "low_priority"]:
+# ルーティング関数
+def route_by_priority(state: SupportState) -> Literal["high", "medium", "low"]:
     """優先度に基づいてルーティング"""
-    return {
-        "high": "high_priority",
-        "medium": "standard",
-        "low": "low_priority"
-    }[state["priority"]]
+    return state["priority"]
 
-def handle_high_priority(state: State) -> dict:
-    """高優先度の対応"""
+# 高優先度対応
+def handle_high_priority(state: SupportState) -> dict:
+    """緊急対応が必要なケース"""
+    
     messages = [
         SystemMessage(content="""
-        あなたは経験豊富なカスタマーサポート担当者です。
-        顧客の問題を最優先で解決してください。
-        丁寧かつ迅速に対応してください。
+あなたは経験豊富なカスタマーサポートのシニアスタッフです。
+クレームや緊急の問い合わせに対応しています。
+
+以下の点に注意して応答してください:
+1. 誠実な謝罪から始める
+2. 問題を理解していることを示す
+3. 具体的な解決策を提示
+4. 迅速な対応を約束
+5. エスカレーションの手順を案内
         """),
-        HumanMessage(content=f"""
-        顧客メッセージ: {state['customer_message']}
-        意図: {state['intent']}
-        感情: {state['sentiment']}
-        
-        上記を考慮して適切に対応してください。
-        """)
+        HumanMessage(content=state["message"])
     ]
     
     response = llm.invoke(messages)
-    return {"response": f"【優先対応】{response.content}"}
+    
+    return {
+        "response": f"【緊急対応】\n{response.content}\n\n※このメッセージは優先的に処理され、担当者に即座にエスカレーションされました。"
+    }
 
-def handle_standard(state: State) -> dict:
-    """標準的な対応"""
+# 中優先度対応
+def handle_medium_priority(state: SupportState) -> dict:
+    """標準的な問い合わせ対応"""
+    
     messages = [
-        SystemMessage(content="親切かつ丁寧に対応してください。"),
-        HumanMessage(content=state["customer_message"])
+        SystemMessage(content="""
+あなたは親切で知識豊富なカスタマーサポートスタッフです。
+一般的な問い合わせに対応しています。
+
+以下の点に注意して応答してください:
+1. 親しみやすく丁寧な口調
+2. 質問に正確に回答
+3. 必要に応じて追加情報を提供
+4. さらなる質問を促す
+        """),
+        HumanMessage(content=state["message"])
     ]
     
     response = llm.invoke(messages)
-    return {"response": response.content}
+    
+    return {
+        "response": f"【標準対応】\n{response.content}\n\nさらにご不明な点がございましたら、お気軽にお問い合わせください。"
+    }
 
-def handle_low_priority(state: State) -> dict:
-    """低優先度の対応"""
+# 低優先度対応
+def handle_low_priority(state: SupportState) -> dict:
+    """フィードバックや要望への対応"""
+    
     messages = [
-        SystemMessage(content="簡潔に対応してください。"),
-        HumanMessage(content=state["customer_message"])
+        SystemMessage(content="""
+あなたはフレンドリーなカスタマーサポートスタッフです。
+フィードバックや要望に対応しています。
+
+以下の点に注意して応答してください:
+1. 感謝の言葉から始める
+2. フィードバックを真摯に受け止める姿勢
+3. 簡潔かつポジティブな応答
+        """),
+        HumanMessage(content=state["message"])
     ]
     
     response = llm.invoke(messages)
-    return {"response": response.content}
+    
+    return {
+        "response": f"【フィードバック対応】\n{response.content}\n\n貴重なご意見をありがとうございます！"
+    }
 
-# ============================================
 # グラフ構築
-# ============================================
+workflow = StateGraph(SupportState)
 
-print("\n🏗️ ワークフローグラフを構築中...")
-
-workflow = StateGraph(State)
-
-# ノード追加
+# ノード登録
 workflow.add_node("analyze", analyze_message)
-workflow.add_node("high_priority", handle_high_priority)
-workflow.add_node("standard", handle_standard)
-workflow.add_node("low_priority", handle_low_priority)
+workflow.add_node("high", handle_high_priority)
+workflow.add_node("medium", handle_medium_priority)
+workflow.add_node("low", handle_low_priority)
 
-# エッジ追加
+# フロー定義
 workflow.add_edge(START, "analyze")
 
-# 条件分岐
 workflow.add_conditional_edges(
-    "analyze",
-    route_message,
-    {
-        "high_priority": "high_priority",
-        "standard": "standard",
-        "low_priority": "low_priority"
+    source="analyze",
+    path=route_by_priority,
+    path_map={
+        "high": "high",
+        "medium": "medium",
+        "low": "low"
     }
 )
 
-# 終了
-workflow.add_edge("high_priority", END)
-workflow.add_edge("standard", END)
-workflow.add_edge("low_priority", END)
+workflow.add_edge("high", END)
+workflow.add_edge("medium", END)
+workflow.add_edge("low", END)
 
 app = workflow.compile()
 
-print("✅ グラフ構築完了")
-
-# ============================================
 # グラフ可視化
-# ============================================
+try:
+    png_data = app.get_graph().draw_mermaid_png()
+    with open("support_bot_graph.png", "wb") as f:
+        f.write(png_data)
+    print("✅ グラフを 'support_bot_graph.png' に保存しました")
+except Exception as e:
+    print(f"⚠️ PNG保存失敗: {e}")
+    print("\nASCII版グラフ:")
+    print(app.get_graph().draw_ascii())
 
-def visualize_graph(app, filename="ch3_customer_support.png"):
-    """グラフをPNG保存"""
-    print(f"\n📊 グラフを可視化中...")
-    try:
-        png_data = app.get_graph().draw_mermaid_png()
-        with open(filename, "wb") as f:
-            f.write(png_data)
-        print(f"✅ グラフを '{filename}' に保存")
-    except Exception as e:
-        print(f"⚠️ PNG保存失敗: {e}")
-        print("\n📝 ASCII版グラフ:")
-        print(app.get_graph().draw_ascii())
+# テストケース
+test_messages = [
+    "商品が2週間経っても届きません！注文番号12345です。すぐに確認してください！",
+    "製品Aの設定方法について教えてください。",
+    "このサービス、本当に便利です！いつもありがとうございます。",
+    "ダークモード機能を追加してほしいです。",
+    "パスワードリセットの方法がわかりません。"
+]
 
-visualize_graph(app)
+print("\n" + "="*80)
+print("カスタマーサポートボット - テスト実行")
+print("="*80)
 
-# ============================================
-# 実行関数
-# ============================================
-
-def run_support_bot(app, message: str):
-    """サポートボットを実行"""
-    print("\n" + "=" * 60)
-    print("🤖 カスタマーサポートボット")
-    print("=" * 60)
-    print(f"📥 顧客メッセージ: {message}")
+for i, msg in enumerate(test_messages, 1):
+    result = app.invoke({
+        "message": msg,
+        "intent": "",
+        "sentiment": "",
+        "priority": "",
+        "response": "",
+        "analysis_detail": ""
+    })
     
-    result = app.invoke({"customer_message": message})
-    
-    print(f"\n📊 分析結果:")
-    print(f"  意図: {result['intent']}")
-    print(f"  感情: {result['sentiment']}")
-    print(f"  優先度: {result['priority']}")
-    print(f"\n📤 応答:\n{result['response']}")
-    print("=" * 60)
-    
-    return result
+    print(f"\n【テストケース {i}】")
+    print(f"メッセージ: {msg}")
+    print(f"分析結果: {result['analysis_detail']}")
+    print(f"\n応答:\n{result['response']}")
+    print("-" * 80)
+```
 
-# ============================================
-# 実行
-# ============================================
+**実行結果例**:
+```
+================================================================================
+カスタマーサポートボット - テスト実行
+================================================================================
 
-if __name__ == "__main__":
-    test_messages = [
-        "商品が届いていません。至急確認してください。",
-        "製品の使い方について教えてください。",
-        "とても良い製品でした。ありがとうございます！",
-        "新機能の追加を検討していただけますか？"
-    ]
-    
-    for message in test_messages:
-        run_support_bot(app, message)
+【テストケース 1】
+メッセージ: 商品が2週間経っても届きません！注文番号12345です。すぐに確認してください！
+分析結果: 意図=complaint, 感情=negative, 優先度=high
+
+応答:
+【緊急対応】
+大変申し訳ございません。ご注文の商品がまだお手元に届いていないとのこと、心よりお詫び申し上げます。
+
+注文番号12345について、直ちに配送状況を確認させていただきます...
+（省略）
+
+※このメッセージは優先的に処理され、担当者に即座にエスカレーションされました。
+--------------------------------------------------------------------------------
+
+【テストケース 2】
+メッセージ: 製品Aの設定方法について教えてください。
+分析結果: 意図=inquiry, 感情=neutral, 優先度=medium
+
+応答:
+【標準対応】
+製品Aの設定方法についてご案内いたします...
+（省略）
+
+さらにご不明な点がございましたら、お気軽にお問い合わせください。
+--------------------------------------------------------------------------------
 ```
 
 ---
 
-## 🎯 第3章のまとめ
+### 3-6. 条件分岐のベストプラクティス
 
-### 学んだこと
+#### ✅ DO（推奨）
 
-1. **条件分岐の基本**
-   - `add_conditional_edges()`の使い方
-   - ルーティング関数の実装
-   - マッピング辞書の定義
-
-2. **Stateの設計原則**
-   - 必須フィールド: ユーザーが渡すもの
-   - オプショナルフィールド: ノード間で共有するもの
-   - 最終出力のみで使うフィールドは定義不要
-
-3. **複雑なルーティング**
-   - スコアベースの分岐
-   - 複数条件の組み合わせ
-   - 動的なルート選択
-
-### 重要なポイント
-
+**1. ルーティング関数はシンプルに**
 ```python
-# ✅ 良いState設計
-class State(TypedDict):
-    input: str                    # 必須（ユーザー提供）
-    category: NotRequired[str]    # 他のノードで使用
-    sentiment: NotRequired[str]   # 他のノードで使用
-    # output: str                 # 定義不要（最終出力のみ）
-
-# ✅ 良いルーティング関数
-def route_func(state: State) -> Literal["a", "b", "c"]:
-    """明確な型ヒント付き"""
-    if state["score"] > 0.8:
-        return "a"
-    elif state["score"] > 0.5:
-        return "b"
-    return "c"
-
-# ✅ 良いノード関数
-def process_node(state: State) -> dict:
-    """必要なフィールドだけ返す"""
-    result = some_processing(state["input"])
-    return {"category": result}  # 更新するフィールドのみ
+# ✅ 良い例
+def route(state: State) -> Literal["a", "b", "c"]:
+    return state["category"]  # Stateから読み取るだけ
 ```
 
-### 次のステップ
+**2. 型ヒントを必ず使う**
+```python
+# ✅ 良い例
+def route(state: State) -> Literal["route_a", "route_b"]:
+    return state["route"]
 
-第4章では、**Tavily検索APIとの統合**を学び、外部ツールを使った実用的なエージェントを構築します。
+# ❌ 悪い例
+def route(state):  # 型ヒントなし
+    return state["route"]
+```
+
+**3. すべてのケースをカバー**
+```python
+# ✅ 良い例
+workflow.add_conditional_edges("node", route, {
+    "case_a": "handler_a",
+    "case_b": "handler_b",
+    "case_c": "handler_c"  # すべてのケース
+})
+```
+
+**4. フォールバック処理を実装**
+```python
+# ✅ 良い例
+def classify(state: State) -> dict:
+    response = llm.invoke([...])
+    category = response.content.strip().lower()
+    
+    # 予期しない値への対策
+    if category not in ["a", "b", "c"]:
+        category = "default"
+    
+    return {"category": category}
+```
 
 ---
 
-これで第3章は完了です！ 🎉
+#### ❌ DON'T（非推奨）
+
+**1. ルーティング関数で複雑なロジック**
+```python
+# ❌ 悪い例
+def route(state: State) -> Literal["a", "b"]:
+    # ルーティング関数内で複雑な処理
+    result = complex_analysis(state["input"])
+    if result > 0.5:
+        return "a"
+    return "b"
+```
+
+**2. マッピングキーと戻り値の不一致**
+```python
+# ❌ 悪い例
+def route(state: State) -> Literal["yes", "no"]:
+    return "yes" if state["flag"] else "no"
+
+workflow.add_conditional_edges("node", route, {
+    "true": "node_a",   # キーが合わない
+    "false": "node_b"
+})
+```
+
+**3. 一部のケースが抜けている**
+```python
+# ❌ 悪い例
+def route(state: State) -> Literal["a", "b", "c"]:
+    return state["category"]
+
+workflow.add_conditional_edges("node", route, {
+    "a": "handler_a",
+    "b": "handler_b"
+    # "c"が抜けている → 実行時エラー
+})
+```
 
 ---
 
-# 第4章: ツール統合 - Tavily検索
+## 第4章: ツール統合【完全解説】
 
-## 4-1. Tavily検索の基本
+### 4-1. Tavily検索APIの完全理解
 
-### Tavily検索とは
+#### Tavily検索とは何か
 
-Tavilyは**AI向けに最適化された検索API**です。通常のGoogle検索と違い、LLMが理解しやすい形式で結果を返します。
+**公式説明**:
+Tavilyは、AI向けに最適化された検索APIです。通常の検索エンジンと異なり、LLMが理解しやすいクリーンで構造化されたデータを返します。
 
-**特徴:**
-- AI向けに最適化された検索結果
-- ノイズの少ないクリーンなデータ
-- 無料枠: 月間1,000リクエスト
-- 高速なレスポンス
+**特徴**:
+- 🚀 高速: レスポンス時間が短い（通常1-2秒）
+- 🎯 正確: AI向けに最適化された関連性の高い結果
+- 💰 無料枠: 月間1,000リクエストまで無料
+- 🔧 簡単: LangChainと完全統合
 
-### 基本的な使い方
+**他の検索APIとの比較**:
+| 項目 | Tavily | Google Search API | Bing Search API |
+|------|--------|-------------------|-----------------|
+| 無料枠 | 1,000req/月 | なし | なし |
+| AI最適化 | ⭐⭐⭐ | ⭐ | ⭐ |
+| LangChain統合 | ネイティブ | 要カスタム | 要カスタム |
 
+---
+
+#### Tavily APIキーの取得（詳細手順）
+
+**ステップ1**: https://tavily.com/ にアクセス
+
+**ステップ2**: 「Get Started」または「Sign Up」をクリック
+
+**ステップ3**: Googleアカウントまたはメールアドレスで登録
+
+**ステップ4**: ダッシュボードで自動生成されたAPIキーをコピー
+- キーは `tvly-` で始まる文字列
+- 例: `tvly-Abc123XyZ789...`
+
+**ステップ5**: APIキーを環境変数に設定
+```python
+import os
+os.environ["TAVILY_API_KEY"] = "tvly-your-actual-key"
+```
+
+または`.env`ファイルに:
+```
+TAVILY_API_KEY=tvly-your-actual-key
+```
+
+---
+
+#### Tavily検索の基本的な使い方
+
+**最小実装**:
 ```python
 import os
 from langchain_community.tools.tavily_search import TavilySearchResults
 
-os.environ["TAVILY_API_KEY"] = "tvly-..."
+# APIキー設定
+os.environ["TAVILY_API_KEY"] = "tvly-your-key"
 
-# 検索ツールの初期化
-search_tool = TavilySearchResults(
-    tavily_api_key=os.environ["TAVILY_API_KEY"],  # ← 正しい引数名
-    max_results=3,
-    search_depth="basic"  # "basic" or "advanced"
+# 検索ツール初期化
+search = TavilySearchResults(
+    max_results=3  # 取得する結果の数
 )
 
 # 検索実行
-results = search_tool.invoke("LangGraphとは")
-print(results)
+results = search.invoke("LangGraphとは")
+
+# 結果表示
+for i, result in enumerate(results, 1):
+    print(f"\n結果 {i}:")
+    print(f"URL: {result['url']}")
+    print(f"内容: {result['content'][:100]}...")
+    print(f"スコア: {result.get('score', 'N/A')}")
 ```
 
-### 検索結果の構造
-
+**実行結果の構造**:
 ```python
-# 返り値の例
 [
     {
-        'url': 'https://example.com/page1',
-        'content': '検索結果の要約...',
-        'score': 0.95  # 関連性スコア
+        'url': 'https://example.com/langgraph-intro',
+        'content': 'LangGraphは、LangChainの上に構築されたフレームワークで...',
+        'score': 0.95  # 関連性スコア（0.0〜1.0）
     },
     {
-        'url': 'https://example.com/page2',
-        'content': '別の検索結果...',
+        'url': 'https://another-site.com/tutorial',
+        'content': 'LangGraphを使うことで、複雑なAIワークフロー...',
         'score': 0.87
-    }
+    },
+    ...
 ]
 ```
 
 ---
 
-## 4-2. LLMとツールの連携
+#### パラメータの詳細解説
 
-### ツールバインディングの仕組み
+```python
+search = TavilySearchResults(
+    max_results=5,           # 結果数（1〜10推奨）
+    search_depth="basic",    # "basic" or "advanced"
+    include_domains=[],      # 特定ドメインのみ（オプション）
+    exclude_domains=[],      # 除外ドメイン（オプション）
+    include_answer=False,    # 要約を含めるか
+    include_raw_content=False  # 生のHTMLを含めるか
+)
+```
 
-LangGraphでは、LLMに「ツールを使える能力」を与えます。
+**パラメータ詳細**:
+
+1. **max_results**:
+   - 取得する検索結果の数
+   - 推奨: 3〜5（バランス重視）
+   - 多すぎるとLLMのコンテキストを圧迫
+
+2. **search_depth**:
+   - `"basic"`: 高速、表面的な情報
+   - `"advanced"`: 詳細、深い分析（遅い）
+   - 推奨: 通常は`"basic"`で十分
+
+3. **include_domains** (例):
+   ```python
+   search = TavilySearchResults(
+       max_results=3,
+       include_domains=["wikipedia.org", "github.com"]
+   )
+   ```
+
+4. **exclude_domains** (例):
+   ```python
+   search = TavilySearchResults(
+       max_results=3,
+       exclude_domains=["ads-site.com", "spam.com"]
+   )
+   ```
+
+---
+
+### 4-2. LLMとツールの統合（bind_tools）
+
+#### bind_toolsの仕組み
+
+**概念**:
+`bind_tools()`は、LLMに「このツールが使えますよ」と教える機能です。LLMは必要に応じてツールの使用を判断します。
+
+**フロー**:
+```
+ユーザー「2024年のノーベル賞受賞者は？」
+  ↓
+LLM「これは最新情報なので検索ツールを使おう」
+  ↓
+tool_calls を生成
+  ↓
+ツール実行（Tavily検索）
+  ↓
+結果をLLMに渡す
+  ↓
+LLM「検索結果をもとに回答を生成」
+```
+
+---
+
+#### 基本的なbind_toolsの使い方
 
 ```python
 import os
-from typing import TypedDict, Annotated, Literal, NotRequired
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_community.tools.tavily_search import TavilySearchResults
+from langchain_core.messages import HumanMessage
+
+# APIキー設定
+os.environ["GEMINI_API_KEY"] = "your-key"
+os.environ["TAVILY_API_KEY"] = "your-key"
+
+# LLM初期化
+llm = ChatGoogleGenerativeAI(
+    model="gemini-2.0-flash-exp",
+    temperature=0
+)
+
+# ツール初期化
+search_tool = TavilySearchResults(max_results=3)
+
+# ツールをLLMにバインド
+llm_with_tools = llm.bind_tools([search_tool])
+
+# 実行
+response = llm_with_tools.invoke([
+    HumanMessage(content="2024年のノーベル物理学賞受賞者は？")
+])
+
+# ツール使用判定
+if hasattr(response, "tool_calls") and response.tool_calls:
+    print("✅ LLMがツール使用を決定しました")
+    print(f"ツール名: {response.tool_calls[0]['name']}")
+    print(f"引数: {response.tool_calls[0]['args']}")
+else:
+    print("❌ LLMはツールを使用しませんでした")
+    print(f"直接回答: {response.content}")
+```
+
+**重要な理解**:
+- `bind_tools()`は**リストを受け取る**（複数ツール対応）
+- LLMが自動的にツールの使用を判断
+- `tool_calls`属性の有無でツール使用を確認
+
+---
+
+#### tool_callsの詳細
+
+```python
+# tool_callsの構造
+response.tool_calls = [
+    {
+        'name': 'tavily_search_results_json',
+        'args': {'query': '2024 ノーベル物理学賞'},
+        'id': 'call_abc123'
+    }
+]
+```
+
+**フィールド解説**:
+- `name`: 使用するツールの名前
+- `args`: ツールに渡す引数（dict形式）
+- `id`: ツール呼び出しの一意ID
+
+---
+
+### 4-3. エージェントループの完全実装
+
+#### エージェントループとは
+
+**定義**:
+LLMとツールが**協調動作**して、タスクを完遂するパターンです。
+
+**フロー図**:
+```
+START
+  ↓
+agent (LLMがツール使用を判断)
+  ↓
+ツール必要? 
+  ├─ YES → tools (検索実行) → agent (結果で再評価) → ...
+  └─ NO  → END (最終回答)
+```
+
+**重要な概念**:
+- **ループ**: `tools → agent` の繰り返し
+- **終了条件**: `tool_calls`がない = タスク完了
+
+---
+
+#### messagesベースのState設計
+
+**なぜmessagesベース?**
+エージェントでは、LLMとツールの往復が発生します。会話履歴を保持するために`messages`をStateに持ちます。
+
+```python
+from typing import TypedDict, Annotated
+import operator
+
+class AgentState(TypedDict):
+    messages: Annotated[list, operator.add]
+```
+
+**Annotatedの意味**:
+```python
+messages: Annotated[list, operator.add]
+#         ^^^^^^^^^^^^^^^^^^^^^^^^
+#         型ヒント + マージ方法の指定
+```
+
+- `list`: メッセージのリスト
+- `operator.add`: 新しいメッセージを**追加**（上書きではない）
+
+**動作例**:
+```python
+# 初期State
+{"messages": [HumanMessage("質問")]}
+
+# ノードAが実行
+return {"messages": [AIMessage("回答A")]}
+
+# マージ後（addなので追加）
+{"messages": [HumanMessage("質問"), AIMessage("回答A")]}
+
+# ノードBが実行
+return {"messages": [ToolMessage("検索結果")]}
+
+# マージ後
+{"messages": [HumanMessage("質問"), AIMessage("回答A"), ToolMessage("検索結果")]}
+```
+
+---
+
+#### ToolNodeの理解
+
+**ToolNodeとは**:
+LangGraphが提供する**組み込みノード**で、ツール実行を自動処理します。
+
+```python
+from langgraph.prebuilt import ToolNode
+
+tools = [search_tool]
+tool_node = ToolNode(tools)
+```
+
+**ToolNodeの動作**:
+1. `messages`から最新の`tool_calls`を取得
+2. 該当するツールを実行
+3. 結果を`ToolMessage`として返す
+
+**利点**:
+- 手動でツール実行コードを書く必要がない
+- エラーハンドリングが自動
+- 複数ツールに対応
+
+---
+
+#### 完全なエージェント実装（コピペ可能）
+
+```python
+import os
+from typing import TypedDict, Annotated, Literal
+import operator
 from langgraph.graph import StateGraph, START, END
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_community.tools.tavily_search import TavilySearchResults
-from langchain_core.messages import HumanMessage, AIMessage
-import operator
+from langchain_core.messages import HumanMessage
+from langgraph.prebuilt import ToolNode
 
-os.environ["GEMINI_API_KEY"] = "your-gemini-key"
-os.environ["TAVILY_API_KEY"] = "your-tavily-key"
+# APIキー設定
+os.environ["GEMINI_API_KEY"] = "your-key"
+os.environ["TAVILY_API_KEY"] = "your-key"
 
-# State定義（messagesベース）
+# State定義
 class AgentState(TypedDict):
-    messages: Annotated[list, operator.add]  # メッセージリストを蓄積
+    messages: Annotated[list, operator.add]
 
-# 検索ツール初期化
+# ツール初期化
 search_tool = TavilySearchResults(
-    tavily_api_key=os.environ["TAVILY_API_KEY"],
     max_results=3,
-    search_depth="basic"
+    search_depth="advanced"  # 詳細な検索
 )
 
 tools = [search_tool]
 
-# LLMにツールをバインド
-llm_with_tools = ChatGoogleGenerativeAI(
-    google_api_key=os.environ["GEMINI_API_KEY"],
+# LLM初期化とツールバインド
+llm = ChatGoogleGenerativeAI(
     model="gemini-2.0-flash-exp",
-    temperature=0
-).bind_tools(tools)
+    temperature=0  # 検索エージェントは決定的に
+)
+llm_with_tools = llm.bind_tools(tools)
 
 # エージェントノード
 def agent_node(state: AgentState) -> dict:
@@ -2605,180 +2999,19 @@ def agent_node(state: AgentState) -> dict:
     response = llm_with_tools.invoke(messages)
     return {"messages": [response]}
 
-# 条件分岐関数
+# ルーティング関数
 def should_continue(state: AgentState) -> Literal["tools", "end"]:
-    """ツール実行が必要か判断"""
+    """ツール使用が必要か判定"""
     last_message = state["messages"][-1]
     
-    # ツール呼び出しがあるか確認
+    # tool_callsがあればツールノードへ
     if hasattr(last_message, "tool_calls") and last_message.tool_calls:
         return "tools"
     
+    # なければ終了
     return "end"
 
-# ツールノード（自動実行）
-from langgraph.prebuilt import ToolNode
-tool_node = ToolNode(tools)
-
 # グラフ構築
-workflow = StateGraph(AgentState)
-
-workflow.add_node("agent", agent_node)
-workflow.add_node("tools", tool_node)
-
-workflow.add_edge(START, "agent")
-
-workflow.add_conditional_edges(
-    "agent",
-    should_continue,
-    {
-        "tools": "tools",
-        "end": END
-    }
-)
-
-# ツール実行後、再びエージェントへ
-workflow.add_edge("tools", "agent")
-
-app = workflow.compile()
-
-# 実行
-result = app.invoke({
-    "messages": [HumanMessage(content="2024年のノーベル物理学賞受賞者は誰ですか？")]
-})
-
-# 最終メッセージを表示
-print(result["messages"][-1].content)
-```
-
-### 実行フロー
-
-```
-START → agent (LLMが判断) →
-    ├─ ツール不要 → END
-    └─ ツール必要 → tools (検索実行) → agent (結果を使って回答) → END
-```
-
----
-
-## 4-3. 実用的な検索エージェント
-
-### 完全な実装例
-
-```python
-"""
-第4章完全実装: Tavily検索エージェント
-- LLMとツールの連携
-- 検索結果を使った回答生成
-- エラーハンドリング
-"""
-
-import os
-from typing import TypedDict, Annotated, Literal
-from langgraph.graph import StateGraph, START, END
-from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_community.tools.tavily_search import TavilySearchResults
-from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
-from langgraph.prebuilt import ToolNode
-import operator
-
-# ============================================
-# APIキー設定
-# ============================================
-
-os.environ["GEMINI_API_KEY"] = "your-gemini-key"
-os.environ["TAVILY_API_KEY"] = "your-tavily-key"
-
-if os.environ.get("GEMINI_API_KEY") == "your-gemini-key":
-    raise ValueError("❌ GEMINI_API_KEYを設定してください")
-
-if os.environ.get("TAVILY_API_KEY") == "your-tavily-key":
-    raise ValueError("❌ TAVILY_API_KEYを設定してください")
-
-# ============================================
-# State定義
-# ============================================
-
-class AgentState(TypedDict):
-    """エージェントの状態
-    
-    messagesにAnnotated[list, operator.add]を使うことで、
-    新しいメッセージが自動的にリストに追加される
-    """
-    messages: Annotated[list, operator.add]
-
-# ============================================
-# ツールとLLMの初期化
-# ============================================
-
-# Tavily検索ツール
-search_tool = TavilySearchResults(
-    tavily_api_key=os.environ["TAVILY_API_KEY"],
-    max_results=3,
-    search_depth="advanced",  # より詳細な検索
-    include_answer=True,      # 要約された回答を含める
-    include_raw_content=False # 生のHTMLは除外
-)
-
-tools = [search_tool]
-
-# LLMにツールをバインド
-llm_with_tools = ChatGoogleGenerativeAI(
-    google_api_key=os.environ["GEMINI_API_KEY"],
-    model="gemini-2.0-flash-exp",
-    temperature=0
-).bind_tools(tools)
-
-print("✅ ツールとLLMの初期化完了")
-
-# ============================================
-# ノード関数
-# ============================================
-
-def agent_node(state: AgentState) -> dict:
-    """
-    エージェントノード: LLMが次のアクションを決定
-    
-    - ツールを使うべきか判断
-    - 使う場合はtool_callsを含むメッセージを返す
-    - 使わない場合は直接回答を返す
-    """
-    messages = state["messages"]
-    
-    # システムメッセージを追加（初回のみ）
-    if len(messages) == 1:
-        system_message = SystemMessage(content="""
-        あなたは親切なアシスタントです。
-        最新の情報が必要な質問には、検索ツールを使ってください。
-        検索結果を基に、正確で分かりやすい回答を提供してください。
-        """)
-        messages = [system_message] + messages
-    
-    response = llm_with_tools.invoke(messages)
-    return {"messages": [response]}
-
-def should_continue(state: AgentState) -> Literal["tools", "end"]:
-    """
-    条件分岐: ツール実行が必要か判断
-    
-    Returns:
-        "tools": ツールを実行する
-        "end": 処理を終了する
-    """
-    last_message = state["messages"][-1]
-    
-    # tool_callsがあればツール実行
-    if hasattr(last_message, "tool_calls") and last_message.tool_calls:
-        return "tools"
-    
-    return "end"
-
-# ============================================
-# グラフ構築
-# ============================================
-
-print("\n🏗️ ワークフローグラフを構築中...")
-
 workflow = StateGraph(AgentState)
 
 # ノード追加
@@ -2790,261 +3023,1278 @@ workflow.add_edge(START, "agent")
 
 # 条件分岐
 workflow.add_conditional_edges(
-    "agent",
-    should_continue,
-    {
+    source="agent",
+    path=should_continue,
+    path_map={
         "tools": "tools",
         "end": END
     }
 )
 
-# ツール実行後、再びエージェントへ
+# ツール → エージェントのループ
 workflow.add_edge("tools", "agent")
 
+# コンパイル
 app = workflow.compile()
 
-print("✅ グラフ構築完了")
-
-# ============================================
 # グラフ可視化
-# ============================================
+try:
+    png_data = app.get_graph().draw_mermaid_png()
+    with open("search_agent_graph.png", "wb") as f:
+        f.write(png_data)
+    print("✅ グラフを 'search_agent_graph.png' に保存しました")
+except:
+    print("ASCII版グラフ:")
+    print(app.get_graph().draw_ascii())
 
-def visualize_graph(app, filename="ch4_search_agent.png"):
-    """グラフをPNG保存"""
-    print(f"\n📊 グラフを可視化中...")
-    try:
-        png_data = app.get_graph().draw_mermaid_png()
-        with open(filename, "wb") as f:
-            f.write(png_data)
-        print(f"✅ グラフを '{filename}' に保存")
-    except Exception as e:
-        print(f"⚠️ PNG保存失敗: {e}")
-        print("\n📝 ASCII版グラフ:")
-        print(app.get_graph().draw_ascii())
+# テスト実行
+print("\n" + "="*80)
+print("検索エージェント - テスト実行")
+print("="*80)
 
-visualize_graph(app)
+test_queries = [
+    "2024年のノーベル物理学賞受賞者を教えて",
+    "LangGraphの最新バージョンは？",
+    "こんにちは"  # 検索不要のケース
+]
 
-# ============================================
-# 実行関数
-# ============================================
-
-def run_search_agent(app, query: str, verbose: bool = True):
-    """検索エージェントを実行"""
-    if verbose:
-        print("\n" + "=" * 60)
-        print("🔍 検索エージェント")
-        print("=" * 60)
-        print(f"📥 質問: {query}")
+for query in test_queries:
+    print(f"\n【質問】 {query}")
     
     result = app.invoke({
         "messages": [HumanMessage(content=query)]
     })
     
-    if verbose:
-        print("\n📊 実行ログ:")
-        for i, msg in enumerate(result["messages"], 1):
-            msg_type = type(msg).__name__
-            print(f"  {i}. {msg_type}")
-            
-            if hasattr(msg, "tool_calls") and msg.tool_calls:
-                print(f"     → ツール呼び出し: {len(msg.tool_calls)}件")
-        
-        print("\n📤 最終回答:")
-        print(result["messages"][-1].content)
-        print("=" * 60)
+    # 最終回答を取得
+    final_message = result["messages"][-1]
+    print(f"【回答】 {final_message.content[:200]}...")
     
-    return result
+    # ツール使用状況を確認
+    tool_used = any(
+        hasattr(msg, "tool_calls") and msg.tool_calls
+        for msg in result["messages"]
+    )
+    print(f"【ツール使用】 {'あり' if tool_used else 'なし'}")
+    print("-" * 80)
+```
 
-# ============================================
-# 実行
-# ============================================
+**実行結果例**:
+```
+================================================================================
+検索エージェント - テスト実行
+================================================================================
 
-if __name__ == "__main__":
-    # テストクエリ
-    test_queries = [
-        "2024年のノーベル物理学賞受賞者は誰ですか？",
-        "最新のGPT-4の特徴を教えてください",
-        "こんにちは"  # 検索不要なクエリ
-    ]
-    
-    for query in test_queries:
-        run_search_agent(app, query)
-        print("\n")
+【質問】 2024年のノーベル物理学賞受賞者を教えて
+【回答】 2024年のノーベル物理学賞は、John J. HopfieldとGeoffrey E. Hintonが受賞しました。彼らは人工ニューラルネットワークを用いた機械学習の基礎的な発見と発明により受賞しました...
+【ツール使用】 あり
+--------------------------------------------------------------------------------
+
+【質問】 LangGraphの最新バージョンは？
+【回答】 検索結果によると、LangGraphの最新バージョンは0.2.xシリーズです...
+【ツール使用】 あり
+--------------------------------------------------------------------------------
+
+【質問】 こんにちは
+【回答】 こんにちは！何かお手伝いできることはありますか？
+【ツール使用】 なし
+--------------------------------------------------------------------------------
 ```
 
 ---
 
-## 4-4. ストリーミング実行
+#### エージェントループのデバッグ
 
-### リアルタイムで進捗を表示
+**ループの進行を確認**:
+```python
+# stream()で各ステップを観察
+for step in app.stream({"messages": [HumanMessage("質問")]}):
+    print(step)
+```
+
+**出力例**:
+```python
+{'agent': {'messages': [AIMessage(content='', tool_calls=[...])]}}
+{'tools': {'messages': [ToolMessage(content='検索結果...')]}}
+{'agent': {'messages': [AIMessage(content='最終回答...')]}}
+```
+
+**ループ回数の制限**（無限ループ防止）:
+```python
+# 最大5ステップで強制終了
+result = app.invoke(
+    {"messages": [HumanMessage("質問")]},
+    config={"recursion_limit": 5}
+)
+```
+
+---
+
+### 4-4. 複数ツールの統合
+
+#### カスタムツールの作成
+
+LangChainの`@tool`デコレータで簡単に作成できます。
 
 ```python
-def run_search_agent_stream(app, query: str):
-    """ストリーミング実行で進捗を表示"""
-    print(f"\n🔍 質問: {query}\n")
-    
-    for event in app.stream(
-        {"messages": [HumanMessage(content=query)]},
-        stream_mode="values"
-    ):
-        # 最新のメッセージを取得
-        last_msg = event["messages"][-1]
-        
-        if isinstance(last_msg, AIMessage):
-            if hasattr(last_msg, "tool_calls") and last_msg.tool_calls:
-                print("🔧 ツールを実行中...")
-            else:
-                print(f"💬 回答: {last_msg.content}")
+from langchain_core.tools import tool
 
-# 使用例
-run_search_agent_stream(app, "最新のAI技術トレンドは？")
+@tool
+def calculate(expression: str) -> str:
+    """数式を計算します。
+    
+    Args:
+        expression: 計算する数式（例: "2 + 2", "10 * 5"）
+    
+    Returns:
+        計算結果の文字列
+    """
+    try:
+        # 注意: eval()は実運用では危険。ここではデモのみ
+        result = eval(expression)
+        return str(result)
+    except Exception as e:
+        return f"計算エラー: {e}"
+
+@tool
+def get_current_time() -> str:
+    """現在の日時を取得します。
+    
+    Returns:
+        現在の日時（日本時間）
+    """
+    from datetime import datetime
+    import pytz
+    
+    jst = pytz.timezone('Asia/Tokyo')
+    now = datetime.now(jst)
+    return now.strftime("%Y年%m月%d日 %H時%M分%S秒")
 ```
+
+**重要ポイント**:
+1. **docstring必須**: LLMがツールの用途を理解するため
+2. **型ヒント必須**: 引数と戻り値の型を明示
+3. **戻り値は文字列**: LLMが解釈しやすい形式
 
 ---
 
-## 4-5. 複数ツールの統合
-
-### 検索 + 計算ツール
+#### 複数ツールを持つエージェント
 
 ```python
 import os
 from typing import TypedDict, Annotated, Literal
+import operator
 from langgraph.graph import StateGraph, START, END
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_community.tools.tavily_search import TavilySearchResults
-from langchain_core.tools import tool
 from langchain_core.messages import HumanMessage
+from langchain_core.tools import tool
 from langgraph.prebuilt import ToolNode
-import operator
 
 os.environ["GEMINI_API_KEY"] = "your-key"
 os.environ["TAVILY_API_KEY"] = "your-key"
 
-# カスタムツール定義
-@tool
-def calculate(expression: str) -> str:
-    """数式を計算します。例: "2 + 2" → "4" """
-    try:
-        result = eval(expression)
-        return str(result)
-    except Exception as e:
-        return f"計算エラー: {str(e)}"
-
-# ツールリスト
-search_tool = TavilySearchResults(
-    tavily_api_key=os.environ["TAVILY_API_KEY"],
-    max_results=3
-)
-
-tools = [search_tool, calculate]
-
 # State定義
-class AgentState(TypedDict):
+class MultiToolState(TypedDict):
     messages: Annotated[list, operator.add]
 
-# LLMにツールをバインド
-llm_with_tools = ChatGoogleGenerativeAI(
-    google_api_key=os.environ["GEMINI_API_KEY"],
-    model="gemini-2.0-flash-exp",
-    temperature=0
-).bind_tools(tools)
+# ツール定義
+search_tool = TavilySearchResults(max_results=3)
 
-# ノード定義
-def agent_node(state: AgentState) -> dict:
-    messages = state["messages"]
-    response = llm_with_tools.invoke(messages)
+@tool
+def calculate(expression: str) -> str:
+    """数式を計算"""
+    try:
+        return str(eval(expression))
+    except Exception as e:
+        return f"エラー: {e}"
+
+@tool
+def get_weather(city: str) -> str:
+    """天気情報を取得（デモ用のダミー実装）"""
+    # 実際はAPI呼び出しなど
+    return f"{city}の天気: 晴れ、気温23度"
+
+# すべてのツールをリスト化
+tools = [search_tool, calculate, get_weather]
+
+# LLM初期化
+llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash-exp", temperature=0)
+llm_with_tools = llm.bind_tools(tools)
+
+# エージェントノード
+def agent(state: MultiToolState) -> dict:
+    response = llm_with_tools.invoke(state["messages"])
     return {"messages": [response]}
 
-def should_continue(state: AgentState) -> Literal["tools", "end"]:
-    last_message = state["messages"][-1]
-    if hasattr(last_message, "tool_calls") and last_message.tool_calls:
+# ルーティング
+def should_continue(state: MultiToolState) -> Literal["tools", "end"]:
+    last_msg = state["messages"][-1]
+    if hasattr(last_msg, "tool_calls") and last_msg.tool_calls:
         return "tools"
     return "end"
 
 # グラフ構築
-workflow = StateGraph(AgentState)
-workflow.add_node("agent", agent_node)
+workflow = StateGraph(MultiToolState)
+workflow.add_node("agent", agent)
 workflow.add_node("tools", ToolNode(tools))
 
 workflow.add_edge(START, "agent")
-workflow.add_conditional_edges(
-    "agent",
-    should_continue,
-    {
-        "tools": "tools",
-        "end": END
-    }
-)
+workflow.add_conditional_edges("agent", should_continue, {
+    "tools": "tools",
+    "end": END
+})
 workflow.add_edge("tools", "agent")
 
 app = workflow.compile()
 
-# 実行
+# テスト
 test_queries = [
-    "最新のビットコイン価格を調べて、1000ドル投資したら何BTC買えるか計算してください",
-    "15 * 234 + 567 を計算してください",
-    "LangGraphの最新情報を教えてください"
+    "東京の天気は？",
+    "125 × 48の計算をして",
+    "Pythonの最新バージョンを調べて",
+    "大阪の天気を調べて、その気温を華氏に変換して"  # 複数ツール使用
 ]
 
+print("="*80)
+print("マルチツールエージェント - テスト")
+print("="*80)
+
 for query in test_queries:
-    print(f"\n{'='*60}")
-    print(f"質問: {query}")
+    print(f"\n【質問】 {query}")
+    
     result = app.invoke({"messages": [HumanMessage(content=query)]})
-    print(f"回答: {result['messages'][-1].content}")
+    
+    # 使用されたツールを確認
+    tools_used = []
+    for msg in result["messages"]:
+        if hasattr(msg, "tool_calls") and msg.tool_calls:
+            for tc in msg.tool_calls:
+                tools_used.append(tc["name"])
+    
+    print(f"【使用ツール】 {', '.join(set(tools_used)) if tools_used else 'なし'}")
+    print(f"【回答】 {result['messages'][-1].content[:150]}...")
+    print("-" * 80)
+```
+
+**実行結果例**:
+```
+【質問】 東京の天気は？
+【使用ツール】 get_weather
+【回答】 東京の天気: 晴れ、気温23度
+
+【質問】 125 × 48の計算をして
+【使用ツール】 calculate
+【回答】 125 × 48 = 6000です。
+
+【質問】 Pythonの最新バージョンを調べて
+【使用ツール】 tavily_search_results_json
+【回答】 検索結果によると、Pythonの最新バージョンは3.12.xです...
+
+【質問】 大阪の天気を調べて、その気温を華氏に変換して
+【使用ツール】 get_weather, calculate
+【回答】 大阪の天気は晴れで、気温は23度（摂氏）です。これを華氏に変換すると73.4度になります。
 ```
 
 ---
 
-## 🎯 第4章のまとめ
+## 第5章: 高度なパターン【完全解説】
 
-### 学んだこと
+### 5-1. ループと再試行パターン
 
-1. **Tavily検索の基本**
-   - 正しい引数名: `tavily_api_key`（`api_key`ではない）
-   - `search_depth`: "basic" or "advanced"
-   - `max_results`: 返す結果の数
+#### なぜループが必要か
 
-2. **ツールバインディング**
-   - `bind_tools()`でLLMにツールを渡す
-   - LLMが自動的にツール使用を判断
-   - `tool_calls`でツール実行要求を確認
+**ユースケース**:
+1. **品質チェック**: 結果が満足いくまで繰り返す
+2. **リトライ**: エラー発生時に再試行
+3. **段階的改善**: 前回の結果をフィードバックして改善
 
-3. **messagesベースのState**
-   - `Annotated[list, operator.add]`で自動蓄積
-   - 会話履歴を保持
-   - ツール実行結果も含まれる
+**例: コード生成の品質チェック**
+```
+generate_code → check_quality →
+  ├─ 合格 → END
+  └─ 不合格 → improve_code → check_quality → ...
+```
 
-4. **ループ構造**
-   - agent → tools → agent のループ
-   - ツールが不要になるまで繰り返し
+---
 
-### 重要なポイント
+#### 基本的なループパターン
 
 ```python
-# ✅ 正しいTavily初期化
-search_tool = TavilySearchResults(
-    tavily_api_key=os.environ["TAVILY_API_KEY"],  # ← 正しい引数名
-    max_results=3
+import os
+from typing import TypedDict, Literal
+from langgraph.graph import StateGraph, START, END
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_core.messages import HumanMessage, SystemMessage
+
+os.environ["GEMINI_API_KEY"] = "your-key"
+
+class LoopState(TypedDict):
+    task: str
+    result: str
+    quality_score: float
+    attempts: int
+
+llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash-exp", temperature=0.7)
+
+# ステップ1: タスク実行
+def execute_task(state: LoopState) -> dict:
+    """タスクを実行"""
+    messages = [
+        SystemMessage(content="簡潔なPython関数を生成してください。"),
+        HumanMessage(content=state["task"])
+    ]
+    response = llm.invoke(messages)
+    
+    return {
+        "result": response.content,
+        "attempts": state["attempts"] + 1
+    }
+
+# ステップ2: 品質評価
+def evaluate_quality(state: LoopState) -> dict:
+    """生成結果の品質を評価"""
+    messages = [
+        SystemMessage(content="""
+以下のコードの品質を0.0〜1.0で評価してください。
+基準:
+- 0.8以上: 優秀
+- 0.5〜0.8: 普通
+- 0.5未満: 改善必要
+
+数値のみ返してください。
+        """),
+        HumanMessage(content=state["result"])
+    ]
+    
+    response = llm.invoke(messages)
+    
+    try:
+        score = float(response.content.strip())
+        score = max(0.0, min(1.0, score))
+    except:
+        score = 0.5
+    
+    return {"quality_score": score}
+
+# ステップ3: ループ判定
+def should_retry(state: LoopState) -> Literal["retry", "end"]:
+    """再試行が必要か判定"""
+    
+    # 品質基準を満たした
+    if state["quality_score"] >= 0.8:
+        return "end"
+    
+    # 最大試行回数に到達
+    if state["attempts"] >= 3:
+        return "end"
+    
+    # 再試行
+    return "retry"
+
+# ステップ4: 改善
+def improve_result(state: LoopState) -> dict:
+    """前回の結果を改善"""
+    messages = [
+        SystemMessage(content=f"""
+前回生成したコードを改善してください。
+品質スコア: {state['quality_score']}
+
+改善点:
+- より明確な変数名
+- エッジケースの処理
+- ドキュメントの追加
+        """),
+        HumanMessage(content=state["result"])
+    ]
+    
+    response = llm.invoke(messages)
+    return {"result": response.content}
+
+# グラフ構築
+workflow = StateGraph(LoopState)
+
+workflow.add_node("execute", execute_task)
+workflow.add_node("evaluate", evaluate_quality)
+workflow.add_node("improve", improve_result)
+
+workflow.add_edge(START, "execute")
+workflow.add_edge("execute", "evaluate")
+
+workflow.add_conditional_edges(
+    source="evaluate",
+    path=should_retry,
+    path_map={
+        "retry": "improve",
+        "end": END
+    }
 )
 
-# ✅ 正しいState定義（messagesベース）
-class AgentState(TypedDict):
-    messages: Annotated[list, operator.add]
+# ループの要: improve → execute
+workflow.add_edge("improve", "execute")
 
-# ✅ 正しい条件分岐
-def should_continue(state: AgentState) -> Literal["tools", "end"]:
-    last_message = state["messages"][-1]
-    if hasattr(last_message, "tool_calls") and last_message.tool_calls:
-        return "tools"
-    return "end"
+app = workflow.compile()
+
+# テスト
+result = app.invoke({
+    "task": "リストの重複を削除する関数を作成",
+    "result": "",
+    "quality_score": 0.0,
+    "attempts": 0
+})
+
+print(f"試行回数: {result['attempts']}")
+print(f"最終スコア: {result['quality_score']:.2f}")
+print(f"\n生成コード:\n{result['result']}")
 ```
 
-### 次のステップ
-
-第5章では、**ループ処理とエラーハンドリング**を学び、より堅牢なエージェントを構築します。
+**グラフ構造**:
+```
+START → execute → evaluate →
+          ↑         ↓
+          |       retry?
+          |         ↓
+        improve ←─ yes
+          
+        no → END
+```
 
 ---
 
-これで第4章は完了です！ 🎉
-from
+#### 再試行の実践例: API呼び出しのリトライ
 
+```python
+import os
+import time
+from typing import TypedDict, Literal
+from langgraph.graph import StateGraph, START, END
+
+class RetryState(TypedDict):
+    url: str
+    response: str
+    error: str
+    attempts: int
+
+def call_api(state: RetryState) -> dict:
+    """API呼び出し（失敗する可能性あり）"""
+    try:
+        # ダミーAPI呼び出し
+        # 実際はrequests.get(state["url"])など
+        import random
+        if random.random() < 0.5:  # 50%の確率で失敗
+            raise Exception("API接続エラー")
+        
+        return {
+            "response": "API呼び出し成功",
+            "error": "",
+            "attempts": state["attempts"] + 1
+        }
+    except Exception as e:
+        return {
+            "response": "",
+            "error": str(e),
+            "attempts": state["attempts"] + 1
+        }
+
+def should_retry(state: RetryState) -> Literal["retry", "end"]:
+    """リトライすべきか判定"""
+    
+    # 成功した
+    if state["response"]:
+        return "end"
+    
+    # 最大リトライ回数に到達
+    if state["attempts"] >= 5:
+        return "end"
+    
+    # リトライ
+    return "retry"
+
+def wait_before_retry(state: RetryState) -> dict:
+    """リトライ前に待機（エクスポネンシャルバックオフ）"""
+    wait_time = 2 ** state["attempts"]  # 2, 4, 8, 16秒...
+    print(f"リトライ {state['attempts']}回目まで {wait_time}秒待機...")
+    time.sleep(wait_time)
+    return {}
+
+# グラフ構築
+workflow = StateGraph(RetryState)
+workflow.add_node("call_api", call_api)
+workflow.add_node("wait", wait_before_retry)
+
+workflow.add_edge(START, "call_api")
+workflow.add_conditional_edges("call_api", should_retry, {
+    "retry": "wait",
+    "end": END
+})
+workflow.add_edge("wait", "call_api")
+
+app = workflow.compile()
+
+# テスト
+result = app.invoke({
+    "url": "https://api.example.com/data",
+    "response": "",
+    "error": "",
+    "attempts": 0
+})
+
+if result["response"]:
+    print(f"✅ 成功（{result['attempts']}回目の試行）")
+else:
+    print(f"❌ 失敗（{result['attempts']}回試行後）: {result['error']}")
+```
+
+---
+
+### 5-2. エラーハンドリングの完全ガイド
+
+#### 基本的なエラーハンドリング
+
+```python
+def safe_node(state: State) -> dict:
+    """エラーをキャッチして安全に処理"""
+    try:
+        result = risky_operation(state["input"])
+        return {
+            "output": result,
+            "error": None,
+            "success": True
+        }
+    except ValueError as e:
+        return {
+            "output": None,
+            "error": f"入力エラー: {e}",
+            "success": False
+        }
+    except Exception as e:
+        return {
+            "output": None,
+            "error": f"予期しないエラー: {e}",
+            "success": False
+        }
+```
+
+---
+
+#### エラー時の分岐処理
+
+```python
+import os
+from typing import TypedDict, Literal
+from langgraph.graph import StateGraph, START, END
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_core.messages import HumanMessage
+
+os.environ["GEMINI_API_KEY"] = "your-key"
+
+class ErrorHandlingState(TypedDict):
+    input: str
+    output: str
+    error: str
+    error_type: str
+
+llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash-exp")
+
+def process_with_error_handling(state: ErrorHandlingState) -> dict:
+    """処理を実行してエラーをハンドリング"""
+    try:
+        # ダミー処理: JSONパース
+        import json
+        data = json.loads(state["input"])
+        
+        response = llm.invoke([
+            HumanMessage(content=f"このデータを説明: {data}")
+        ])
+        
+        return {
+            "output": response.content,
+            "error": "",
+            "error_type": "none"
+        }
+    
+    except json.JSONDecodeError as e:
+        return {
+            "output": "",
+            "error": str(e),
+            "error_type": "json_error"
+        }
+    
+    except Exception as e:
+        return {
+            "output": "",
+            "error": str(e),
+            "error_type": "unknown_error"
+        }
+
+def route_by_error(state: ErrorHandlingState) -> Literal["success", "json_error", "unknown_error"]:
+    """エラータイプで分岐"""
+    return state["error_type"]
+
+def handle_json_error(state: ErrorHandlingState) -> dict:
+    """JSON解析エラーへの対応"""
+    return {
+        "output": f"入力形式エラー: {state['error']}\n正しいJSON形式で入力してください。"
+    }
+
+def handle_unknown_error(state: ErrorHandlingState) -> dict:
+    """未知のエラーへの対応"""
+    return {
+        "output": f"システムエラーが発生しました: {state['error']}\n管理者に連絡してください。"
+    }
+
+def format_success(state: ErrorHandlingState) -> dict:
+    """成功時の処理"""
+    return {"output": f"✅ 処理成功\n{state['output']}"}
+
+# グラフ構築
+workflow = StateGraph(ErrorHandlingState)
+
+workflow.add_node("process", process_with_error_handling)
+workflow.add_node("json_error_handler", handle_json_error)
+workflow.add_node("unknown_error_handler", handle_unknown_error)
+workflow.add_node("success_handler", format_success)
+
+workflow.add_edge(START, "process")
+
+workflow.add_conditional_edges(
+    source="process",
+    path=route_by_error,
+    path_map={
+        "none": "success_handler",
+        "json_error": "json_error_handler",
+        "unknown_error": "unknown_error_handler"
+    }
+)
+
+workflow.add_edge("success_handler", END)
+workflow.add_edge("json_error_handler", END)
+workflow.add_edge("unknown_error_handler", END)
+
+app = workflow.compile()
+
+# テスト
+test_inputs = [
+    '{"name": "Alice", "age": 30}',  # 正常
+    '{"invalid json',                 # JSON解析エラー
+    None                              # その他のエラー
+]
+
+for inp in test_inputs:
+    print(f"\n入力: {inp}")
+    try:
+        result = app.invoke({
+            "input": str(inp),
+            "output": "",
+            "error": "",
+            "error_type": ""
+        })
+        print(f"出力: {result['output']}")
+    except Exception as e:
+        print(f"実行エラー: {e}")
+    print("-" * 60)
+```
+
+---
+
+### 5-3. 並列実行パターン
+
+#### 並列実行の基本概念
+
+**直列実行（通常）**:
+```
+task1 → task2 → task3  （所要時間: 6秒）
+2秒    2秒    2秒
+```
+
+**並列実行**:
+```
+task1 ─┐
+task2 ─┼→ merge  （所要時間: 2秒）
+task3 ─┘
+2秒
+```
+
+---
+
+#### 並列ノードの実装
+
+```python
+import os
+from typing import TypedDict
+from langgraph.graph import StateGraph, START, END
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_core.messages import HumanMessage, SystemMessage
+
+os.environ["GEMINI_API_KEY"] = "your-key"
+
+class ParallelState(TypedDict):
+    topic: str
+    summary: str
+    pros: str
+    cons: str
+    final_report: str
+
+llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash-exp", temperature=0.7)
+
+# 並列タスク1: 要約生成
+def generate_summary(state: ParallelState) -> dict:
+    """トピックの要約を生成"""
+    response = llm.invoke([
+        SystemMessage(content="トピックを3文で要約してください。"),
+        HumanMessage(content=state["topic"])
+    ])
+    return {"summary": response.content}
+
+# 並列タスク2: メリット抽出
+def extract_pros(state: ParallelState) -> dict:
+    """メリットを列挙"""
+    response = llm.invoke([
+        SystemMessage(content="3つの主要なメリットを箇条書きで。"),
+        HumanMessage(content=state["topic"])
+    ])
+    return {"pros": response.content}
+
+# 並列タスク3: デメリット抽出
+def extract_cons(state: ParallelState) -> dict:
+    """デメリットを列挙"""
+    response = llm.invoke([
+        SystemMessage(content="3つの主要なデメリットを箇条書きで。"),
+        HumanMessage(content=state["topic"])
+    ])
+    return {"cons": response.content}
+
+# 統合タスク
+def merge_results(state: ParallelState) -> dict:
+    """並列処理結果を統合"""
+    report = f"""
+=== 分析レポート: {state['topic']} ===
+
+【要約】
+{state['summary']}
+
+【メリット】
+{state['pros']}
+
+【デメリット】
+{state['cons']}
+    """
+    return {"final_report": report.strip()}
+
+# グラフ構築
+workflow = StateGraph(ParallelState)
+
+# ノード登録
+workflow.add_node("summary", generate_summary)
+workflow.add_node("pros", extract_pros)
+workflow.add_node("cons", extract_cons)
+workflow.add_node("merge", merge_results)
+
+# 並列開始
+workflow.add_edge(START, "summary")
+workflow.add_edge(START, "pros")
+workflow.add_edge(START, "cons")
+
+# 統合ノードへ集約
+workflow.add_edge("summary", "merge")
+workflow.add_edge("pros", "merge")
+workflow.add_edge("cons", "merge")
+
+workflow.add_edge("merge", END)
+
+app = workflow.compile()
+
+# グラフ確認
+print("グラフ構造:")
+print(app.get_graph().draw_ascii())
+
+# テスト
+import time
+start = time.time()
+
+result = app.invoke({
+    "topic": "リモートワークの導入",
+    "summary": "",
+    "pros": "",
+    "cons": "",
+    "final_report": ""
+})
+
+elapsed = time.time() - start
+
+print(f"\n実行時間: {elapsed:.2f}秒")
+print(result["final_report"])
+```
+
+**重要なポイント**:
+- `add_edge(START, "node")` を複数回呼ぶことで並列開始
+- すべての並列ノードが完了してから`merge`が実行される
+- 実行順序は保証されない（非同期実行）
+
+---
+
+### 5-4. ストリーミング実行
+
+#### stream()の基本
+
+**通常のinvoke()**:
+```python
+result = app.invoke({"input": "質問"})
+print(result)  # 全て完了後に一度だけ表示
+```
+
+**stream()を使用**:
+```python
+for chunk in app.stream({"input": "質問"}):
+    print(chunk)  # 各ノードの実行ごとに表示
+```
+
+---
+
+#### 実践例: プログレス表示
+
+```python
+import os
+from typing import TypedDict
+from langgraph.graph import StateGraph, START, END
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_core.messages import HumanMessage
+import time
+
+os.environ["GEMINI_API_KEY"] = "your-key"
+
+class StreamState(TypedDict):
+    input: str
+    step1_result: str
+    step2_result: str
+    final_output: str
+
+llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash-exp")
+
+def step1_process(state: StreamState) -> dict:
+    """ステップ1: 入力を分析"""
+    print("  [ステップ1] 入力を分析中...")
+    time.sleep(1)  # シミュレーション
+    
+    response = llm.invoke([
+        HumanMessage(content=f"次の文を分析: {state['input']}")
+    ])
+    
+    return {"step1_result": response.content}
+
+def step2_process(state: StreamState) -> dict:
+    """ステップ2: 詳細分析"""
+    print("  [ステップ2] 詳細分析中...")
+    time.sleep(1)
+    
+    response = llm.invoke([
+        HumanMessage(content=f"次の分析を深める: {state['step1_result']}")
+    ])
+    
+    return {"step2_result": response.content}
+
+def finalize(state: StreamState) -> dict:
+    """ステップ3: 最終レポート"""
+    print("  [ステップ3] レポート生成中...")
+    time.sleep(1)
+    
+    final = f"""
+分析結果:
+- 初期分析: {state['step1_result'][:50]}...
+- 詳細分析: {state['step2_result'][:50]}...
+    """
+    return {"final_output": final}
+
+# グラフ構築
+workflow = StateGraph(StreamState)
+workflow.add_node("step1", step1_process)
+workflow.add_node("step2", step2_process)
+workflow.add_node("finalize", finalize)
+
+workflow.add_edge(START, "step1")
+workflow.add_edge("step1", "step2")
+workflow.add_edge("step2", "finalize")
+workflow.add_edge("finalize", END)
+
+app = workflow.compile()
+
+# ストリーミング実行
+print("="*60)
+print("ストリーミング実行開始")
+print("="*60)
+
+for i, chunk in enumerate(app.stream({
+    "input": "AIの未来について",
+    "step1_result": "",
+    "step2_result": "",
+    "final_output": ""
+}), 1):
+    node_name = list(chunk.keys())[0]
+    print(f"\n[チャンク {i}] ノード '{node_name}' 完了")
+    # print(f"  結果: {chunk}")  # 詳細表示
+
+print("\n" + "="*60)
+print("✅ すべての処理が完了しました")
+print("="*60)
+```
+
+**出力例**:
+```
+============================================================
+ストリーミング実行開始
+============================================================
+  [ステップ1] 入力を分析中...
+
+[チャンク 1] ノード 'step1' 完了
+  [ステップ2] 詳細分析中...
+
+[チャンク 2] ノード 'step2' 完了
+  [ステップ3] レポート生成中...
+
+[チャンク 3] ノード 'finalize' 完了
+
+============================================================
+✅ すべての処理が完了しました
+============================================================
+```
+
+---
+
+## 付録A: トラブルシューティング完全ガイド
+
+### よくあるエラーと解決法
+
+#### エラー1: KeyError: 'route_name'
+
+**エラーメッセージ**:
+```
+KeyError: 'high_priority'
+```
+
+**原因**:
+ルーティング関数が返す値がpath_mapに存在しない
+
+**解決法**:
+```python
+# ❌ 問題のあるコード
+def route(state):
+    return "high_priority"  # この値が
+
+workflow.add_conditional_edges("node", route, {
+    "high": "handler",  # ここにない
+    "low": "handler2"
+})
+
+# ✅ 修正版
+def route(state):
+    return "high"  # 値を一致させる
+
+workflow.add_conditional_edges("node", route, {
+    "high": "handler",
+    "low": "handler2"
+})
+```
+
+---
+
+#### エラー2: "Node '__start__' already exists"
+
+**エラーメッセージ**:
+```
+ValueError: Node '__start__' already exists
+```
+
+**原因**:
+予約語`__start__`や`__end__`をノード名として使用
+
+**解決法**:
+```python
+# ❌ 問題のあるコード
+workflow.add_node("__start__", func)
+
+# ✅ 修正版
+workflow.add_node("start_process", func)
+```
+
+---
+
+#### エラー3: API認証エラー
+
+**エラーメッセージ**:
+```
+AuthenticationError: Invalid API key
+```
+
+**原因**:
+- APIキーが正しく設定されていない
+- APIキーが無効
+
+**解決法**:
+```python
+import os
+
+# デバッグ: キーが設定されているか確認
+print(os.environ.get("GEMINI_API_KEY"))
+print(os.environ.get("TAVILY_API_KEY"))
+
+# 正しく設定
+os.environ["GEMINI_API_KEY"] = "AIza..."  # 実際のキー
+os.environ["TAVILY_API_KEY"] = "tvly-..."  # 実際のキー
+```
+
+---
+
+#### エラー4: RecursionError
+
+**エラーメッセージ**:
+```
+RecursionError: maximum recursion depth exceeded
+```
+
+**原因**:
+無限ループ（終了条件がない）
+
+**解決法**:
+```python
+# ❌ 問題のあるコード（終了条件なし）
+def route(state):
+    return "retry"  # 常にretry
+
+workflow.add_conditional_edges("node", route, {
+    "retry": "node"  # 無限ループ
+})
+
+# ✅ 修正版（終了条件を追加）
+def route(state):
+    if state["attempts"] >= 5:
+        return "end"
+    return "retry"
+
+workflow.add_conditional_edges("node", route, {
+    "retry": "node",
+    "end": END
+})
+```
+
+**または最大ステップ数を制限**:
+```python
+result = app.invoke(
+    {"input": "質問"},
+    config={"recursion_limit": 10}  # 最大10ステップ
+)
+```
+
+---
+
+## 付録B: ベストプラクティス集
+
+### 1. State設計のベストプラクティス
+
+#### ✅ 良い設計
+
+```python
+from typing import TypedDict
+
+class State(TypedDict):
+    # 明確で具体的な名前
+    user_query: str
+    search_results: list
+    final_answer: str
+    confidence_score: float
+    error_message: str
+```
+
+#### ❌ 悪い設計
+
+```python
+class State(TypedDict):
+    # 曖昧な名前
+    data: str
+    result: str
+    value: float
+    msg: str
+```
+
+---
+
+### 2. ノード関数のベストプラクティス
+
+#### ✅ 良い実装
+
+```python
+def process_node(state: State) -> dict:
+    """
+    ユーザークエリを処理してLLMで回答を生成
+    
+    Args:
+        state: 現在のワークフロー状態
+    
+    Returns:
+        更新するStateフィールド
+    """
+    try:
+        # 明確なロジック
+        user_input = state["user_query"]
+        response = llm.invoke([HumanMessage(content=user_input)])
+        
+        return {
+            "final_answer": response.content,
+            "error_message": ""
+        }
+    
+    except Exception as e:
+        # エラーハンドリング
+        return {
+            "final_answer": "",
+            "error_message": str(e)
+        }
+```
+
+#### ❌ 悪い実装
+
+```python
+def process_node(state):  # 型ヒントなし
+    # ドキュメントなし
+    # エラーハンドリングなし
+    return {"result": llm.invoke([HumanMessage(state["input"])]).content}
+```
+
+---
+
+### 3. グラフ構造のベストプラクティス
+
+#### ✅ 良い構造
+
+```python
+# 明確な命名
+workflow.add_node("classify_intent", classify)
+workflow.add_node("search_knowledge_base", search)
+workflow.add_node("generate_response", generate)
+
+# 論理的なフロー
+workflow.add_edge(START, "classify_intent")
+workflow.add_conditional_edges("classify_intent", route, {
+    "needs_search": "search_knowledge_base",
+    "direct_answer": "generate_response"
+})
+```
+
+#### ❌ 悪い構造
+
+```python
+# 曖昧な命名
+workflow.add_node("node1", func1)
+workflow.add_node("node2", func2)
+workflow.add_node("process", func3)
+
+# 複雑すぎるフロー（可読性が低い）
+```
+
+---
+
+## 付録C: 実装パターンライブラリ
+
+### パターン1: シンプルQ&A
+
+```python
+import os
+from typing import TypedDict
+from langgraph.graph import StateGraph, START, END
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_core.messages import HumanMessage
+
+os.environ["GEMINI_API_KEY"] = "your-key"
+
+class QAState(TypedDict):
+    question: str
+    answer: str
+
+llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash-exp")
+
+workflow = StateGraph(QAState)
+workflow.add_node("answer", lambda s: {
+    "answer": llm.invoke([HumanMessage(s["question"])]).content
+})
+workflow.add_edge(START, "answer")
+workflow.add_edge("answer", END)
+
+app = workflow.compile()
+
+result = app.invoke({"question": "LangGraphとは？", "answer": ""})
+print(result["answer"])
+```
+
+---
+
+### パターン2: 検索付きQ&A
+
+```python
+# 第4章のエージェントループを参照
+```
+
+---
+
+### パターン3: 多段階処理
+
+```python
+workflow.add_edge(START, "analyze")
+workflow.add_edge("analyze", "transform")
+workflow.add_edge("transform", "validate")
+workflow.add_edge("validate", "format")
+workflow.add_edge("format", END)
+```
+
+---
+
+### パターン4: 条件分岐 + ループ
+
+```python
+workflow.add_edge(START, "process")
+workflow.add_conditional_edges("process", check_quality, {
+    "good": END,
+    "retry": "improve"
+})
+workflow.add_edge("improve", "process")  # ループ
+```
+
+---
+
+## 🎉 完走おめでとうございます！
+
+この第3章以降の資料で、あなたは以下をマスターしました:
+
+✅ **条件分岐**: 複雑なルーティングロジックの実装
+✅ **ツール統合**: Tavily検索とカスタムツールの統合
+✅ **エージェントループ**: LLMとツールの協調動作
+✅ **高度なパターン**: ループ、並列実行、ストリーミング
+✅ **エラーハンドリング**: 堅牢なワークフロー設計
+✅ **ベストプラクティス**: プロダクション品質のコード
+
+---
+
+## 次のステップ
+
+1. **実践プロジェクトに挑戦**:
+   - カスタマーサポートボットを構築
+   - リサーチエージェントを作成
+   - データ分析パイプラインを実装
+
+2. **公式ドキュメントで深掘り**:
+   - [LangGraph公式](https://langchain-ai.github.io/langgraph/)
+   - [LangChain統合](https://python.langchain.com/)
+
+3. **コミュニティ参加**:
+   - GitHub Discussionsで質問
+   - 自分の実装を共有
+
+---
+
+## 参考リンク
+
+- 📚 [LangGraph公式ドキュメント](https://langchain-ai.github.io/langgraph/)
+- 🔑 [Google AI Studio](https://aistudio.google.com/)
+- 🔍 [Tavily Search API](https://tavily.com/)
+- 💬 [LangChain Discord](https://discord.gg/langchain)
+
+**Happy Coding! 🚀**
+
+あなたは今、LangGraphのエキスパートです。実際のサービスを構築する準備が整いました！
